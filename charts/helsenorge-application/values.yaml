@@ -110,7 +110,7 @@ TokenValidationSettings:
   # -- Thumbprint til valideringssertifikat
   SigningCertificate: F46ECB29F8B9994D2286B073C1CEA6A52BB746FC
   # -- Hashingsecret
-  TokenHashingSecret: fdafdaszxcdards534534534432r5423sdfaczx23r
+  TokenHashingSecret: 
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
 
