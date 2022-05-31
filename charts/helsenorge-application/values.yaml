@@ -1,0 +1,123 @@
+# -- Navn på losningsomraadet applikasjonen tilhører - eks "personvern".
+area: ""
+# -- Ansvarlig team for losningsomraade - eks "Plattform". 
+team: ""
+# -- Navn på applikasjonen som skal deployes. Kombineres med area.name, så du trenger ikke inkludere navn på losningsomraadet i navnet. 
+name: ""
+# -- Dns-sonen til miljøet. Overstyres i høyere miljøer.
+dnsZone: "aks-helsenorge.utvikling"
+# -- Beskriver imaget til applikasjonen
+# @default -- Se verdier under
+image:
+  # -- Fra hvilket container registry skal imaget hentes. 
+  registry: helsenorge.azurecr.io
+  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository
+  repository: ""
+  # -- Kubernetes image pull-policy.
+  # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
+  pullPolicy: IfNotPresent
+  # -- Kommandoen som skal kjøre inne i imaget ved oppstart. 
+  # Dette kan være pathen til et bash-script, kjoring av en executable eller annet. Bestemmes av hvordan container-imaget er bygget.
+  # Ler mer om entrypoint [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
+  command: "/app/container-startup.sh" 
+  # -- tag identifiserer versjonen på imaget som skal deployes 
+  tag: 
+  # -- Argumenter til commanden. Beskrives som et array.
+  args:
+# -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
+imagePullSecrets: []
+# -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.
+replicaCount: 2
+livenessProbe:
+  # -- [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path.
+  path: "/api/ping"
+readinessProbe:
+   # -- [Readiness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren er klar for å motta requests ved å gjøre et http kall mot gitt path
+  path: "/health"
+# -- Kubernetes service-konto for losningsomraade. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/).
+# Navn settes til det samme som applikasjon.
+serviceAccount:
+  # -- Spesifiserer om en service-konto skal opprettes.
+  create: true
+  # -- Spesifikke annoteringer som skal legges til servicekontoen (todo).
+  annotations: {}
+# -- Servicen som eksponerer apiet ut i klusteret.
+# @default -- Se verdier under
+service:  
+    # -- Type service.
+    # Les mer [her](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+    type: "ClusterIP" 
+    # -- Port servicen eksponerer apiet på ut i clusteret.
+    port: 80 
+# -- Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret. 
+# Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/).
+# @default -- Se verdier under
+ingress: 
+  # -- Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret.
+  create: true
+  # -- Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling.
+  # Trenger ikke overstyres med mindre man skal teste noe spesielt
+  # @default -- kalkuleres basert på apinavn og miljo
+  hostname: ""
+  className: "nginx"
+# -- Beskriver hvor mye ressurser en pod som kjører koden skal få tilgang til.
+# Les mer om konseptene [her](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits).
+# @default -- Se verdier under
+resources:
+  # -- Hvor mye ressurser er poden begrenset til.
+  # @default -- Se verdier under
+  limits:
+    # -- [Limits and requests for CPU resources are measured in cpu units. One cpu, in Kubernetes, is equivalent to 1 vCPU/Core for cloud providers and 1 hyperthread on bare-metal Intel processors](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu).
+    cpu: 200m
+    # -- [Limits and requests for memory are measured in bytes.](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory).
+    memory: 128Mi
+  # -- Hvor mye ressurser poden minimum trenger.
+  # @default -- Se verdier under
+  requests:
+    # -- Samme som under resources.limits.
+    cpu: 100m
+    # -- Samme som under resources.limits.
+    memory: 128Mi
+# -- Environment variabler som tilgjengeliggjøres for løsningsområde
+# Skrives på formen key: value
+envVariables:
+# -- Setter visse parametere for hvordan applikasjonenslogger sendes til splunk
+splunk:
+  # -- Setter SourceType for applikasjonen
+  sourceType: kube:Helsenorge
+# -- Helsenorge sikkerhetssertikat
+helsenorgeSikkerhetCertificate:
+  # -- Skal sertifikatet mountes på containerne
+  mount: false
+  # -- Hvor på containerne skal sertifikatet mountes
+  mountPath: helsenorge-sikkerhet-private
+  certificate:
+    # -- Navn på sertifikat
+    name: helsenorge-sikkerhet
+    # -- Navn på secret sertifikat hentes fra
+    secretName: certificate.helsenorge-sikkerhet
+# -- Fellesconfig for Tokenvalidering
+# @default -- Se verdier under
+TokenValidationSettings: 
+  Enabled: true
+  Metadata: 
+    # --  Navn på config-map som opprettes.
+    ConfigMapName: tokenvalidation-config 
+  certificate:  
+    mountPath: helsenorge-sikkerhet-public
+    name: helsenorge-sikkerhet-public
+    secretName: certificate.helsenorge-sikkerhet.public
+  # -- Thumbprint til valideringssertifikat
+  SigningCertificate: F46ECB29F8B9994D2286B073C1CEA6A52BB746FC
+  # -- Hashingsecret
+  TokenHashingSecret: fdafdaszxcdards534534534432r5423sdfaczx23r
+  # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
+debugEnvironment: true
+
+#todo
+# nodeSelector: {}
+# tolerations: []
+# affinity: {}
+# podAnnotations: {}
+# podSecurityContext: {}
+# securityContext: {}

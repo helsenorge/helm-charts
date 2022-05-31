@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "application.fullName" . }}
+  labels:
+    {{- include "helsenorge-application.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount | default 2 }}
+  selector:
+    matchLabels:
+      {{- include "helsenorge-application.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helsenorge-application.labels" . | nindent 8 }}
+      annotations: 
+        splunk.com/sourcetype: {{ .Values.splunk.sourceType }}
+    spec:
+      serviceAccountName: {{ include "helsenorge-application.serviceAccountName" . }}
+      containers:
+        - name: {{ include "application.fullName" .  }} 
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ include "application.image" . }} 
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          command: [{{ .Values.image.command }}]
+          args: 
+          {{- range .Values.image.args }}
+            - {{ . }}
+          {{- end }}
+          envFrom:
+          {{- include "ehelse-common.MountConfig" . | indent 10 }}
+          env:
+          {{- include "helpers.list-env-variables" . | indent 10 }}
+          volumeMounts:
+          {{- include "helpers.TokenValidationSettings.VolumeMount" . | indent 10 }}
+          {{- include "helpers.HelsenorgeSikkerhetCert.VolumeMount" . | indent 10 }}
+          {{- include "helpers.DebugEnvironment.VolumeMount" . | indent 10 }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: http
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        {{- include "helpers.TokenValidationSettings.Volume" . | indent 8 }}
+        {{- include "helpers.HelsenorgeSikkerhetCert.Volume" . | indent 8 }}
+        {{- include "helpers.DebugEnvironment.Volume" . | indent 8 }}

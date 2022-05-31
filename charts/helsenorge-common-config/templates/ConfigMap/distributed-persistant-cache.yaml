@@ -1,0 +1,13 @@
+
+apiVersion: v1 
+kind: ConfigMap 
+metadata:
+  name: {{ include "distributedPersistentCache.ConfigMapName" . }}
+  labels:
+    {{- include "labels" . | nindent 4 }}
+data:
+  {{ printf "%s%s" (include "configPrefix" .)  "DistributedPersistentCache__Configuration" }}: {{ .Values.distributedPersistentCache.configuration | quote }}
+  {{ printf "%s%s" (include "configPrefix" .)  "DistributedPersistentCache__CacheKeyPrefix" }}: {{ .Values.distributedPersistentCache.cacheKeyPrefix | quote }}
+  # TODO secret
+  {{ printf "%s%s" (include "configPrefix" .)  "DistributedPersistentCache__AreaEncryptionKey" }}: {{ .Values.distributedPersistentCache.areaEncryptionKey | quote }}
+  {{ printf "%s%s" (include "configPrefix" .)  "DistributedPersistentCache__GlobalEncryptionKey" }}: {{ .Values.distributedPersistentCache.globalEncryptionKey | quote }}
