@@ -1,0 +1,30 @@
+apiVersion: v1
+entries:
+  helsenorge-applikasjon:
+  - apiVersion: v2
+    created: "2022-05-31T17:14:56.472649815Z"
+    description: Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon
+      ser ut. En helsenorge-applikasjon dekker typene api, webapp og service.
+    digest: 68da6a097e0b1b077bb8516f42754bb0aaf1ee871ef6d30667f76879c694e146
+    maintainers:
+    - email: utv-hn-plattform@norskhelsenett.slack.com
+      name: Team Plattform
+      url: https://www.nhn.no/
+    name: helsenorge-applikasjon
+    type: application
+    urls:
+    - https://github.com/helsenorge/helsenorge-helm-charts/releases/download/helsenorge-applikasjon-0.0.12/helsenorge-applikasjon-0.0.12.tgz
+    version: 0.0.12
+  helsenorge-common-config:
+  - apiVersion: v2
+    appVersion: 23.0.0
+    created: "2022-05-31T17:14:56.636195368Z"
+    description: Helm chart for deployment felles config (definert av ehelse-common
+      pakkesettet)
+    digest: 69eecebbaec88ffd6134893d83a4c6943a8cfcf60e04020239e0aded73650ac7
+    name: helsenorge-common-config
+    type: application
+    urls:
+    - https://github.com/helsenorge/helsenorge-helm-charts/releases/download/helsenorge-common-config-0.0.1/helsenorge-common-config-0.0.1.tgz
+    version: 0.0.1
+generated: "2022-05-31T17:14:56.636203268Z"
