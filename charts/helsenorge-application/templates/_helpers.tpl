@@ -162,6 +162,11 @@ Navn på secret i kubernetes som inneholder alle hemmelige variabler som applika
 {{- end }}
 {{- end -}}
 
+
+{{/*
+  Config-maps
+*/}}
+
 {{- define "loggingConfiguration.ConfigMapName" -}}
 {{ printf "%s-%s" ( include "area.name" . ) "logging-configuration" | lower  }}
 {{- end -}}
@@ -170,17 +175,42 @@ Navn på secret i kubernetes som inneholder alle hemmelige variabler som applika
 {{ printf "%s-%s" ( include "area.name" . ) "configuration-files-share" | lower  }}
 {{- end -}}
 
-{{/*
-  Config-maps
-*/}}
-{{ define "helpers.configMapMounts" }}
+{{- define "internalMessaging.ConfigMapName" -}}
+{{ printf "%s-%s" ( include "area.name" . ) "internalMessaging" | lower  }}
+{{- end -}}
+
+{{- define "clientSettings.ConfigMapName" -}}
+{{ printf "%s-%s" ( include "area.name" . ) "clientSettings" | lower  }}
+{{- end -}}
+
+{{ define "helpers.configMapRefs" }}
 - configMapRef:
     name: {{ include "loggingConfiguration.ConfigMapName" . }}
 - configMapRef:
     name: {{ include "configurationFileShare.ConfigMapName" . }}
+- configMapRef:
+    name: {{ include "internalMessaging.ConfigMapName" . }}
+- configMapRef:
+    name: {{ include "clientSettings.ConfigMapName" . }}
 {{- end -}}
 
+{{/*
+  Secrets
+*/}}
+{{- define "clientSettings.Secret" -}}
+{{ printf "%s-%s" ( include "area.name" . ) "clientSettings" | lower  }}
+{{- end -}}
 
+{{- define "internalMessaging.Secret" -}}
+{{ printf "%s-%s" ( include "area.name" . ) "internalMessagingSettings" | lower  }}
+{{- end -}}
+
+{{ define "helpers.secretRefs" }}
+- secretRef:
+    name: {{ include "clientSettings.Secret" . }}
+- secretRef:
+    name: {{ include "internalMessaging.Secret" . }}
+{{- end -}}
 
 {{/*
 List environment variables

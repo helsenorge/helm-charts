@@ -29,7 +29,8 @@ spec:
             - {{ . }}
           {{- end }}
           envFrom:
-          {{- include "helpers.configMapMounts" . | indent 10 }}
+          {{- include "helpers.configMapRefs" . | indent 10 }}
+          {{- include "helpers.secretRefs" . | indent 10 }}
           env:
           {{- include "helpers.list-env-variables" . | indent 10 }}
           volumeMounts:

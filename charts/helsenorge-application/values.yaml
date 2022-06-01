@@ -117,6 +117,7 @@ debugEnvironment: true
 
 configPrefix: HN_
 
+
 # -- Felles-config for applikasjonslogging.
 # @default -- Se verdier under
 loggingConfiguration:
@@ -124,11 +125,17 @@ loggingConfiguration:
   area: 
   # --  LogLevel. Tillatte verdier: Info, Debug, Trace.
   logLevel: "Info"
-
 # @default -- Se verdier under
 configurationFileShare: 
   # -- Uri til path til share
   share: /config-share/
+clientSettings:
+  clientId:
+  clientSecret:
+internalMessaging:
+  username:
+  password:
+
 
 #todo
 # nodeSelector: {}

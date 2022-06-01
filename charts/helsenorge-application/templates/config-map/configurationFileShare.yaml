@@ -5,5 +5,5 @@ metadata:
   labels:
     {{- include "helsenorge-application.labels" . | nindent 4 }}
 data:
-  {{ printf "%s%s" (include "configPrefix" .) "ConfigurationFileShare__Share" }}: {{ .Values.configurationFileShare.share | default "/config-share/" | quote }}
+  {{ printf "%s%s" (include "configPrefix" .) "ConfigurationFileShare__Share" }}: {{ default "/config-share/" .Values.configurationFileShare.share | quote }}
 
