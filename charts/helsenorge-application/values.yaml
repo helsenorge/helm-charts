@@ -82,9 +82,31 @@ resources:
 # Skrives på formen key: value
 envVariables:
 # -- Setter visse parametere for hvordan applikasjonenslogger sendes til splunk
+
 splunk:
   # -- Setter SourceType for applikasjonen
   sourceType: kube:Helsenorge
+
+configPrefix: HN_
+
+# -- Felles-config for applikasjonslogging.
+# @default -- Se verdier under
+loggingConfiguration:
+  # -- Navn på area-kategorien i loggen. Defaulter til area.name.
+  area: 
+  # --  LogLevel. Tillatte verdier: Info, Debug, Trace.
+  logLevel: "Info"
+# @default -- Se verdier under
+configurationFileShare: 
+  # -- Uri til path til share
+  share: /config-share/
+clientSettings:
+  clientId:
+  clientSecret:
+internalMessaging:
+  username:
+  password:
+
 # -- Helsenorge sikkerhetssertikat
 helsenorgeSikkerhetCertificate:
   # -- Skal sertifikatet mountes på containerne
@@ -113,6 +135,7 @@ TokenValidationSettings:
   TokenHashingSecret: 
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
+
 
 #todo
 # nodeSelector: {}

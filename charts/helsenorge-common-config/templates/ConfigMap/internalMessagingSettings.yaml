@@ -6,13 +6,10 @@ metadata:
     {{- include "labels" . | nindent 4 }}
 data:
   {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__RootAddress" }}: {{ .Values.internalMessagingSettings.rootAddress | quote }}
-  {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__Name"}}: {{ .Values.internalMessagingSettings.name | default .Release.Name | quote}}
   {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__VirtualHost"}}: {{ .Values.internalMessagingSettings.virtualHost | default "internalmessaging.helsenorge.no" | quote }}
   {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__ConfigurationCredentials__Username"}}: {{ .Values.internalMessagingSettings.configurationCredentials.username | default "rmq_config_user" quote }}
-  {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__Credentials__Username"}}: {{ .Values.internalMessagingSettings.credentials.username | quote | default "not-set"}}
   {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__UseSsl"}}: {{ .Values.internalMessagingSettings.useSsl | default "false" | quote }}
   {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__EncryptMessages"}}: {{ .Values.internalMessagingSettings.encryptMessages | default "true" | quote }}
   # TODO secret
   {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__ConfigurationCredentials__Password"}}: {{ .Values.internalMessagingSettings.configurationCredentials.password | quote }}
-  {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__Credentials__Password"}}: {{ .Values.internalMessagingSettings.credentials.password | quote | default "not set"}}
   {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__SymmetricKey"}}: {{ .Values.internalMessagingSettings.symmetricKey | quote }}

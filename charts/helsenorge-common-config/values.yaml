@@ -1,12 +1,9 @@
-configPrefix: HN_
 
-# -- Felles-config for applikasjonslogging.
-# @default -- Se verdier under
-loggingConfiguration:
-  # -- Navn på area-kategorien i loggen. Defaulter til area.name.
-  area: 
-  # --  LogLevel. Tillatte verdier: Info, Debug, Trace.
-  logLevel: "Info"
+area:
+  name: felles-config
+  team: Plattform
+
+configPrefix: HN_
 
 # -- Fellesconfig for fellesloggen
 # @default -- Se verdier under
@@ -20,11 +17,7 @@ ehelseSecurityTokenServiceSettings:
   # -- Uri til tokenservice-endepunkt
   endpointUrl: http://sts-tokenservice
   timeout: "00:05:00"
-  connectionTimeout: 00:05:00
-  # -- ClientId for løsningsområde
-  clientId: 
-  # -- ClientSecret for løsningsområde
-  clientSecret:
+  connectionTimeout: 00:05:0
 
 # -- Fellesconfig for Ressursfiler (SOT)
 # @default -- Se verdier under
@@ -49,18 +42,11 @@ internalMessagingSettings:
   rootAddress: rabbitmq://rabbitmq:5671
   # -- Navn på rabbitmq virtual host
   virtualHost: internal.messaging.helsenorge.no
-  # -- Navn på rabbitmq client
-  name: Configuration
   configurationCredentials:
     # -- Navn på rabbitmq bruker med rettigheter til utføre konfigurasjoner i rabbitmq
-    username: rmq_config_user
-    # -- Passord til rabbitmq bruker med rettigheter til utføre konfigurasjoner i rabbitmq
-    password: rO9ZbR1w 
-  credentials:
-    # -- Navn på clientens rabbitmq-bruker
     username: 
-    # -- Passord til clientens rabbitmq-bruker
-    password: 
+    # -- Passord til rabbitmq bruker med rettigheter til utføre konfigurasjoner i rabbitmq
+    password:  
   # -- Skal ssl brukes i kommunikasjonen mot rabbitmq
   useSsl: true
   # -- Skal meldinger krypteres
@@ -71,8 +57,6 @@ internalMessagingSettings:
 # -- Fellesconfig for intern redis-cache
 # @default -- Se verdier under
 distributedPersistentCache:
-  # --  Navn på områded til clienten.
-  areaName: Configuration
   # --  Redis-config
   configuration: redis-persistence-master:6379
   # --  Skal cache prefixes. Kun relevant der flere miljøer deler redis-instans.
@@ -82,8 +66,4 @@ distributedPersistentCache:
   # --  Global krypteringsnøkkel.
   globalEncryptionKey: 
 
-# -- Legacy ConfigurationFileShare config - TODO denne vil ikke bli lest fordi ehelse.common leser inn denne configen utenfor configsystemet.
-# @default -- Se verdier under
-configurationFileShare: 
-  # -- Uri til path til share
-  share: /config-share/
+
