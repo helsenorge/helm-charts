@@ -1,16 +1,16 @@
-
 {{ $top := . }}
 {{- range $key, $val := .Values.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-%s" "felles-config" $key }}
+  name: {{ printf "%s-%s" "felles-config" $key | lower  }}
   labels:
     {{- include "labels" $top | nindent 4 }}
 data:
 {{- range $key, $value := . }}
   {{ $key }}: {{ $value | quote -}}
-{{- end -}}
-{{ end -}}
+{{- end }}
+---
+{{- end }}
 
 

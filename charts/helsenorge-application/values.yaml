@@ -107,32 +107,6 @@ internalMessaging:
   username:
   password:
 
-# -- Helsenorge sikkerhetssertikat
-helsenorgeSikkerhetCertificate:
-  # -- Skal sertifikatet mountes på containerne
-  mount: false
-  # -- Hvor på containerne skal sertifikatet mountes
-  mountPath: helsenorge-sikkerhet-private
-  certificate:
-    # -- Navn på sertifikat
-    name: helsenorge-sikkerhet
-    # -- Navn på secret sertifikat hentes fra
-    secretName: certificate.helsenorge-sikkerhet
-# -- Fellesconfig for Tokenvalidering
-# @default -- Se verdier under
-TokenValidationSettings: 
-  Enabled: true
-  Metadata: 
-    # --  Navn på config-map som opprettes.
-    ConfigMapName: tokenvalidation-config 
-  certificate:  
-    mountPath: helsenorge-sikkerhet-public
-    name: helsenorge-sikkerhet-public
-    secretName: certificate.helsenorge-sikkerhet.public
-  # -- Thumbprint til valideringssertifikat
-  SigningCertificate: F46ECB29F8B9994D2286B073C1CEA6A52BB746FC
-  # -- Hashingsecret
-  TokenHashingSecret: 
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
 

@@ -29,9 +29,11 @@ spec:
             - {{ . }}
           {{- end }}
           envFrom:
-          {{- include "helpers.configMapRefs" . | indent 10 }}
-          {{- include "helpers.secretRefs" . | indent 10 }}
           env:
+          {{- include "LoggingConfiguration" . | indent 10 }}
+          {{- include "InternalMessagingSettings" . | indent 10 }}
+          {{- include "ClientSettings" . | indent 10 }}
+          {{- include "ConfigurationFileShare" . | indent 10 }}
           {{- include "helpers.list-env-variables" . | indent 10 }}
           volumeMounts:
           {{- include "helpers.SikkerSone.PublicCert.VolumeMount" . | indent 10 }}
