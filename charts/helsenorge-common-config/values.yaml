@@ -5,65 +5,33 @@ area:
 
 configPrefix: HN_
 
-# -- Fellesconfig for fellesloggen
-# @default -- Se verdier under
-fellesloggClientSettings:
-  # -- Uri til felleslogg-endepunkt
-  endpointUri: http://felleslogg-internalapi
+config:
+  sot: 
+    endpointUrl: http://sot-internalapi
+  felleslogg: 
+    endpointUrl: http://sot-internalapi
+  sts:
+    endpointUrl: http://sts-tokenservice
+    signingCert: F46ECB29F8B9994D2286B073C1CEA6A52BB746FC
+  internalMessaging:
+    rabbitEndpoint: rabbitmq://rabbitmq:5671
+    virtualHost: internal.messaging.helsenorge.no
+    useSsl: true
+    encryptMessages: false
+  cache:
+    redisPersistentCacheEndpoint: redis-persistence-master:6379
+    cacheKeyPrefix: 
+    
+secrets:
+  sts:
+    hashingSecret:
+  internalMessaging:
+    configUsername: 
+    configPassword:
+    symmetricKey:
+  cache:
+    areaEncryptionKey:
+    globalEncryptionKey:
 
-# -- Fellesconfig for STS
-# @default -- Se verdier under
-ehelseSecurityTokenServiceSettings: 
-  # -- Uri til tokenservice-endepunkt
-  endpointUrl: http://sts-tokenservice
-  timeout: "00:05:00"
-  connectionTimeout: 00:05:0
-
-# -- Fellesconfig for Ressursfiler (SOT)
-# @default -- Se verdier under
-sotApiClient: 
-  # -- Uri til SOT-endepunkt
-  endpointUri: http://sot-internalapi
-  requestTimeout: 00:00:05
-  connectionTimeout: 00:05:00
-
-# -- Fellesconfig for Tokenvalidering
-# @default -- Se verdier under
-tokenValidationSettings: 
-  # -- Thumbprint til valideringssertifikat
-  signingCertificate: F46ECB29F8B9994D2286B073C1CEA6A52BB746FC
-  # -- Hashingsecret
-  tokenHashingSecret: 
-
-# -- Fellesconfig for intern meldingsutveksling
-# @default -- Se verdier under
-internalMessagingSettings:
-  # -- Adresse til rabbitmq instans
-  rootAddress: rabbitmq://rabbitmq:5671
-  # -- Navn på rabbitmq virtual host
-  virtualHost: internal.messaging.helsenorge.no
-  configurationCredentials:
-    # -- Navn på rabbitmq bruker med rettigheter til utføre konfigurasjoner i rabbitmq
-    username: 
-    # -- Passord til rabbitmq bruker med rettigheter til utføre konfigurasjoner i rabbitmq
-    password:  
-  # -- Skal ssl brukes i kommunikasjonen mot rabbitmq
-  useSsl: true
-  # -- Skal meldinger krypteres
-  encryptMessages: false
-  # -- Krypteringsnøkkel for krypterte meldinger
-  symmetricKey: 
-
-# -- Fellesconfig for intern redis-cache
-# @default -- Se verdier under
-distributedPersistentCache:
-  # --  Redis-config
-  configuration: redis-persistence-master:6379
-  # --  Skal cache prefixes. Kun relevant der flere miljøer deler redis-instans.
-  cacheKeyPrefix: ""
-  # --  Krypteringsnøkkel for området.
-  areaEncryptionKey: 
-  # --  Global krypteringsnøkkel.
-  globalEncryptionKey: 
 
 
