@@ -125,6 +125,11 @@ loggingConfiguration:
   # --  LogLevel. Tillatte verdier: Info, Debug, Trace.
   logLevel: "Info"
 
+# @default -- Se verdier under
+configurationFileShare: 
+  # -- Uri til path til share
+  share: /config-share/
+
 #todo
 # nodeSelector: {}
 # tolerations: []

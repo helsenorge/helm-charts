@@ -166,13 +166,21 @@ Navn på secret i kubernetes som inneholder alle hemmelige variabler som applika
 {{ printf "%s-%s" ( include "area.name" . ) "logging-configuration" | lower  }}
 {{- end -}}
 
+{{- define "configurationFileShare.ConfigMapName" -}}
+{{ printf "%s-%s" ( include "area.name" . ) "configuration-files-share" | lower  }}
+{{- end -}}
+
 {{/*
-  Mount loggingConfiguration
+  Config-maps
 */}}
-{{ define "loggingConfiguration.ConfigMapMount" }}
+{{ define "helpers.configMapMounts" }}
 - configMapRef:
     name: {{ include "loggingConfiguration.ConfigMapName" . }}
+- configMapRef:
+    name: {{ include "configurationFileShare.ConfigMapName" . }}
 {{- end -}}
+
+
 
 {{/*
 List environment variables

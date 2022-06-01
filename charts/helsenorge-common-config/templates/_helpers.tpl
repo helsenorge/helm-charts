@@ -74,14 +74,6 @@ Name of ehelse-common config-maps
 {{ printf "%s-%s" ( include "area.name" . ) "internal-messaging-settings" | lower  }}
 {{- end -}}
 
-{{- define "configurationFileShare.ConfigMapName" -}}
-{{ printf "%s-%s" ( include "area.name" . ) "configuration-files-share" | lower  }}
-{{- end -}}
-
-{{- define "loggingConfiguration.ConfigMapName" -}}
-{{ printf "%s-%s" ( include "area.name" . ) "logging-configuration" | lower  }}
-{{- end -}}
-
 {{/*
   Mount shared ehelse.config
 */}}
@@ -98,8 +90,4 @@ Name of ehelse-common config-maps
     name: {{ include "tokenValidationSettings.ConfigMapName" . }}
 - configMapRef:
     name: {{ include "internalMessagingSettings.ConfigMapName" . }}
-- configMapRef:
-    name: {{ include "configurationFileShare.ConfigMapName" . }}
-- configMapRef:
-    name: {{ include "loggingConfiguration.ConfigMapName" . }}
 {{- end -}}
