@@ -114,6 +114,14 @@ TokenValidationSettings:
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
 
+# -- Felles-config for applikasjonslogging.
+# @default -- Se verdier under
+loggingConfiguration:
+  # -- Navn på area-kategorien i loggen. Defaulter til area.name.
+  area: 
+  # --  LogLevel. Tillatte verdier: Info, Debug, Trace.
+  logLevel: "Info"
+
 #todo
 # nodeSelector: {}
 # tolerations: []
