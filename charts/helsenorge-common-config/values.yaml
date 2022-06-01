@@ -3,8 +3,6 @@ area:
   name: felles-config
   team: Plattform
 
-configPrefix: HN_
-
 config:
   sot: 
     endpointUrl: http://sot-internalapi

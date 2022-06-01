@@ -1,24 +1,16 @@
+
+{{ $top := . }}
+{{- range $key, $val := .Values.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: felles-config
+  name: {{ printf "%s-%s" "felles-config" $key }}
   labels:
-    {{- include "labels" . | nindent 4 }}
+    {{- include "labels" $top | nindent 4 }}
 data:
-{{- range $key, $value := .Values.config.sot }}
-  {{ printf "%s-%s" "sot" $key }}: {{ $value | quote -}}
+{{- range $key, $value := . }}
+  {{ $key }}: {{ $value | quote -}}
 {{- end -}}
-{{- range $key, $value := .Values.config.felleslogg }}
-  {{ printf "%s-%s" "felleslogg" $key }}: {{ $value | quote -}}
-{{- end -}}
-{{- range $key, $value := .Values.config.sts }}
-  {{ printf "%s-%s" "sts" $key }}: {{ $value | quote -}}
-{{- end -}}
-{{- range $key, $value := .Values.config.internalMessaging }}
-  {{ printf "%s-%s" "internalMessaging" $key }}: {{ $value | quote -}}
-{{- end -}}
-{{- range $key, $value := .Values.config.cache }}
-  {{ printf "%s-%s" "cache" $key }}: {{ $value | quote -}}
-{{- end -}}
+{{ end -}}
 
 
