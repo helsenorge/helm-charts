@@ -3,9 +3,9 @@ LoggingConfiguration
 */}}
 {{- define "LoggingConfiguration" }}
 - name: {{  printf "%s%s" (include "configPrefix" .)  "LoggingConfiguration__Area" }}
-  value: {{ .Values.loggingConfiguration.area | quote | default (include "area.name" .) }}
+  value: {{ .Values.applicationConfig.loggingConfiguration.area | quote | default (include "area.name" .) }}
 - name: {{  printf "%s%s" (include "configPrefix" .)  "LoggingConfiguration__Level" }}
-  value: {{ .Values.loggingConfiguration.logLevel | quote | default "info" }}
+  value: {{ .Values.applicationConfig.loggingConfiguration.logLevel | quote | default "info" }}
 {{- end }}
 
 {{/*
@@ -45,9 +45,9 @@ InternalMessagingSettings
       name: {{ $fellesConfigSecretName }}
       key: configPassword
 - name: {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__Credentials__Username" }}
-  value: {{ .Values.internalMessaging.username | quote }}
+  value: {{ .Values.applicationConfig.internalMessaging.username | quote }}
 - name: {{ printf "%s%s" (include "configPrefix" .)  "InternalMessagingSettings__Credentials__Password" }}
-  value: {{ .Values.internalMessaging.password | quote }}
+  value: {{ .Values.applicationSecrets.internalMessaging.password | quote }}
 {{- end -}}
 
 {{/*
@@ -55,9 +55,9 @@ ClientSettings
 */}}
 {{- define "ClientSettings" }}
 - name: {{  printf "%s%s" (include "configPrefix" .)  "EhelseSecurityTokenServiceSettings__ClientId" }}
-  value: {{ .Values.clientSettings.clientId | quote | default (include "area.name" .) }}
+  value: {{ .Values.applicationConfig.clientSettings.clientId | quote | default (include "area.name" .) }}
 - name: {{  printf "%s%s" (include "configPrefix" .)  "EhelseSecurityTokenServiceSettings__ClientSecret" }}
-  value: {{ .Values.clientSettings.clientSecret | quote }}
+  value: {{ .Values.applicationSecrets.clientSettings.clientSecret | quote }}
 {{- end -}}
 
 {{/*
@@ -65,5 +65,5 @@ ConfigurationFileShare
 */}}
 {{- define "ConfigurationFileShare" }}
 - name: {{  printf "%s%s" (include "configPrefix" .)  "ConfigurationFileShare__Share" }}
-  value: {{ .Values.configurationFileShare.share | quote | default "/config-share/" }}
+  value: {{ .Values.applicationConfig.configurationFileShare.share | quote | default "/config-share/" }}
 {{- end -}}

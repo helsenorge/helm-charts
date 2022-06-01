@@ -1,0 +1,14 @@
+{{ $top := . }}
+{{- range $key, $val := .Values.applicationConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-%s" (include "application.fullName" $top) $key | lower  }}
+  labels:
+    {{- include "helsenorge-application.labels" $top | nindent 4 }}
+data:
+{{- range $key, $value := . }}
+  {{ $key }}: {{ $value | quote -}}
+{{- end }}
+---
+{{- end }}
