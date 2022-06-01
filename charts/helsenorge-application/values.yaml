@@ -114,9 +114,7 @@ TokenValidationSettings:
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
 
-
 configPrefix: HN_
-
 
 # -- Felles-config for applikasjonslogging.
 # @default -- Se verdier under

@@ -2,21 +2,21 @@
 Navn på løsningsområde
 */}}
 {{- define "area.name" -}}
-{{- .Values.global.area | default .Values.area }}
+{{- .Values.area.name | lower | trunc 63 | default "" }}
 {{- end }}
 
 {{/*
 Navn på ansvarlig team
 */}}
 {{- define "area.team" -}}
-{{- .Values.global.team | default .Values.team | lower | trunc 63 | }}
+{{- .Values.area.team | lower | trunc 63 | default ""  }}
 {{- end }}
 
 {{/*
 Versjon av applikasjon
 */}}
 {{- define "releaseVersion" -}}
-{{- .Chart.AppVersion | default "latest" }}
+{{- .Chart.Version | default "latest" }}
 {{- end }}
 
 {{/*
@@ -30,7 +30,7 @@ Create chart name and version as used by the chart label.
 Helsenorge config prefix. Prefix used before any helsenorge environment variable
 */}}
 {{- define "configPrefix" -}}
-{{- .Values.global.configPrefix | default .Values.configPrefix }}
+{{- .Values.configPrefix | default "HN_" -}}
 {{- end -}}
 
 {{/*
@@ -38,7 +38,7 @@ Common labels
 */}}
 {{- define "labels" -}}
 helm.sh/chart: {{ include "chart" . }}
-app.kubernetes.io/managed-by: {{ "ehelse-common" }}
+app.kubernetes.io/managed-by: {{ "Helm" }}
 app.kubernetes.io/part-of: {{ include "area.name" . }}
 app.kubernetes.io/created-by: {{ include "area.team" . }}
 app.kubernetes.io/version: {{ include "releaseVersion" . | quote }}
