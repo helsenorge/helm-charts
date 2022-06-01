@@ -34,8 +34,7 @@ spec:
           env:
           {{- include "helpers.list-env-variables" . | indent 10 }}
           volumeMounts:
-          {{- include "helpers.TokenValidationSettings.VolumeMount" . | indent 10 }}
-          {{- include "helpers.HelsenorgeSikkerhetCert.VolumeMount" . | indent 10 }}
+          {{- include "helpers.SikkerSone.PublicCert.VolumeMount" . | indent 10 }}
           {{- include "helpers.DebugEnvironment.VolumeMount" . | indent 10 }}
           ports:
             - name: http
@@ -52,6 +51,5 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-        {{- include "helpers.TokenValidationSettings.Volume" . | indent 8 }}
-        {{- include "helpers.HelsenorgeSikkerhetCert.Volume" . | indent 8 }}
+        {{- include "helpers.SikkerSone.PublicCert.Volume" . | indent 8 }}
         {{- include "helpers.DebugEnvironment.Volume" . | indent 8 }}

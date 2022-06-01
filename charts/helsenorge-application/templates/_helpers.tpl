@@ -100,53 +100,27 @@ Helsenorge config prefix. Prefix used before any helsenorge environment variable
 {{- .Values.global.configPrefix | default .Values.configPrefix }}
 {{- end -}}
 
-{{/*
-Navn på secret i kubernetes som inneholder alle hemmelige variabler som applikasjonen kan mounte ved oppstart
-*/}}
-{{- define "appSecretName" -}}
-{{- printf "%s-%s" (include "application.fullName" .) "secrets" | lower }}
-{{- end }}
 
-{{- define "helpers.TokenValidationSettings.Volume" -}}
-{{- if .Values.TokenValidationSettings.Enabled }}
-- name: {{ .Values.TokenValidationSettings.certificate.name }}
+{{/*
+Mount av public-delen av helsenorge-sikkerhets-sert: TODO fikse opp i.
+*/}}
+{{ define "helpers.SikkerSone.PublicCert.Volume" }}
+- name: helsenorge-sikkerhet-public
   secret: 
-    secretName: {{ .Values.TokenValidationSettings.certificate.secretName }}
-{{- end -}}
+    secretName: certificate.helsenorge-sikkerhet.public
 {{- end -}}
 
-{{- define "helpers.TokenValidationSettings.VolumeMount" -}}
-{{- if .Values.TokenValidationSettings.Enabled }}
-  - name: {{ .Values.TokenValidationSettings.certificate.name }}
-    mountPath: {{ printf "%s/%s/" "/certificates" ( .Values.TokenValidationSettings.certificate.mountPath | default "helsenorge-sikkerhet-public" ) }}
-    readOnly: true
-{{- end }}
+{{ define "helpers.SikkerSone.PublicCert.VolumeMount" }}
+- name: helsenorge-sikkerhet-public
+  mountPath: /certificates/helsenorge-sikkerhet-public" 
+  readOnly: true
 {{- end -}}
 
 {{/*
-  certificate helsenorge-sikkerhet
-*/}}
-{{- define "helpers.HelsenorgeSikkerhetCert.Volume" -}}
-{{- if .Values.helsenorgeSikkerhetCertificate.mount }}
-- name: {{ .Values.helsenorgeSikkerhetCertificate.certificate.name }}
-  secret: 
-    secretName: {{ .Values.helsenorgeSikkerhetCertificate.certificate.secretName }}
-{{- end -}}
-{{- end -}}
-
-{{- define "helpers.HelsenorgeSikkerhetCert.VolumeMount" -}}
-{{- if .Values.helsenorgeSikkerhetCertificate.mount }}
-  - name: {{ .Values.helsenorgeSikkerhetCertificate.certificate.name }}
-    mountPath: {{ printf "%s/%s/" "/certificates" ( .Values.helsenorgeSikkerhetCertificate.mountPath | default "helsenorge-sikkerhet-private" ) }}
-    readOnly: true
-{{- end }}
-{{- end -}}
-
-{{/*
-  Debug-dll
+  Mount av Debug-dll
 */}}
 
-{{- define "helpers.DebugEnvironment.Volume" -}}
+{{ define "helpers.DebugEnvironment.Volume" }}
 {{- if .Values.debugEnvironment }}
 - name: debug-environment
   configMap: 
@@ -154,11 +128,11 @@ Navn på secret i kubernetes som inneholder alle hemmelige variabler som applika
 {{- end -}}
 {{- end -}}
 
-{{- define "helpers.DebugEnvironment.VolumeMount" -}}
+{{ define "helpers.DebugEnvironment.VolumeMount" }}
 {{- if .Values.debugEnvironment }}
-  - name: debug-environment
-    mountPath: /config-share/
-    readOnly: true
+- name: debug-environment
+  mountPath: /config-share/
+  readOnly: true
 {{- end }}
 {{- end -}}
 
@@ -166,6 +140,22 @@ Navn på secret i kubernetes som inneholder alle hemmelige variabler som applika
 {{/*
   Config-maps
 */}}
+
+{{/*
+  Referense til felles-config som eksisterer i namespace: todo-fikse navn
+*/}}
+{{- define "felles-config-configMapRefs" -}}
+- configMapRef:
+    name: felles-config-distributed-persistant-cache
+- configMapRef:
+    name: felles-config-felleslogg-client
+- configMapRef:
+    name: felles-config-ehelse-security-tokenservice-settings
+- configMapRef:
+    name: felles-config-sot-api-client
+- configMapRef:
+    name: felles-config-internal-messaging-settings
+{{- end -}}
 
 {{- define "loggingConfiguration.ConfigMapName" -}}
 {{ printf "%s-%s" ( include "area.name" . ) "logging-configuration" | lower  }}
@@ -192,6 +182,7 @@ Navn på secret i kubernetes som inneholder alle hemmelige variabler som applika
     name: {{ include "internalMessaging.ConfigMapName" . }}
 - configMapRef:
     name: {{ include "clientSettings.ConfigMapName" . }}
+{{ include "felles-config-configMapRefs" . }}
 {{- end -}}
 
 {{/*
