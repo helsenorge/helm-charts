@@ -29,7 +29,7 @@ spec:
             - {{ . }}
           {{- end }}
           envFrom:
-          {{- include "ehelse-common.MountConfig" . | indent 10 }}
+          {{- include "loggingConfiguration.ConfigMapMount" . | indent 10 }}
           env:
           {{- include "helpers.list-env-variables" . | indent 10 }}
           volumeMounts:

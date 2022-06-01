@@ -94,6 +94,13 @@ ingress hostname
 {{- end }}
 
 {{/*
+Helsenorge config prefix. Prefix used before any helsenorge environment variable
+*/}}
+{{- define "configPrefix" -}}
+{{- .Values.global.configPrefix | default .Values.configPrefix }}
+{{- end -}}
+
+{{/*
 Navn på secret i kubernetes som inneholder alle hemmelige variabler som applikasjonen kan mounte ved oppstart
 */}}
 {{- define "appSecretName" -}}
@@ -153,6 +160,18 @@ Navn på secret i kubernetes som inneholder alle hemmelige variabler som applika
     mountPath: /config-share/
     readOnly: true
 {{- end }}
+{{- end -}}
+
+{{- define "loggingConfiguration.ConfigMapName" -}}
+{{ printf "%s-%s" ( include "area.name" . ) "logging-configuration" | lower  }}
+{{- end -}}
+
+{{/*
+  Mount loggingConfiguration
+*/}}
+{{ define "loggingConfiguration.ConfigMapMount" }}
+- configMapRef:
+    name: {{ include "loggingConfiguration.ConfigMapName" . }}
 {{- end -}}
 
 {{/*
