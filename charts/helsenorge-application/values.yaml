@@ -89,32 +89,31 @@ splunk:
 
 configPrefix: HN_
 
-applicationConfig:
-  clientSettings:
-    clientId:
-  internalMessaging:
-    username:
-  # -- Felles-config for applikasjonslogging.
-  # @default -- Se verdier under
-  loggingConfiguration:
-    # -- Navn på area-kategorien i loggen. Defaulter til area.name.
-    area: 
-    # --  LogLevel. Tillatte verdier: Info, Debug, Trace.
-    logLevel: "Info"
-  # @default -- Se verdier under
-  configurationFileShare: 
-    # -- Uri til path til share
-    share: /config-share/
-
-applicationSecrets: 
-  clientSettings:
-    clientSecret:
-  internalMessaging:
-    password:
-
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
 
+env:
+  - name: HN_EhelseSecurityTokenServiceSettings__ClientId
+    value: 9a4a529f-6010-455c-a4ac-8065029cc820
+  - name: HN_ConfigurationFileShare__Share
+    value: /config-share/
+  - name: HN_InternalMessagingSettings__Credentials__Username
+    value: configuration.user
+  - name: HN_LoggingConfiguration__Area
+    value: Configuration
+  - name: HN_LoggingConfiguration__LogLevel
+    value: Info
+  # Secrets:
+  - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret
+    valueFrom:
+      secretKeyRef:
+        name: configuration-internalapi-clientsettings
+        key: clientSecret
+  - name: InternalMessagingSettings__Credentials__Password
+    valueFrom:
+      secretKeyRef:
+        name: configuration-internalapi-internalmessaging
+        key: password
 
 #todo
 # nodeSelector: {}

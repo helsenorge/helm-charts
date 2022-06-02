@@ -2,14 +2,14 @@
 Navn på løsningsområde
 */}}
 {{- define "area.name" -}}
-{{- .Values.global.area | default .Values.area }}
+{{- .Values.area | default .Values.global.area }}
 {{- end }}
 
 {{/*
 Navn på ansvarlig team
 */}}
 {{- define "area.team" -}}
-{{- .Values.global.team | default .Values.team | lower | trunc 63 | }}
+{{- .Values.team | default .Values.global.team | lower | trunc 63 | }}
 {{- end }}
 
 {{/*
