@@ -30,7 +30,7 @@ image:
   # -- tag identifiserer versjonen på imaget som skal deployes 
   tag: ""
   # -- Argumenter til commanden. Beskrives som et array.
-  args: ""
+  args: []
 # -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
 imagePullSecrets: []
 # -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.

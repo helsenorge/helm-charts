@@ -26,7 +26,7 @@ Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser
 | fellesloggEndpoint | string | `"http://felleslogg-internalapi"` | Endepunkt til felleslog-vertikalen sitt internal api - Blir tilgjengeliggjort som environment-variabler i pod |
 | fullnameOverride | string | `""` | Overrider navn på chart.  |
 | image | object | Se verdier under | Beskriver imaget til applikasjonen |
-| image.args | string | `""` | Argumenter til commanden. Beskrives som et array. |
+| image.args | list | `[]` | Argumenter til commanden. Beskrives som et array. |
 | image.command | string | `"/app/container-startup.sh"` | Kommandoen som skal kjøre inne i imaget ved oppstart.  Dette kan være pathen til et bash-script, kjoring av en executable eller annet. Bestemmes av hvordan container-imaget er bygget. Ler mer om entrypoint [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
