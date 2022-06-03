@@ -153,8 +153,8 @@ configurationEndpoint: http://configuration-internalapi
 
 # -- Logging
 logging:
-  # LogLevel - tillatte verdier trace, debug, info
-  logLevel: info
+  # LogLevel - tillatte verdier Trace, Debug, Info
+  logLevel: Info
   # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.
   areaOvveride: ""
 
