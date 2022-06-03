@@ -16,7 +16,7 @@ Navn på ansvarlig team
 Navn på applikasjon
 */}}
 {{- define "application.name" -}}
-{{- .Values.name  | lower | trunc 63 }}
+{{- .Release.Name | lower | trunc 63 }}
 {{- end }}
 
 {{/*
@@ -41,6 +41,31 @@ Navn på applikasjon. Kombinasjon av løsningsområde og applikasjonsnavn.
 {{- include "application.name" . }}
 {{- else }}
 {{- printf "%s-%s" ( include "area.name" . ) .Values.name | lower  }}
+{{- end }}
+{{- end }}
+
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "helsenorge-application.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "helsenorge-application.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
 {{- end }}
 {{- end }}
 
@@ -141,7 +166,7 @@ Mount av public-delen av helsenorge-sikkerhets-sert: TODO fikse opp i.
 List environment variables
 */}}
 {{- define "helpers.list-env-variables"}}
-{{- range $key, $val := .Values.envVariables }}
+{{- range $key, $val := .Values.extraEnvVariables }}
 - name: {{ $key }}
   value: {{ $val | quote }}
 {{- end }}

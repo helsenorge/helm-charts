@@ -37,5 +37,7 @@ InternalMessagingSettings
       key: configPassword
 {{- end -}}
 
-
+{{- define "rabbitmq.RootAddress" }}
+{{- printf "rabbitmq://%s:%v" .Values.rabbitmq.hostname .Values.rabbitmq.amqpPort -}}
+{{- end }}
 

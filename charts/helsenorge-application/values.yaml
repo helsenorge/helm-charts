@@ -4,6 +4,13 @@ area: ""
 team: ""
 # -- Navn på applikasjonen som skal deployes. Kombineres med area.name, så du trenger ikke inkludere navn på losningsomraadet i navnet. 
 name: ""
+
+clientId:
+clientSecret:
+
+nameOverride: "test"
+fullnameOverride: 
+
 # -- Dns-sonen til miljøet. Overstyres i høyere miljøer.
 dnsZone: "aks-helsenorge.utvikling"
 # -- Beskriver imaget til applikasjonen
@@ -78,9 +85,9 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
-# -- Environment variabler som tilgjengeliggjøres for løsningsområde
+# -- Environment variabler som tilgjengeliggjøres podden
 # Skrives på formen key: value
-envVariables:
+extraEnvVariables:
 # -- Setter visse parametere for hvordan applikasjonenslogger sendes til splunk
 
 splunk:
@@ -89,31 +96,46 @@ splunk:
 
 configPrefix: HN_
 
+# -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
+aspnetCoreEnvironment: "k8s"
+
+rabbitmq:
+  hostname: rabbitmq
+  configUser: rmq_config_user
+  configPassword:
+  user:
+  password:
+  amqpPort: 5671
+  virtualHost: internal.messaging.helsenorge.no
+
+redis:
+  configuration: redis-persistence-master:6379
+  globalEncryptionKey:
+  areaEncryptionKey:
+
+tokenValidation:
+  signingCertificateThumbprint:
+  hashingSecret:
+
+fellesloggEndpoint: http://felleslogg-internalapi
+
+sotEndpoint: http://sot-internalapi
+
+tokenserviceEndpoint: http://sts-tokenservice
+
+configurationEndpoint: http://configuration-internalapi
+
+logging:
+  logLevel: Info
+  area:
+
+configShare: /config-share/
+
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
 
 env:
-  - name: HN_EhelseSecurityTokenServiceSettings__ClientId
-    value: 9a4a529f-6010-455c-a4ac-8065029cc820
-  - name: HN_ConfigurationFileShare__Share
-    value: /config-share/
-  - name: HN_InternalMessagingSettings__Credentials__Username
-    value: configuration.user
-  - name: HN_LoggingConfiguration__Area
-    value: Configuration
-  - name: HN_LoggingConfiguration__LogLevel
-    value: Info
-  # Secrets:
-  - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret
-    valueFrom:
-      secretKeyRef:
-        name: configuration-internalapi-clientsettings
-        key: clientSecret
-  - name: InternalMessagingSettings__Credentials__Password
-    valueFrom:
-      secretKeyRef:
-        name: configuration-internalapi-internalmessaging
-        key: password
+
 
 #todo
 # nodeSelector: {}
