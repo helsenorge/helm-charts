@@ -1,47 +1,22 @@
 {{/*
-Navn på løsningsområde
-*/}}
-{{- define "area.name" -}}
-{{- .Values.area | default .Values.global.area }}
-{{- end }}
-
-{{/*
 Navn på ansvarlig team
 */}}
-{{- define "area.team" -}}
+{{- define "helsenorge-application.team" -}}
 {{- .Values.team | default .Values.global.team | lower | trunc 63 | }}
-{{- end }}
-
-{{/*
-Navn på applikasjon
-*/}}
-{{- define "application.name" -}}
-{{- .Release.Name | lower | trunc 63 }}
 {{- end }}
 
 {{/*
 Versjon av applikasjon
 */}}
-{{- define "application.version" -}}
+{{- define "helsenorge-application.version" -}}
 {{- .Values.image.tag | default "latest" }}
 {{- end }}
 
 {{/*
 Applikasjons image
 */}}
-{{- define "application.image" -}}
-{{ printf "%s/%s:%s" .Values.image.registry (include "application.fullName" .) (include "application.version" .) }} 
-{{- end }}
-
-{{/*
-Navn på applikasjon. Kombinasjon av løsningsområde og applikasjonsnavn.
-*/}}
-{{- define "application.fullName" -}}
-{{- if contains ( include "area.name" . ) (include "application.name" . ) -}}
-{{- include "application.name" . }}
-{{- else }}
-{{- printf "%s-%s" ( include "area.name" . ) .Values.name | lower  }}
-{{- end }}
+{{- define "helsenorge-application.image" -}}
+{{ printf "%s/%s:%s" .Values.image.registry (include "helsenorge-application.fullname" .) (include "helsenorge-application.version" .) }} 
 {{- end }}
 
 {{/*
@@ -82,13 +57,13 @@ Common labels
 {{- define "helsenorge-application.labels" -}}
 helm.sh/chart: {{ include "helsenorge-application.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service | lower }}
-app.kubernetes.io/part-of: {{ include "area.name" . }}
-app.kubernetes.io/created-by: {{ include "area.team" . }}
-app.kubernetes.io/version: {{ include "application.version" . | quote }}
-name: {{ include "application.name" . }}
-area: {{ include "area.name" . }}
-team: {{ include "area.team" . }}
-version: {{ include "application.version" . | quote }}
+app.kubernetes.io/part-of: {{ .Release.Name | lower }}
+app.kubernetes.io/created-by: {{ include "helsenorge-application.team" . }}
+app.kubernetes.io/version: {{ include "helsenorge-application.version" . | quote }}
+name: {{ include "helsenorge-application.fullname" . }}
+area: {{ .Release.Name | lower }}
+team: {{ include "helsenorge-application.team" . }}
+version: {{ include "helsenorge-application.version" . | quote }}
 {{ include "helsenorge-application.selectorLabels" . }}
 {{- end }}
 
@@ -96,7 +71,7 @@ version: {{ include "application.version" . | quote }}
 Selector labels
 */}}
 {{- define "helsenorge-application.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "application.fullName" . }}
+app.kubernetes.io/name: {{ include "helsenorge-application.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -105,7 +80,7 @@ Create the name of the service account to use
 */}}
 {{- define "helsenorge-application.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "application.fullName" .) .Values.serviceAccount.name | lower}}
+{{- default (include "helsenorge-application.fullname" .) .Values.serviceAccount.name | lower}}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name | lower }}
 {{- end }}
@@ -115,7 +90,7 @@ Create the name of the service account to use
 ingress hostname
 */}}
 {{- define "helsenorge-application.hostname" -}}
-{{ default (printf "%s-%s.%s" (include "application.fullName" .) .Release.Namespace .Values.dnsZone) .Values.ingress.hostname }}
+{{ default (printf "%s-%s.%s" (include "helsenorge-application.fullname" .) .Release.Namespace .Values.dnsZone) .Values.ingress.hostname }}
 {{- end }}
 
 {{/*

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "application.fullName" . }}-test-connection"
+  name: "{{ include "helsenorge-application.fullname" . }}-test-connection"
   labels:
     {{- include "helsenorge-application.labels" . | nindent 4 }}
   annotations:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "application.fullName" . }}:{{ .Values.service.port }}/api/health']
+      args: ['{{ include "helsenorge-application.fullname" . }}:{{ .Values.service.port }}/api/health']
   restartPolicy: Never

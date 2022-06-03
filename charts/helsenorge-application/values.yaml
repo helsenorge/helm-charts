@@ -1,15 +1,11 @@
-# -- Navn på losningsomraadet applikasjonen tilhører - eks "personvern".
-area: ""
+nameOverride: 
+fullnameOverride: 
+
 # -- Ansvarlig team for losningsomraade - eks "Plattform". 
 team: ""
-# -- Navn på applikasjonen som skal deployes. Kombineres med area.name, så du trenger ikke inkludere navn på losningsomraadet i navnet. 
-name: ""
 
 clientId:
 clientSecret:
-
-nameOverride: "test"
-fullnameOverride: 
 
 # -- Dns-sonen til miljøet. Overstyres i høyere miljøer.
 dnsZone: "aks-helsenorge.utvikling"
@@ -126,11 +122,10 @@ tokenserviceEndpoint: http://sts-tokenservice
 configurationEndpoint: http://configuration-internalapi
 
 logging:
-  logLevel: Info
-  area:
+  logLevel: info
+  areaOvveride:
 
 configShare: /config-share/
-
   # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
 debugEnvironment: true
 
