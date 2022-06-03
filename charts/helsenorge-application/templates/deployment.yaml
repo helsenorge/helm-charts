@@ -41,9 +41,15 @@ spec:
           - name: HN_InternalMessagingSettings__ConfigurationCredentials__Password
             value: {{ .Values.rabbitmq.configPassword | quote }}
           - name: HN_InternalMessagingSettings__Credentials__Username
-            value: {{ .Values.rabbitmq.user | quote}}
+            value: {{ .Values.rabbitmq.user | quote }}
           - name: HN_InternalMessagingSettings__Credentials__Password
-            value: {{ .Values.rabbitmq.password | quote}}
+            value: {{ .Values.rabbitmq.password | quote }}
+          - name: HN_InternalMessagingSettings__SymmetricKey
+            value: {{ .Values.rabbitmq.symmetricKey | quote }}
+          - name: HN_InternalMessagingSettings__UseSsl
+            value: {{ .Values.rabbitmq.useSsl | quote }}
+          - name: HN_InternalMessagingSettings__EncryptMessages
+            value: {{ .Values.rabbitmq.encryptMessages | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientId
             value: {{ .Values.clientId | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret

@@ -4,8 +4,8 @@ fullnameOverride:
 # -- Ansvarlig team for losningsomraade - eks "Plattform". 
 team: ""
 
-clientId:
-clientSecret:
+clientId: 
+clientSecret: 
 
 # -- Dns-sonen til miljøet. Overstyres i høyere miljøer.
 dnsZone: "aks-helsenorge.utvikling"
@@ -30,7 +30,7 @@ image:
 # -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
 imagePullSecrets: []
 # -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.
-replicaCount: 2
+replicaCount: 1
 livenessProbe:
   # -- [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path.
   path: "/api/ping"
@@ -90,8 +90,6 @@ splunk:
   # -- Setter SourceType for applikasjonen
   sourceType: kube:Helsenorge
 
-configPrefix: HN_
-
 # -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
 aspnetCoreEnvironment: "k8s"
 
@@ -100,9 +98,12 @@ rabbitmq:
   configUser: rmq_config_user
   configPassword:
   user:
-  password:
+  password: 
   amqpPort: 5671
   virtualHost: internal.messaging.helsenorge.no
+  symmetricKey: 
+  useSsl: true
+  encryptMessages: true
 
 redis:
   configuration: redis-persistence-master:6379

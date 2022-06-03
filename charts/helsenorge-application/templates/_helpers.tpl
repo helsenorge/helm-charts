@@ -93,13 +93,6 @@ ingress hostname
 {{ default (printf "%s-%s.%s" (include "helsenorge-application.fullname" .) .Release.Namespace .Values.dnsZone) .Values.ingress.hostname }}
 {{- end }}
 
-{{/*
-Helsenorge config prefix. Prefix used before any helsenorge environment variable
-*/}}
-{{- define "configPrefix" -}}
-{{- .Values.global.configPrefix | default .Values.configPrefix }}
-{{- end -}}
-
 
 {{/*
 Mount av public-delen av helsenorge-sikkerhets-sert: TODO fikse opp i.
@@ -131,7 +124,7 @@ Mount av public-delen av helsenorge-sikkerhets-sert: TODO fikse opp i.
 {{ define "helpers.DebugEnvironment.VolumeMount" }}
 {{- if .Values.debugEnvironment }}
 - name: debug-environment
-  mountPath: /config-share/
+  mountPath: {{ .Values.configShare }}
   readOnly: true
 {{- end }}
 {{- end -}}
@@ -151,60 +144,3 @@ List environment variables
 {{- end }}
 {{- end }}
 
-{{/*
-List applikasjons-config
-
-Funksjonen converter en yaml struktur til environment-variabler på formen som Configuration i ASP.NET Core anbefaler.
-Det legges på en prefix på nøklene. Dette er prefixen satt i ehelse-common for å skille ut Helsenorge variabler fra standard variabler
-
-https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#environment-variables
-
-Funksjonen tar inn en liste over argumenter:
-0 = prefixverdien
-1 = nøkkelen i yamlstrukturen
-2 = verdien til nøkkelen
-
-Hvis verdien er av typen "map", så itererer vi over denne. 
-  Hvis nøkkelen har en verdi så kaller vi funksjonen rekursivt der 
-  0 = prefixverdi
-  1 = nøkkel__nestenøkkel (Eks LoggingConfiguration__Directory)
-  2 = verdien til nestenøkkel
-  Hvis nøkkelen ikke har en verdi så kaller vi funksjonen rekursivt der
-  0 = prefixverdi
-  1 = nøkkel
-  2 = verdien til nøkkelen
-Hvis verdien er av typen "slice", så iterer vi over denne og kaller funksjonen rekursivt der
-  0 = prefixverdi
-  1 = nøkkel__index (LoggingConfiguration__Directory__0)
-  2) verdien til nøkkelen
-Hvis verdien ikke er av typen "map" eller "slice" så skriver vi ut verdien på nøkkel og verdi i templaten
-*/}}
-
-{{- define "helpers.list-config" -}}
-  {{- $value := index . 2 -}}
-  {{- if $value -}}
-    {{- template "convertFromYamlToDotNetEnv" . -}}
-  {{- end -}}
-{{- end }}
-
-{{- define "convertFromYamlToDotNetEnv" }}
-{{- $prefix := index . 0 -}}
-{{- $key := index . 1 -}}
-{{- $value := index . 2 -}}
-{{- if kindIs "map" $value -}}
-  {{- range $k, $v := $value -}}
-    {{- if $key -}}
-        {{- template "convertFromYamlToDotNetEnv" (list $prefix (printf "%s__%s" $key $k) $v) -}}
-    {{- else -}}   
-        {{- template "convertFromYamlToDotNetEnv" (list $prefix (printf "%s" $k) $v) -}}
-    {{- end -}}          
-  {{- end -}}
-{{- else if kindIs "slice" $value -}}
-  {{- range $k, $v := $value -}}
-    {{- template "convertFromYamlToDotNetEnv" (list $prefix (printf "%s__%v" $key $k) $v) -}}
-  {{- end -}}
-{{- else }}
-- name: {{ printf "%s%s" $prefix $key }}
-  value: {{  $value | quote }}
-{{- end -}}
-{{- end -}}
