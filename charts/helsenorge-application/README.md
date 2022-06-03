@@ -1,6 +1,6 @@
 # helsenorge-applikasjon
 
-![Version: 0.0.13](https://img.shields.io/badge/Version-0.0.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.16](https://img.shields.io/badge/Version-0.0.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser ut. En helsenorge-applikasjon dekker typene api, webapp og service.
 
@@ -37,7 +37,7 @@ Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser
 | ingress.create | bool | `true` | Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret. |
 | ingress.hostname | string | kalkuleres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
 | livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
-| logging | object | `{"areaOvveride":"","logLevel":"info"}` | Logging |
+| logging | object | `{"areaOvveride":"","logLevel":"Info"}` | Logging |
 | nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
 | rabbitmq | object | `{"amqpPort":5671,"configPassword":"","configUser":"","encryptMessages":true,"hostname":"rabbitmq","password":"","symmetricKey":"","useSsl":true,"user":"","virtualHost":"internal.messaging.helsenorge.no"}` | Messagings settings - Blir tilgjengeliggjort som environment-variabler i pod |
 | rabbitmq.amqpPort | int | `5671` | amqp-port |

@@ -1,6 +1,6 @@
 # helsenorge-common-config
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.0.0](https://img.shields.io/badge/AppVersion-23.0.0-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.0.0](https://img.shields.io/badge/AppVersion-23.0.0-informational?style=flat-square)
 
 Helm chart for deployment felles config (definert av ehelse-common pakkesettet)
 
@@ -11,15 +11,15 @@ Helm chart for deployment felles config (definert av ehelse-common pakkesettet)
 | area.name | string | `"felles-config"` |  |
 | area.team | string | `"Plattform"` |  |
 | config.cache.cacheKeyPrefix | string | `nil` |  |
-| config.cache.redisPersistentCacheEndpoint | string | `"redis-persistence-master:6379"` |  |
-| config.felleslogg.endpointUrl | string | `"http://sot-internalapi"` |  |
+| config.cache.redisPersistentCacheEndpoint | string | `nil` |  |
+| config.felleslogg.endpointUrl | string | `nil` |  |
 | config.internalMessaging.encryptMessages | bool | `false` |  |
-| config.internalMessaging.rabbitEndpoint | string | `"rabbitmq://rabbitmq:5671"` |  |
+| config.internalMessaging.rabbitEndpoint | string | `nil` |  |
 | config.internalMessaging.useSsl | bool | `true` |  |
-| config.internalMessaging.virtualHost | string | `"internal.messaging.helsenorge.no"` |  |
-| config.sot.endpointUrl | string | `"http://sot-internalapi"` |  |
-| config.sts.endpointUrl | string | `"http://sts-tokenservice"` |  |
-| config.sts.signingCert | string | `"F46ECB29F8B9994D2286B073C1CEA6A52BB746FC"` |  |
+| config.internalMessaging.virtualHost | string | `nil` |  |
+| config.sot.endpointUrl | string | `nil` |  |
+| config.sts.endpointUrl | string | `nil` |  |
+| config.sts.signingCert | string | `nil` |  |
 | secrets.cache.areaEncryptionKey | string | `nil` |  |
 | secrets.cache.globalEncryptionKey | string | `nil` |  |
 | secrets.internalMessaging.configPassword | string | `nil` |  |
