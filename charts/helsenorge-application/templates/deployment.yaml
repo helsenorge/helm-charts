@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "application.fullName" . }}
+  name: {{ include "helsenorge-application.fullname" . }}
   labels:
     {{- include "helsenorge-application.labels" . | nindent 4 }}
 spec:
@@ -18,10 +18,10 @@ spec:
     spec:
       serviceAccountName: {{ include "helsenorge-application.serviceAccountName" . }}
       containers:
-        - name: {{ include "application.fullName" .  }} 
+        - name: {{ include "helsenorge-application.fullname" .  }} 
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ include "application.image" . }} 
+          image: {{ include "helsenorge-application.image" . }} 
           imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           command: [{{ .Values.image.command }}]
           args: 
@@ -29,13 +29,59 @@ spec:
             - {{ . }}
           {{- end }}
           envFrom:
-          {{- include "helpers.configMapRefs" . | indent 10 }}
-          {{- include "helpers.secretRefs" . | indent 10 }}
           env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: {{ .Values.aspnetCoreEnvironment | quote }}
+          - name: HN_InternalMessagingSettings__RootAddress
+            value: {{ include "rabbitmq.rootAddress" . | quote }}
+          - name: HN_InternalMessagingSettings__VirtualHost
+            value: {{ .Values.rabbitmq.virtualHost | quote }}
+          - name: HN_InternalMessagingSettings__ConfigurationCredentials__Username
+            value: {{ .Values.rabbitmq.configUser | quote }}
+          - name: HN_InternalMessagingSettings__ConfigurationCredentials__Password
+            value: {{ .Values.rabbitmq.configPassword | quote }}
+          - name: HN_InternalMessagingSettings__Credentials__Username
+            value: {{ .Values.rabbitmq.user | quote }}
+          - name: HN_InternalMessagingSettings__Credentials__Password
+            value: {{ .Values.rabbitmq.password | quote }}
+          - name: HN_InternalMessagingSettings__SymmetricKey
+            value: {{ .Values.rabbitmq.symmetricKey | quote }}
+          - name: HN_InternalMessagingSettings__UseSsl
+            value: {{ .Values.rabbitmq.useSsl | quote }}
+          - name: HN_InternalMessagingSettings__EncryptMessages
+            value: {{ .Values.rabbitmq.encryptMessages | quote }}
+          - name: HN_EhelseSecurityTokenServiceSettings__ClientId
+            value: {{ .Values.clientId | quote }}
+          - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret
+            value: {{ .Values.clientSecret | quote }}
+          - name: HN_EhelseSecurityTokenServiceSettings__EndpointUrl
+            value: {{ .Values.tokenserviceEndpoint | quote }}
+          {{- if .Values.debug.enabled }}
+          - name: HN_ConfigurationFileShare__Share
+            value: {{ .Values.configShare | quote }}
+          {{- end }}
+          - name: HN_LoggingConfiguration__LogLevel
+            value: {{ .Values.logging.logLevel | quote }}
+          - name: HN_LoggingConfiguration__Area
+            value: {{ include "logging.area" . | quote }}
+          - name: HN_SotApi__EndpointUri
+            value: {{ .Values.sotEndpoint | quote }}
+          - name: HN_TokenValidationSettings__SigningCertificate
+            value: {{ .Values.tokenValidation.signingCertificateThumbprint |  quote }}
+          - name: HN_TokenValidationSettings__TokenHashingSecret
+            value: {{ .Values.tokenValidation.hashingSecret |  quote }}
+          - name: HN_FellesloggClientSettings__EndpointUri
+            value: {{ .Values.fellesloggEndpoint |  quote }}
+          - name: DistributedPersistentCache__Configuration
+            value: {{ .Values.redis.configuration | quote }}
+          - name: DistributedPersistentCache__AreaEncryptionKey
+            value: {{ .Values.redis.areaEncryptionKey | quote }}
+          - name: DistributedPersistentCache__GlobalEncryptionKey
+            value: {{ .Values.redis.globalEncryptionKey | quote }}
           {{- include "helpers.list-env-variables" . | indent 10 }}
           volumeMounts:
           {{- include "helpers.SikkerSone.PublicCert.VolumeMount" . | indent 10 }}
-          {{- include "helpers.DebugEnvironment.VolumeMount" . | indent 10 }}
+          {{- include "debug.volumeMount" . | indent 10 }}
           ports:
             - name: http
               containerPort: 80
@@ -52,4 +98,4 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         {{- include "helpers.SikkerSone.PublicCert.Volume" . | indent 8 }}
-        {{- include "helpers.DebugEnvironment.Volume" . | indent 8 }}
+        {{- include "debug.volume" . | indent 8 }}

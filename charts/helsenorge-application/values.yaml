@@ -1,10 +1,17 @@
-# -- Navn på losningsomraadet applikasjonen tilhører - eks "personvern".
-area: ""
+# -- Overrider navn på chart. Beholder release-navnet
+nameOverride: ""
+# -- Overrider navn på chart. 
+fullnameOverride: ""
+
 # -- Ansvarlig team for losningsomraade - eks "Plattform". 
 team: ""
-# -- Navn på applikasjonen som skal deployes. Kombineres med area.name, så du trenger ikke inkludere navn på losningsomraadet i navnet. 
-name: ""
-# -- Dns-sonen til miljøet. Overstyres i høyere miljøer.
+
+# -- Id registrert i STS-vertikalen for applikasjonen
+clientId: ""
+# -- Tilhærende secret til klienten
+clientSecret: ""
+
+# -- Dns-sonen til miljøet.
 dnsZone: "aks-helsenorge.utvikling"
 # -- Beskriver imaget til applikasjonen
 # @default -- Se verdier under
@@ -21,13 +28,13 @@ image:
   # Ler mer om entrypoint [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
   command: "/app/container-startup.sh" 
   # -- tag identifiserer versjonen på imaget som skal deployes 
-  tag: 
+  tag: ""
   # -- Argumenter til commanden. Beskrives som et array.
-  args:
+  args: []
 # -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
 imagePullSecrets: []
 # -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.
-replicaCount: 2
+replicaCount: 1
 livenessProbe:
   # -- [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path.
   path: "/api/ping"
@@ -78,69 +85,85 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
-# -- Environment variabler som tilgjengeliggjøres for løsningsområde
+# -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
-envVariables:
-# -- Setter visse parametere for hvordan applikasjonenslogger sendes til splunk
-
+# Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
+# Eks: 
+# HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;"
+extraEnvVariables:
+# -- Splunk
 splunk:
-  # -- Setter SourceType for applikasjonen
+  # -- Setter SourceType på loggene i splunk
   sourceType: kube:Helsenorge
 
-configPrefix: HN_
+# -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
+aspnetCoreEnvironment: "k8s"
 
-# -- Felles-config for applikasjonslogging.
-# @default -- Se verdier under
-loggingConfiguration:
-  # -- Navn på area-kategorien i loggen. Defaulter til area.name.
-  area: 
-  # --  LogLevel. Tillatte verdier: Info, Debug, Trace.
-  logLevel: "Info"
-# @default -- Se verdier under
-configurationFileShare: 
-  # -- Uri til path til share
-  share: /config-share/
-clientSettings:
-  clientId:
-  clientSecret:
-internalMessaging:
-  username:
-  password:
+# -- Messagings settings - Blir tilgjengeliggjort som environment-variabler i pod
+rabbitmq:
+  # -- Hostname til rabbitmq
+  hostname: rabbitmq
+  # -- Configbruker 
+  configUser: ""
+  # -- Configbruker passord
+  configPassword: ""
+  # -- Bruker
+  user: ""
+  # -- Passord
+  password: ""
+  # -- amqp-port
+  amqpPort: 5671
+  virtualHost: internal.messaging.helsenorge.no
+  # -- Krypteringsnøkkel for meldinger hvis kryptering er skrudd på
+  symmetricKey: ""
+  # -- Amqp trafikk over ssl
+  useSsl: true
+  # -- Skru på meldingskryptering
+  encryptMessages: true
 
-# -- Helsenorge sikkerhetssertikat
-helsenorgeSikkerhetCertificate:
-  # -- Skal sertifikatet mountes på containerne
-  mount: false
-  # -- Hvor på containerne skal sertifikatet mountes
-  mountPath: helsenorge-sikkerhet-private
-  certificate:
-    # -- Navn på sertifikat
-    name: helsenorge-sikkerhet
-    # -- Navn på secret sertifikat hentes fra
-    secretName: certificate.helsenorge-sikkerhet
-# -- Fellesconfig for Tokenvalidering
-# @default -- Se verdier under
-TokenValidationSettings: 
-  Enabled: true
-  Metadata: 
-    # --  Navn på config-map som opprettes.
-    ConfigMapName: tokenvalidation-config 
-  certificate:  
-    mountPath: helsenorge-sikkerhet-public
-    name: helsenorge-sikkerhet-public
-    secretName: certificate.helsenorge-sikkerhet.public
-  # -- Thumbprint til valideringssertifikat
-  SigningCertificate: F46ECB29F8B9994D2286B073C1CEA6A52BB746FC
-  # -- Hashingsecret
-  TokenHashingSecret: 
-  # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
-debugEnvironment: true
+# -- Cache settings - Blir tilgjengeliggjort som environment-variabler i pod
+redis:
+  # -- connectionstring mot redis
+  # -- comma-separert liste over master-noder
+  # -- eks: redis1:6379,redis2:6379
+  configuration: redis-persistence-master:6379
+  # -- krypteringsnøkkel for globale cache verdier
+  globalEncryptionKey: ""
+  # -- krypteringsnøkkel for cache verdier innenfor området/applikasjon
+  areaEncryptionKey: ""
 
+# -- Tokenvalidering - Blir tilgjengeliggjort som environment-variabler i pod
+tokenValidation:
+  # -- Thumbprint til valideringssertifikat - public del av sikkerhets-sertifikat
+  signingCertificateThumbprint: ""
+  # -- TODO hva er dette?
+  hashingSecret: ""
 
-#todo
-# nodeSelector: {}
-# tolerations: []
-# affinity: {}
-# podAnnotations: {}
-# podSecurityContext: {}
-# securityContext: {}
+# -- Endepunkt til felleslog-vertikalen sitt internal api - Blir tilgjengeliggjort som environment-variabler i pod
+fellesloggEndpoint: http://felleslogg-internalapi
+
+# -- Endepunkt til sot-vertikalen sitt internalapi - Blir tilgjengeliggjort som environment-variabler i pod
+sotEndpoint: http://sot-internalapi
+
+# -- Endepunkt til sts-vertikalen sin tokenservice - Blir tilgjengeliggjort som environment-variabler i pod
+tokenserviceEndpoint: http://sts-tokenservice
+
+# -- Endepunkt til configuration-vertikalen sitt internalapi - Blir tilgjengeliggjort som environment-variabler i pod
+configurationEndpoint: http://configuration-internalapi
+
+# -- Logging
+logging:
+  # LogLevel - tillatte verdier trace, debug, info
+  logLevel: info
+  # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.
+  areaOvveride: ""
+
+  # -- debugmodus
+debug:  
+  # -- skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
+  enabled: false
+  # -- path i pod der debug-dll blir tilgjengeligjort
+  configShare: /config-share/
+  # -- navn på config-map som inneholder debug-dll. Denne må eksistere i miljøet fra før
+  debugConfigMap: debug-environment
+

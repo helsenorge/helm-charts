@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "application.fullName" . }}
+  name: {{ include "helsenorge-application.fullname" . }}
   labels:
     {{- include "helsenorge-application.labels" . | nindent 4 }}
   annotations:
@@ -16,7 +16,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ include "application.fullName" . }}
+            name: {{ include "helsenorge-application.fullname" . }}
             port:
               number: {{ .Values.service.port | default 80 }}
 {{- end}}
