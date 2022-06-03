@@ -5,19 +5,19 @@ area:
 
 config:
   sot: 
-    endpointUrl: http://sot-internalapi
+    endpointUrl: 
   felleslogg: 
-    endpointUrl: http://sot-internalapi
+    endpointUrl: 
   sts:
-    endpointUrl: http://sts-tokenservice
-    signingCert: F46ECB29F8B9994D2286B073C1CEA6A52BB746FC
+    endpointUrl: 
+    signingCert:
   internalMessaging:
-    rabbitEndpoint: rabbitmq://rabbitmq:5671
-    virtualHost: internal.messaging.helsenorge.no
+    rabbitEndpoint: 
+    virtualHost: 
     useSsl: true
     encryptMessages: false
   cache:
-    redisPersistentCacheEndpoint: redis-persistence-master:6379
+    redisPersistentCacheEndpoint: 
     cacheKeyPrefix: 
     
 secrets:
