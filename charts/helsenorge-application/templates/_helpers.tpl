@@ -109,26 +109,6 @@ Mount av public-delen av helsenorge-sikkerhets-sert: TODO fikse opp i.
   readOnly: true
 {{- end -}}
 
-{{/*
-  Mount av Debug-dll
-*/}}
-
-{{ define "helpers.DebugEnvironment.Volume" }}
-{{- if .Values.debugEnvironment }}
-- name: debug-environment
-  configMap: 
-    name: debug-environment
-{{- end -}}
-{{- end -}}
-
-{{ define "helpers.DebugEnvironment.VolumeMount" }}
-{{- if .Values.debugEnvironment }}
-- name: debug-environment
-  mountPath: {{ .Values.configShare }}
-  readOnly: true
-{{- end }}
-{{- end -}}
-
 
 {{/*
 List environment variables

@@ -1,13 +1,17 @@
-nameOverride: 
-fullnameOverride: 
+# -- Overrider navn på chart. Beholder release-navnet
+nameOverride: ""
+# -- Overrider navn på chart. 
+fullnameOverride: ""
 
 # -- Ansvarlig team for losningsomraade - eks "Plattform". 
 team: ""
 
-clientId: 
-clientSecret: 
+# -- Id registrert i STS-vertikalen for applikasjonen
+clientId: ""
+# -- Tilhærende secret til klienten
+clientSecret: ""
 
-# -- Dns-sonen til miljøet. Overstyres i høyere miljøer.
+# -- Dns-sonen til miljøet.
 dnsZone: "aks-helsenorge.utvikling"
 # -- Beskriver imaget til applikasjonen
 # @default -- Se verdier under
@@ -24,9 +28,9 @@ image:
   # Ler mer om entrypoint [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
   command: "/app/container-startup.sh" 
   # -- tag identifiserer versjonen på imaget som skal deployes 
-  tag: 
+  tag: ""
   # -- Argumenter til commanden. Beskrives som et array.
-  args:
+  args: ""
 # -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
 imagePullSecrets: []
 # -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.
@@ -81,62 +85,85 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
-# -- Environment variabler som tilgjengeliggjøres podden
+# -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
+# Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
+# Eks: 
+# HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;"
 extraEnvVariables:
-# -- Setter visse parametere for hvordan applikasjonenslogger sendes til splunk
-
+# -- Splunk
 splunk:
-  # -- Setter SourceType for applikasjonen
+  # -- Setter SourceType på loggene i splunk
   sourceType: kube:Helsenorge
 
 # -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
 aspnetCoreEnvironment: "k8s"
 
+# -- Messagings settings - Blir tilgjengeliggjort som environment-variabler i pod
 rabbitmq:
+  # -- Hostname til rabbitmq
   hostname: rabbitmq
-  configUser: rmq_config_user
-  configPassword:
-  user:
-  password: 
+  # -- Configbruker 
+  configUser: ""
+  # -- Configbruker passord
+  configPassword: ""
+  # -- Bruker
+  user: ""
+  # -- Passord
+  password: ""
+  # -- amqp-port
   amqpPort: 5671
   virtualHost: internal.messaging.helsenorge.no
-  symmetricKey: 
+  # -- Krypteringsnøkkel for meldinger hvis kryptering er skrudd på
+  symmetricKey: ""
+  # -- Amqp trafikk over ssl
   useSsl: true
+  # -- Skru på meldingskryptering
   encryptMessages: true
 
+# -- Cache settings - Blir tilgjengeliggjort som environment-variabler i pod
 redis:
+  # -- connectionstring mot redis
+  # -- comma-separert liste over master-noder
+  # -- eks: redis1:6379,redis2:6379
   configuration: redis-persistence-master:6379
-  globalEncryptionKey:
-  areaEncryptionKey:
+  # -- krypteringsnøkkel for globale cache verdier
+  globalEncryptionKey: ""
+  # -- krypteringsnøkkel for cache verdier innenfor området/applikasjon
+  areaEncryptionKey: ""
 
+# -- Tokenvalidering - Blir tilgjengeliggjort som environment-variabler i pod
 tokenValidation:
-  signingCertificateThumbprint:
-  hashingSecret:
+  # -- Thumbprint til valideringssertifikat - public del av sikkerhets-sertifikat
+  signingCertificateThumbprint: ""
+  # -- TODO hva er dette?
+  hashingSecret: ""
 
+# -- Endepunkt til felleslog-vertikalen sitt internal api - Blir tilgjengeliggjort som environment-variabler i pod
 fellesloggEndpoint: http://felleslogg-internalapi
 
+# -- Endepunkt til sot-vertikalen sitt internalapi - Blir tilgjengeliggjort som environment-variabler i pod
 sotEndpoint: http://sot-internalapi
 
+# -- Endepunkt til sts-vertikalen sin tokenservice - Blir tilgjengeliggjort som environment-variabler i pod
 tokenserviceEndpoint: http://sts-tokenservice
 
+# -- Endepunkt til configuration-vertikalen sitt internalapi - Blir tilgjengeliggjort som environment-variabler i pod
 configurationEndpoint: http://configuration-internalapi
 
+# -- Logging
 logging:
+  # LogLevel - tillatte verdier trace, debug, info
   logLevel: info
-  areaOvveride:
+  # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.
+  areaOvveride: ""
 
-configShare: /config-share/
-  # -- Tilgjengeliggjør debug-modus i miljøet. Dette gjelder blant annet bakdør.
-debugEnvironment: true
+  # -- debugmodus
+debug:  
+  # -- skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
+  enabled: false
+  # -- path i pod der debug-dll blir tilgjengeligjort
+  configShare: /config-share/
+  # -- navn på config-map som inneholder debug-dll. Denne må eksistere i miljøet fra før
+  debugConfigMap: debug-environment
 
-env:
-
-
-#todo
-# nodeSelector: {}
-# tolerations: []
-# affinity: {}
-# podAnnotations: {}
-# podSecurityContext: {}
-# securityContext: {}

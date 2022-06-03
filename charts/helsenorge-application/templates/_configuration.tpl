@@ -16,3 +16,22 @@ SET Logging.Area
 {{- end }}
 {{- end }}
 
+{{/*
+  Enable debug-mode
+*/}}
+{{ define "debug.volume" }}
+{{- if .Values.debug.enabled }}
+- name: debug-environment
+  configMap: 
+    name: {{ .Values.debug.debugConfigMap }}
+{{- end -}}
+{{- end -}}
+
+{{ define "debug.volumeMount" }}
+{{- if .Values.debug.enabled }}
+- name: debug-environment
+  mountPath: {{ .Values.debug.configShare }}
+  readOnly: true
+{{- end }}
+{{- end -}}
+

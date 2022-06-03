@@ -56,8 +56,10 @@ spec:
             value: {{ .Values.clientSecret | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__EndpointUrl
             value: {{ .Values.tokenserviceEndpoint | quote }}
+          {{- if .Values.debug.enabled }}
           - name: HN_ConfigurationFileShare__Share
             value: {{ .Values.configShare | quote }}
+          {{- end }}
           - name: HN_LoggingConfiguration__LogLevel
             value: {{ .Values.logging.logLevel | quote }}
           - name: HN_LoggingConfiguration__Area
@@ -79,7 +81,7 @@ spec:
           {{- include "helpers.list-env-variables" . | indent 10 }}
           volumeMounts:
           {{- include "helpers.SikkerSone.PublicCert.VolumeMount" . | indent 10 }}
-          {{- include "helpers.DebugEnvironment.VolumeMount" . | indent 10 }}
+          {{- include "debug.volumeMount" . | indent 10 }}
           ports:
             - name: http
               containerPort: 80
@@ -96,4 +98,4 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         {{- include "helpers.SikkerSone.PublicCert.Volume" . | indent 8 }}
-        {{- include "helpers.DebugEnvironment.Volume" . | indent 8 }}
+        {{- include "debug.volume" . | indent 8 }}
