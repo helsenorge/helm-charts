@@ -32,6 +32,17 @@ entries:
   helsenorge-common-config:
   - apiVersion: v2
     appVersion: 23.0.0
+    created: "2022-06-03T10:45:19.688640689Z"
+    description: Helm chart for deployment felles config (definert av ehelse-common
+      pakkesettet)
+    digest: c3a9fe948d66cf40497f858a554d13dfd274471b469e1c906afe2d688592e2bb
+    name: helsenorge-common-config
+    type: application
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-common-config-0.0.3/helsenorge-common-config-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 23.0.0
     created: "2022-05-31T17:40:00.944224902Z"
     description: Helm chart for deployment felles config (definert av ehelse-common
       pakkesettet)
@@ -52,4 +63,4 @@ entries:
     urls:
     - https://github.com/helsenorge/helsenorge-helm-charts/releases/download/helsenorge-common-config-0.0.1/helsenorge-common-config-0.0.1.tgz
     version: 0.0.1
-generated: "2022-05-31T17:40:00.944608507Z"
+generated: "2022-06-03T10:45:19.68878139Z"
