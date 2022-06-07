@@ -107,13 +107,14 @@ extraEnvVarsSecret:
       name: "felles-config"
 
 extraVolumes:
+  - name: helsenorge-sikkerhet-public
+    secret: 
+      secretName: certificate.helsenorge-sikkerhet.public
 
 extraVolumeMounts:
-
-# Navn på felles config-map
-#fellesConfig: felles-config
-# Navn på felles config-secret
-#fellesSecrets: felles-config
+  - name: helsenorge-sikkerhet-public
+    mountPath: /certificates
+    readOnly: true
 
 # -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
 aspnetCoreEnvironment: "k8s"
@@ -164,18 +165,6 @@ tokenValidation:
   # -- Skru på tokenvalidering for pod'en?
   enabled: true
   
-# -- Endepunkt til felleslog-vertikalen sitt internal api - Blir tilgjengeliggjort som environment-variabler i pod
-fellesloggEndpoint: http://felleslogg-internalapi
-
-# -- Endepunkt til sot-vertikalen sitt internalapi - Blir tilgjengeliggjort som environment-variabler i pod
-sotEndpoint: http://sot-internalapi
-
-# -- Endepunkt til sts-vertikalen sin tokenservice - Blir tilgjengeliggjort som environment-variabler i pod
-tokenserviceEndpoint: http://sts-tokenservice
-
-# -- Endepunkt til configuration-vertikalen sitt internalapi - Blir tilgjengeliggjort som environment-variabler i pod
-configurationEndpoint: http://configuration-internalapi
-
 # -- Logging
 logging:
   # LogLevel - tillatte verdier Trace, Debug, Info

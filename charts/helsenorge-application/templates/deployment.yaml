@@ -65,11 +65,7 @@ spec:
             mountPath: {{ .Values.debug.configShare }}
             readOnly: true
           {{- end }}
-          {{- if .Values.tokenValidation.enabled }}
-          - name: helsenorge-sikkerhet-public
-            mountPath: {{.Values.tokenValidation.mountPath }}
-            readOnly: true
-          {{- end }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }} 
           ports:
             - name: http
               containerPort: 80
@@ -85,11 +81,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-      {{- if .Values.tokenValidation.enabled }}
-      - name: helsenorge-sikkerhet-public
-        secret: 
-          secretName: {{ .Values.tokenValidation.secretName}}
-      {{- end }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 10 }} 
       {{- if .Values.debug.enabled }}
       - name: debug-environment
         configMap: 
