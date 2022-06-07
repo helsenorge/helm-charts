@@ -32,56 +32,40 @@ spec:
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: {{ .Values.aspnetCoreEnvironment | quote }}
-          - name: HN_InternalMessagingSettings__RootAddress
-            value: {{ include "rabbitmq.rootAddress" . | quote }}
-          - name: HN_InternalMessagingSettings__VirtualHost
-            value: {{ .Values.rabbitmq.virtualHost | quote }}
-          - name: HN_InternalMessagingSettings__ConfigurationCredentials__Username
-            value: {{ .Values.rabbitmq.configUser | quote }}
-          - name: HN_InternalMessagingSettings__ConfigurationCredentials__Password
-            value: {{ .Values.rabbitmq.configPassword | quote }}
           - name: HN_InternalMessagingSettings__Credentials__Username
             value: {{ .Values.rabbitmq.user | quote }}
           - name: HN_InternalMessagingSettings__Credentials__Password
             value: {{ .Values.rabbitmq.password | quote }}
-          - name: HN_InternalMessagingSettings__SymmetricKey
-            value: {{ .Values.rabbitmq.symmetricKey | quote }}
-          - name: HN_InternalMessagingSettings__UseSsl
-            value: {{ .Values.rabbitmq.useSsl | quote }}
-          - name: HN_InternalMessagingSettings__EncryptMessages
-            value: {{ .Values.rabbitmq.encryptMessages | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientId
             value: {{ .Values.clientId | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret
             value: {{ .Values.clientSecret | quote }}
-          - name: HN_EhelseSecurityTokenServiceSettings__EndpointUrl
-            value: {{ .Values.tokenserviceEndpoint | quote }}
-          {{- if .Values.debug.enabled }}
-          - name: HN_ConfigurationFileShare__Share
-            value: {{ .Values.configShare | quote }}
-          {{- end }}
-          - name: HN_LoggingConfiguration__LogLevel
-            value: {{ .Values.logging.logLevel | quote }}
           - name: HN_LoggingConfiguration__Area
             value: {{ include "logging.area" . | quote }}
-          - name: HN_SotApi__EndpointUri
-            value: {{ .Values.sotEndpoint | quote }}
-          - name: HN_TokenValidationSettings__SigningCertificate
-            value: {{ .Values.tokenValidation.signingCertificateThumbprint |  quote }}
-          - name: HN_TokenValidationSettings__TokenHashingSecret
-            value: {{ .Values.tokenValidation.hashingSecret |  quote }}
-          - name: HN_FellesloggClientSettings__EndpointUri
-            value: {{ .Values.fellesloggEndpoint |  quote }}
-          - name: DistributedPersistentCache__Configuration
-            value: {{ .Values.redis.configuration | quote }}
-          - name: DistributedPersistentCache__AreaEncryptionKey
-            value: {{ .Values.redis.areaEncryptionKey | quote }}
-          - name: DistributedPersistentCache__GlobalEncryptionKey
-            value: {{ .Values.redis.globalEncryptionKey | quote }}
-          {{- include "helpers.list-env-variables" . | indent 10 }}
+          {{- range $key, $val := .Values.extraEnvVars }}
+          - name: {{ $key }}
+            value: {{ $val | quote }}
+          {{- end }}
+          {{- range $key, $val := .Values.global.extraEnvVars }}
+          - name: {{ $key }}
+            value: {{ $val | quote }}
+          {{- end }}
+           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsCM "context" $) | nindent 12 }} 
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
           volumeMounts:
-          {{- include "helpers.SikkerSone.PublicCert.VolumeMount" . | indent 10 }}
-          {{- include "debug.volumeMount" . | indent 10 }}
+          {{- if .Values.debug.enabled }}
+          - name: debug-environment
+            mountPath: {{ .Values.debug.configShare }}
+            readOnly: true
+          {{- end }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }} 
           ports:
             - name: http
               containerPort: 80
@@ -97,5 +81,9 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-        {{- include "helpers.SikkerSone.PublicCert.Volume" . | indent 8 }}
-        {{- include "debug.volume" . | indent 8 }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 10 }} 
+      {{- if .Values.debug.enabled }}
+      - name: debug-environment
+        configMap: 
+          name: {{ .Values.debug.debugConfigMap }}
+      {{- end }}

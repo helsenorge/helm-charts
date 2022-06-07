@@ -95,32 +95,17 @@ ingress hostname
 
 
 {{/*
-Mount av public-delen av helsenorge-sikkerhets-sert: TODO fikse opp i.
+https://github.com/bitnami/charts/blob/master/bitnami/common/templates/_tplvalues.tpl
+
+Renders a value that contains template.
+Usage:
+{{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
 */}}
-{{ define "helpers.SikkerSone.PublicCert.Volume" }}
-- name: helsenorge-sikkerhet-public
-  secret: 
-    secretName: certificate.helsenorge-sikkerhet.public
+{{- define "common.tplvalues.render" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}
-
-{{ define "helpers.SikkerSone.PublicCert.VolumeMount" }}
-- name: helsenorge-sikkerhet-public
-  mountPath: /certificates/helsenorge-sikkerhet-public" 
-  readOnly: true
-{{- end -}}
-
-
-{{/*
-List environment variables
-*/}}
-{{- define "helpers.list-env-variables"}}
-{{- range $key, $val := .Values.extraEnvVariables }}
-- name: {{ $key }}
-  value: {{ $val | quote }}
-{{- end }}
-{{- range $key, $val := .Values.global.sharedEnvVariables }}
-- name: {{ $key }}
-  value: {{ $val | quote }}
-{{- end }}
-{{- end }}
 
