@@ -6,10 +6,30 @@ fullnameOverride: ""
 # -- Ansvarlig team for losningsomraade - eks "Plattform". 
 team: ""
 
-# -- Id registrert i STS-vertikalen for applikasjonen
+# -- ClientId for applikasjonen
 clientId: ""
-# -- Tilhærende secret til klienten
+# -- Tilhørende secret
 clientSecret: ""
+
+# -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
+aspnetCoreEnvironment: "k8s"
+
+# -- Messagings settings - Blir tilgjengeliggjort som environment-variabler i pod
+rabbitmq:
+  # -- Bruker
+  user: ""
+  # -- Passord
+  password: ""
+
+# -- Logging
+logging:
+  # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.
+  areaOvveride: ""
+
+# -- Splunk
+splunk:
+  # -- Setter SourceType på loggene i splunk
+  sourceType: kube:Helsenorge
 
 # -- Dns-sonen til miljøet.
 dnsZone: "aks-helsenorge.utvikling"
@@ -86,11 +106,6 @@ resources:
     # -- Samme som under resources.limits.
     memory: 128Mi
 
-# -- Splunk
-splunk:
-  # -- Setter SourceType på loggene i splunk
-  sourceType: kube:Helsenorge
-
 # -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
 # Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
@@ -106,71 +121,17 @@ extraEnvVarsSecret:
   - secretRef:
       name: "felles-config"
 
+# Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
 extraVolumes:
   - name: helsenorge-sikkerhet-public
     secret: 
       secretName: certificate.helsenorge-sikkerhet.public
 
+# Definisjon på extra volume mount som skal mountes til podden
 extraVolumeMounts:
   - name: helsenorge-sikkerhet-public
     mountPath: /certificates
     readOnly: true
-
-# -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
-aspnetCoreEnvironment: "k8s"
-
-# -- Messagings settings - Blir tilgjengeliggjort som environment-variabler i pod
-rabbitmq:
-  # -- Hostname til rabbitmq
-  hostname: rabbitmq
-  # -- Configbruker 
-  configUser: ""
-  # -- Configbruker passord
-  configPassword: ""
-  # -- Bruker
-  user: ""
-  # -- Passord
-  password: ""
-  # -- amqp-port
-  amqpPort: 5671
-  virtualHost: internal.messaging.helsenorge.no
-  # -- Krypteringsnøkkel for meldinger hvis kryptering er skrudd på
-  symmetricKey: ""
-  # -- Amqp trafikk over ssl
-  useSsl: true
-  # -- Skru på meldingskryptering
-  encryptMessages: true
-
-# -- Cache settings - Blir tilgjengeliggjort som environment-variabler i pod
-redis:
-  # -- connectionstring mot redis
-  # -- comma-separert liste over master-noder
-  # -- eks: redis1:6379,redis2:6379
-  configuration: redis-persistence-master:6379
-  # -- krypteringsnøkkel for globale cache verdier
-  globalEncryptionKey: ""
-  # -- krypteringsnøkkel for cache verdier innenfor området/applikasjon
-  areaEncryptionKey: ""
-
-# -- Tokenvalidering - Blir tilgjengeliggjort som environment-variabler i pod
-tokenValidation:
-  # -- Thumbprint til valideringssertifikat - public del av sikkerhets-sertifikat
-  signingCertificateThumbprint: ""
-  # -- TODO hva er dette?
-  hashingSecret: ""
-  # -- Navn på secret som inneholder sertifikat - må eksisterer i namespace fra før
-  secretName: certificate.helsenorge-sikkerhet.public
-  # -- Path som sertifikatet mountes på i pod
-  mountPath: certificates
-  # -- Skru på tokenvalidering for pod'en?
-  enabled: true
-  
-# -- Logging
-logging:
-  # LogLevel - tillatte verdier Trace, Debug, Info
-  logLevel: Info
-  # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.
-  areaOvveride: ""
 
   # -- debugmodus
 debug:  
