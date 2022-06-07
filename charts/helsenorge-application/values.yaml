@@ -85,16 +85,35 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
+
+# -- Splunk
+splunk:
+  # -- Setter SourceType på loggene i splunk
+  sourceType: kube:Helsenorge
+
 # -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
 # Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
 # Eks: 
 # HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;"
-extraEnvVariables:
-# -- Splunk
-splunk:
-  # -- Setter SourceType på loggene i splunk
-  sourceType: kube:Helsenorge
+extraEnvVars:
+# Navn på eksisterende config-map som inneholder extra env-vars - må skrives på formen for en gyldig configMapRef og config-map må eksistere fra før
+extraEnvVarsCM: 
+  - configMapRef:
+      name: "felles-config"
+# Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før
+extraEnvVarsSecret: 
+  - secretRef:
+      name: "felles-config"
+
+extraVolumes:
+
+extraVolumeMounts:
+
+# Navn på felles config-map
+#fellesConfig: felles-config
+# Navn på felles config-secret
+#fellesSecrets: felles-config
 
 # -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
 aspnetCoreEnvironment: "k8s"
@@ -138,7 +157,13 @@ tokenValidation:
   signingCertificateThumbprint: ""
   # -- TODO hva er dette?
   hashingSecret: ""
-
+  # -- Navn på secret som inneholder sertifikat - må eksisterer i namespace fra før
+  secretName: certificate.helsenorge-sikkerhet.public
+  # -- Path som sertifikatet mountes på i pod
+  mountPath: certificates
+  # -- Skru på tokenvalidering for pod'en?
+  enabled: true
+  
 # -- Endepunkt til felleslog-vertikalen sitt internal api - Blir tilgjengeliggjort som environment-variabler i pod
 fellesloggEndpoint: http://felleslogg-internalapi
 
@@ -164,6 +189,6 @@ debug:
   enabled: false
   # -- path i pod der debug-dll blir tilgjengeligjort
   configShare: /config-share/
-  # -- navn på config-map som inneholder debug-dll. Denne må eksistere i miljøet fra før
+  # -- navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før
   debugConfigMap: debug-environment
 
