@@ -1,0 +1,19 @@
+
+
+# -- Beskriver imaget til applikasjonen
+# @default -- Se verdier under
+image:
+  # -- Fra hvilket container registry skal imaget hentes. 
+  registry: helsenorge.azurecr.io
+  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository
+  repository: ""
+  # -- Kubernetes image pull-policy.
+  # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
+  pullPolicy: IfNotPresent
+  # -- tag identifiserer versjonen på imaget som skal deployes 
+  tag: ""
+  # -- Ovveride default container command
+command: 
+  # -- Ovveride default container args
+args: 
+

@@ -1,0 +1,14 @@
+apiVersion: v2
+name: helsenorge-migration
+description: Helm chart for å kjøre en fluentmigrator migrering
+
+type: application
+version: 0.0.1
+appVersion: "1.16.0"
+
+dependencies:
+- name: helsenorge-common
+  version: "~0.0.1"
+  #repository: "https://helsenorge.github.io/helm-charts/"
+  repository: "file://../helsenorge-common"
+
