@@ -27,4 +27,25 @@ restartPolicy: Never
 # -- Antall forsøk jobben får før den markeres som feilet
 backoffLimit: 1
 
+# -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
+# Skrives på formen key: value
+# Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
+# Eks: 
+# HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;"
+extraEnvVars:
+# Navn på eksisterende config-map som inneholder extra env-vars - må skrives på formen for en gyldig configMapRef og config-map må eksistere fra før
+extraEnvVarsCM: 
+  - configMapRef:
+      name: "felles-config"
+# Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før
+extraEnvVarsSecret: 
+  - secretRef:
+      name: "felles-config"
+
+# Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
+extraVolumes:
+
+# Definisjon på extra volume mount som skal mountes til podden
+extraVolumeMounts:
+
 
