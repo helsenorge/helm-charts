@@ -17,10 +17,14 @@ command:
   # -- Ovveride default container args
 args: 
 
+# -- Labels som legges på alle objeckter som deployes
 commonLabels:
+# -- Annoteringer som legges på alle objeckter som deployes 
 commonAnnotations:
 
-restartPolicy: never
-backOfLimit: 1
+# -- Restart policien til en pod. Defaulter til Never for en engangsjobb. Mulige verdier er Always, OnFailure, and Never. Les mer [her](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy).
+restartPolicy: Never
+# -- Antall forsøk jobben får før den markeres som feilet
+backoffLimit: 1
 
 
