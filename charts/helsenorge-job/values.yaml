@@ -1,0 +1,30 @@
+
+
+# -- Beskriver imaget til applikasjonen
+# @default -- Se verdier under
+image:
+  # -- Fra hvilket container registry skal imaget hentes. 
+  registry: helsenorge.azurecr.io
+  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository
+  repository: ""
+  # -- Kubernetes image pull-policy.
+  # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
+  pullPolicy: IfNotPresent
+  # -- tag identifiserer versjonen på imaget som skal deployes 
+  tag: ""
+  # -- Ovveride default container command
+command: 
+  # -- Ovveride default container args
+args: 
+
+# -- Labels som legges på alle objeckter som deployes
+commonLabels:
+# -- Annoteringer som legges på alle objeckter som deployes 
+commonAnnotations:
+
+# -- Restart policien til en pod. Defaulter til Never for en engangsjobb. Mulige verdier er Always, OnFailure, and Never. Les mer [her](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy).
+restartPolicy: Never
+# -- Antall forsøk jobben får før den markeres som feilet
+backoffLimit: 1
+
+
