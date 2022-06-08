@@ -1,6 +1,6 @@
 dependencies:
 - name: helsenorge-common
   repository: file://../helsenorge-common
-  version: 0.0.1
-digest: sha256:458b40c63110869db2c0090b378c465c93547cec38e58ae94868955beab90cef
-generated: "2022-06-07T15:28:09.3270797+02:00"
+  version: 0.0.2
+digest: sha256:5480cadfccad0dfa31fe7a508e4061ffa732466c15f79211c46920d814520a79
+generated: "2022-06-08T08:54:28.7625268+02:00"
