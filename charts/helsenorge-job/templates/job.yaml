@@ -33,6 +33,23 @@ spec:
           - name: {{ $key }}
             value: {{ $val | quote }}
           {{- end }}
+        {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+        envFrom:
+          {{- if .Values.extraEnvVarsCM }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsCM "context" $) | nindent 12 }} 
+          {{- end }}
+          {{- if .Values.extraEnvVarsSecret }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $) | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.extraVolumeMounts }}
+        volumeMounts:
+          {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }} 
+        {{- end }} 
       restartPolicy: {{ .Values.restartPolicy }}
+    {{- if .Values.extraVolumes }}
+    volumes:
+      {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 10 }}
+    {{- end }} 
   backoffLimit: {{ .Values.backoffLimit }}
   

@@ -1,6 +1,6 @@
 # helsenorge-job
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 Helm chart for å kjøre en helsenorge job
 
@@ -8,7 +8,7 @@ Helm chart for å kjøre en helsenorge job
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helsenorge.github.io/helm-charts/ | helsenorge-common | ~0.0.1 |
+| file://../helsenorge-common | helsenorge-common | ~0.0.1 |
 
 ## Values
 
@@ -19,6 +19,11 @@ Helm chart for å kjøre en helsenorge job
 | command | string | `nil` |  |
 | commonAnnotations | string | `nil` | Annoteringer som legges på alle objeckter som deployes  |
 | commonLabels | string | `nil` | Labels som legges på alle objeckter som deployes |
+| extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet Eks:  HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;" |
+| extraEnvVarsCM[0].configMapRef.name | string | `"felles-config"` |  |
+| extraEnvVarsSecret[0].secretRef.name | string | `"felles-config"` |  |
+| extraVolumeMounts | string | `nil` |  |
+| extraVolumes | string | `nil` |  |
 | image | object | Se verdier under | Beskriver imaget til applikasjonen |
 | image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
