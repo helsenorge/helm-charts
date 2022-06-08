@@ -17,3 +17,10 @@ command:
   # -- Ovveride default container args
 args: 
 
+commonLabels:
+commonAnnotations:
+
+restartPolicy: never
+backOfLimit: 1
+
+

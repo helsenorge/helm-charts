@@ -57,7 +57,7 @@ Common labels
 {{/*
 Common labels
 */}}
-{{- define "common.labels" -}}
+{{- define "common.labels.standard" -}}
 helm.sh/chart: {{ include "common.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service | lower }}
 app.kubernetes.io/part-of: {{ .Release.Name | lower }}
@@ -67,13 +67,13 @@ name: {{ include "common.fullname" . }}
 area: {{ .Release.Name | lower }}
 team: {{ include "common.team" . }}
 version: {{ include "common.version" . | quote }}
-{{ include "common.selectorLabels" . }}
+{{ include "common.selectorLabels.standard" . }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "common.selectorLabels" -}}
+{{- define "common.selectorLabels.standard" -}}
 app.kubernetes.io/name: {{ include "common.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
@@ -88,3 +88,18 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+https://github.com/bitnami/charts/blob/master/bitnami/common/templates/_tplvalues.tpl
+
+Renders a value that contains template.
+Usage:
+{{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "common.tplvalues.render" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}
