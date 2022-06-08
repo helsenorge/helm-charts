@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helsenorge-application.fullname" . }}
+  name: {{ include "common.fullname" . }}
   labels:
-    {{- include "helsenorge-application.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount | default 2 }}
   selector:
     matchLabels:
-      {{- include "helsenorge-application.selectorLabels" . | nindent 6 }}
+      {{- include "common.selectorLabels.standard" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "helsenorge-application.labels" . | nindent 8 }}
+        {{- include "common.labels.standard" . | nindent 8 }}
       annotations: 
         splunk.com/sourcetype: {{ .Values.splunk.sourceType }}
     spec:
-      serviceAccountName: {{ include "helsenorge-application.serviceAccountName" . }}
+      serviceAccountName: {{ include "common.serviceAccountName" . }}
       containers:
-        - name: {{ include "helsenorge-application.fullname" .  }} 
+        - name: {{ include "common.fullname" .  }} 
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ include "helsenorge-application.image" . }} 
+          image: {{ include "common.image" . }} 
           imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           command: [{{ .Values.image.command }}]
           args: 

@@ -3,9 +3,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-%s" (include "helsenorge-application.fullname" $top) $key | lower  }}
+  name: {{ printf "%s-%s" (include "common.fullname" $top) $key | lower  }}
   labels:
-    {{- include "helsenorge-application.labels" $top | nindent 4 }}
+    {{- include "common.labels.standard" $top | nindent 4 }}
 data:
 {{- range $key, $value := . }}
   {{ $key }}: {{ $value | quote -}}
