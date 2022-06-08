@@ -130,6 +130,20 @@ entries:
   helsenorge-job:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-06-08T08:37:08.755279973Z"
+    dependencies:
+    - name: helsenorge-common
+      repository: file://../helsenorge-common
+      version: ~0.0.1
+    description: Helm chart for å kjøre en helsenorge job
+    digest: a21c156ee7aff847d7a6a5dfde794a43d87a72d0635129c3e1ab7e1c26ab47de
+    name: helsenorge-job
+    type: application
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.3/helsenorge-job-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-06-08T06:55:17.314257157Z"
     dependencies:
     - name: helsenorge-common
@@ -142,4 +156,4 @@ entries:
     urls:
     - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.2/helsenorge-job-0.0.2.tgz
     version: 0.0.2
-generated: "2022-06-08T06:55:17.314279353Z"
+generated: "2022-06-08T08:37:08.755302574Z"
