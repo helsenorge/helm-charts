@@ -3,7 +3,7 @@ name: helsenorge-job
 description: Helm chart for å kjøre en helsenorge job
 
 type: application
-version: 0.0.6
+version: 0.0.7
 
 dependencies:
 - name: helsenorge-common
