@@ -1,6 +1,6 @@
 # helsenorge-applikasjon
 
-![Version: 0.0.17](https://img.shields.io/badge/Version-0.0.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.20](https://img.shields.io/badge/Version-0.0.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser ut. En helsenorge-applikasjon dekker typene api, webapp og service.
 
@@ -10,13 +10,21 @@ Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser
 | ---- | ------ | --- |
 | Team Plattform | utv-hn-plattform@norskhelsenett.slack.com | https://www.nhn.no/ |
 
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| file://../helsenorge-common | helsenorge-common | ~0.0.1 |
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | aspnetCoreEnvironment | string | `"k8s"` | setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod |
 | clientId | string | `""` | ClientId for applikasjonen |
 | clientSecret | string | `""` | Tilhørende secret |
+| command | string | `nil` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | debug.configShare | string | `"/config-share/"` | path i pod der debug-dll blir tilgjengeligjort |
 | debug.debugConfigMap | string | `"debug-environment"` | navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før |
 | debug.enabled | bool | `false` | skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
@@ -31,11 +39,9 @@ Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser
 | extraVolumes[0].secret.secretName | string | `"certificate.helsenorge-sikkerhet.public"` |  |
 | fullnameOverride | string | `""` | Overrider navn på chart.  |
 | image | object | Se verdier under | Beskriver imaget til applikasjonen |
-| image.args | list | `[]` | Argumenter til commanden. Beskrives som et array. |
-| image.command | string | `"/app/container-startup.sh"` | Kommandoen som skal kjøre inne i imaget ved oppstart.  Dette kan være pathen til et bash-script, kjoring av en executable eller annet. Bestemmes av hvordan container-imaget er bygget. Ler mer om entrypoint [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
-| image.repository | string | `""` | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository |
+| image.repository | string | `""` | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename+applikasjonsnavn, eg configuration-internalapi. TODO: gjøre det mulig å overstyre repository |
 | image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
 | imagePullSecrets | list | `[]` | Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk) |
 | ingress | object | Se verdier under | Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret.  Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/). |

@@ -1,6 +1,6 @@
 # helsenorge-job
 
-![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.0.6](https://img.shields.io/badge/Version-0.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for å kjøre en helsenorge job
 
@@ -14,9 +14,9 @@ Helm chart for å kjøre en helsenorge job
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| args | string | `nil` | Ovveride default container args |
+| args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | backoffLimit | int | `1` | Antall forsøk jobben får før den markeres som feilet |
-| command | string | `nil` |  |
+| command | string | `nil` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | commonAnnotations | string | `nil` | Annoteringer som legges på alle objeckter som deployes  |
 | commonLabels | string | `nil` | Labels som legges på alle objeckter som deployes |
 | extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet Eks:  HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;" |

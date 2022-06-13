@@ -3,11 +3,11 @@ name: helsenorge-job
 description: Helm chart for å kjøre en helsenorge job
 
 type: application
-version: 0.0.5
+version: 0.0.6
 
 dependencies:
 - name: helsenorge-common
   version: "~0.0.1"
-  repository: "https://helsenorge.github.io/helm-charts/"
-  #repository: "file://../helsenorge-common"
+  #repository: "https://helsenorge.github.io/helm-charts/"
+  repository: "file://../helsenorge-common"
 
