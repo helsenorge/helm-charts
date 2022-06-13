@@ -12,9 +12,9 @@ image:
   pullPolicy: IfNotPresent
   # -- tag identifiserer versjonen på imaget som skal deployes 
   tag: ""
-  # -- Ovveride default container command
+# -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 command: 
-  # -- Ovveride default container args
+# -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 args: 
 
 # -- Labels som legges på alle objeckter som deployes
