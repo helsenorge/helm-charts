@@ -1,12 +1,5 @@
 {{/*
-GET rabbitmq.RootAdress
-*/}}
-{{- define "rabbitmq.rootAddress" }}
-{{- printf "rabbitmq://%s:%v" .Values.rabbitmq.hostname .Values.rabbitmq.amqpPort -}}
-{{- end }}
-
-{{/*
-SET Logging.Area
+Overrider area i logg hvis satt.
 */}}
 {{- define "logging.area" }}
 {{- if .Values.logging.areaOvveride }}

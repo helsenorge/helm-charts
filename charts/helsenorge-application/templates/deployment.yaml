@@ -23,11 +23,15 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ include "common.image" . }} 
           imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
-          command: [{{ .Values.image.command }}]
-          args: 
-          {{- range .Values.image.args }}
-            - {{ . }}
+          command:
+          {{- if .Values.command }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- else }}
+          - dotnet
           {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}  
           envFrom:
           env:
           - name: ASPNETCORE_ENVIRONMENT
