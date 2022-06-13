@@ -108,36 +108,49 @@ resources:
 # -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
 # Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
-# Eks: 
 # HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;"
 extraEnvVars:
-# Navn på eksisterende config-map som inneholder extra env-vars - må skrives på formen for en gyldig configMapRef og config-map må eksistere fra før
+# Navn på eksisterende config-map som inneholder extra env-vars - må skrives på formen for en gyldig configMapRef og config-map må eksistere fra før. Hvis du legger til flere, husk å bevare eventuelle defaults ved å ekplisitt definere i tillegg i din values-fil.
+# - configMapRef:
+#    name: myconfigmap
 extraEnvVarsCM: 
   - configMapRef:
       name: "felles-config"
-# Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før
+# -- Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før. Hvis du legger til flere, husk å bevare eventuelle defaults ved å ekplisitt definere i tillegg i din values-fil.
+# - secretRef:
+#    name: mysecret
 extraEnvVarsSecret: 
   - secretRef:
       name: "felles-config"
 
-# Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
-extraVolumes:
-  - name: helsenorge-sikkerhet-public
-    secret: 
-      secretName: certificate.helsenorge-sikkerhet.public
+# -- Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
+extraVolumes: 
 
-# Definisjon på extra volume mount som skal mountes til podden
-extraVolumeMounts:
-  - name: helsenorge-sikkerhet-public
-    mountPath: /certificates
-    readOnly: true
+# -- Definisjon på extra volume mount som skal mountes til podden
+extraVolumeMounts: 
 
-  # -- debugmodus
+# -- Debugmodus - begrenset til utviklings- og testmiljoer.
 debug:  
-  # -- skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
+  # -- Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
   enabled: false
-  # -- path i pod der debug-dll blir tilgjengeligjort
+  # -- Path til hvor debug-fil mountes i pod'en.
   configShare: /config-share/
-  # -- navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før
+  # -- Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før.
   debugConfigMap: debug-environment
+
+# -- Image som inneholder diverse utils. Benyttes for installasjon av sertifikater.
+helsenorgeUtilImage: helsenorge.azurecr.io/utils/certificate-tool:0.1
+# -- Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden.
+enableTokenValidation: true
+# -- Informasjon om tokenvalideringssertifikatet i miljoet.
+tokenValidation:
+  # -- Navn på filen som inneholder sertifikatet
+  filename: helsenorge_sikkerhet_public.pem
+  # -- Path til hvor sertifikatet mountes i pod'en
+  volumeMount: /tokevalidation-cert
+  # -- Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før.
+  secretName: certificate.helsenorge-sikkerhet.public
+# -- Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux. 
+certificateStore: "root/.dotnet/corefx/cryptography/x509stores/my"  
+
 

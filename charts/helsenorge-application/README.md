@@ -1,6 +1,6 @@
 # helsenorge-applikasjon
 
-![Version: 0.0.20](https://img.shields.io/badge/Version-0.0.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.22](https://img.shields.io/badge/Version-0.0.22-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser ut. En helsenorge-applikasjon dekker typene api, webapp og service.
 
@@ -22,22 +22,23 @@ Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser
 |-----|------|---------|-------------|
 | args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | aspnetCoreEnvironment | string | `"k8s"` | setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod |
+| certificateStore | string | `"root/.dotnet/corefx/cryptography/x509stores/my"` | Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux.  |
 | clientId | string | `""` | ClientId for applikasjonen |
 | clientSecret | string | `""` | Tilhørende secret |
 | command | string | `nil` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
-| debug.configShare | string | `"/config-share/"` | path i pod der debug-dll blir tilgjengeligjort |
-| debug.debugConfigMap | string | `"debug-environment"` | navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før |
-| debug.enabled | bool | `false` | skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
+| debug | object | `{"configShare":"/config-share/","debugConfigMap":"debug-environment","enabled":false}` | Debugmodus - begrenset til utviklings- og testmiljoer. |
+| debug.configShare | string | `"/config-share/"` | Path til hvor debug-fil mountes i pod'en. |
+| debug.debugConfigMap | string | `"debug-environment"` | Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før. |
+| debug.enabled | bool | `false` | Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
 | dnsZone | string | `"aks-helsenorge.utvikling"` | Dns-sonen til miljøet. |
-| extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet Eks:  HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;" |
+| enableTokenValidation | bool | `true` | Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden. |
+| extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;" |
 | extraEnvVarsCM[0].configMapRef.name | string | `"felles-config"` |  |
-| extraEnvVarsSecret[0].secretRef.name | string | `"felles-config"` |  |
-| extraVolumeMounts[0].mountPath | string | `"/certificates"` |  |
-| extraVolumeMounts[0].name | string | `"helsenorge-sikkerhet-public"` |  |
-| extraVolumeMounts[0].readOnly | bool | `true` |  |
-| extraVolumes[0].name | string | `"helsenorge-sikkerhet-public"` |  |
-| extraVolumes[0].secret.secretName | string | `"certificate.helsenorge-sikkerhet.public"` |  |
+| extraEnvVarsSecret | list | `[{"secretRef":{"name":"felles-config"}}]` | Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før. Hvis du legger til flere, husk å bevare eventuelle defaults ved å ekplisitt definere i tillegg i din values-fil. - secretRef:    name: mysecret |
+| extraVolumeMounts | string | `nil` | Definisjon på extra volume mount som skal mountes til podden |
+| extraVolumes | string | `nil` | Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten |
 | fullnameOverride | string | `""` | Overrider navn på chart.  |
+| helsenorgeUtilImage | string | `"helsenorge.azurecr.io/utils/certificate-tool:0.1"` | Image som inneholder diverse utils. Benyttes for installasjon av sertifikater. |
 | image | object | Se verdier under | Beskriver imaget til applikasjonen |
 | image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
@@ -71,6 +72,10 @@ Helm chart for som beskriver hvordan deployment av en helsenorge-applikasjon ser
 | splunk | object | `{"sourceType":"kube:Helsenorge"}` | Splunk |
 | splunk.sourceType | string | `"kube:Helsenorge"` | Setter SourceType på loggene i splunk |
 | team | string | `""` | Ansvarlig team for losningsomraade - eks "Plattform".  |
+| tokenValidation | object | `{"filename":"helsenorge_sikkerhet_public.pem","secretName":"certificate.helsenorge-sikkerhet.public","volumeMount":"/tokevalidation-cert"}` | Informasjon om tokenvalideringssertifikatet i miljoet. |
+| tokenValidation.filename | string | `"helsenorge_sikkerhet_public.pem"` | Navn på filen som inneholder sertifikatet |
+| tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |
+| tokenValidation.volumeMount | string | `"/tokevalidation-cert"` | Path til hvor sertifikatet mountes i pod'en |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.6.0](https://github.com/norwoodj/helm-docs/releases/v1.6.0)

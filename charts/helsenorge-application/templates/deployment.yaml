@@ -17,8 +17,21 @@ spec:
         splunk.com/sourcetype: {{ .Values.splunk.sourceType }}
     spec:
       serviceAccountName: {{ include "common.serviceAccountName" . }}
+      initContainers:
+      {{- if .Values.enableTokenValidation }}
+      - name: {{ include "common.fullname" . }}-tokenvalidation
+        image: {{ .Values.helsenorgeUtilImage }}  
+        workingDir: {{ .Values.tokenValidation.volumeMount }}
+        command: ["certificate-tool"]
+        args: ["add", "--file", {{ .Values.tokenValidation.filename }} ]
+        volumeMounts:
+        - name: certificate-store
+          mountPath: {{ .Values.certificateStore }}
+        - name: tokenvalidation-certificate
+          mountPath: {{ .Values.tokenValidation.volumeMount }}
+      {{- end }}
       containers:
-        - name: {{ include "common.fullname" .  }} 
+        - name: {{ include "common.fullname" . }} 
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ include "common.image" . }} 
@@ -69,7 +82,14 @@ spec:
             mountPath: {{ .Values.debug.configShare }}
             readOnly: true
           {{- end }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }} 
+          {{- if .Values.enableTokenValidation }}
+          - name: certificate-store
+            mountPath: {{ .Values.certificateStore }}
+            readOnly: true
+          {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }} 
+          {{- end }}
           ports:
             - name: http
               containerPort: 80
@@ -85,9 +105,18 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-      {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 10 }} 
       {{- if .Values.debug.enabled }}
       - name: debug-environment
         configMap: 
           name: {{ .Values.debug.debugConfigMap }}
+      {{- end }}
+      {{- if .Values.enableTokenValidation }}
+      - name: certificate-store
+        emptyDir: {}
+      - name: tokenvalidation-certificate
+        secret:
+          secretName: {{ .Values.tokenValidation.secretName }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 6 }} 
       {{- end }}
