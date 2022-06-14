@@ -2,6 +2,25 @@ apiVersion: v1
 entries:
   helsenorge-applikasjon:
   - apiVersion: v2
+    created: "2022-06-14T09:57:15.294680242Z"
+    dependencies:
+    - name: helsenorge-common
+      repository: https://helsenorge.github.io/helm-charts/
+      version: ~0.0.1
+    description: Helm chart for installere en helsenorge-applikasjon på kuberntes.
+      En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner
+      som utfører arbeid kontinuerlig.
+    digest: 3c3ea8c135f05a6e3bdba71485c43e7523de690a538e0b359cd58fc17531b163
+    maintainers:
+    - email: utv-hn-plattform@norskhelsenett.slack.com
+      name: Team Plattform
+      url: https://www.nhn.no/
+    name: helsenorge-applikasjon
+    type: application
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-applikasjon-0.0.24/helsenorge-applikasjon-0.0.24.tgz
+    version: 0.0.24
+  - apiVersion: v2
     created: "2022-06-14T08:18:20.502563415Z"
     dependencies:
     - name: helsenorge-common
@@ -269,4 +288,4 @@ entries:
     urls:
     - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.2/helsenorge-job-0.0.2.tgz
     version: 0.0.2
-generated: "2022-06-14T09:53:06.107871914Z"
+generated: "2022-06-14T09:57:15.294724841Z"
