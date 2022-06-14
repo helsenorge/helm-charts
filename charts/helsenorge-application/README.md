@@ -14,7 +14,7 @@ Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../helsenorge-common | helsenorge-common | ~0.0.1 |
+| https://helsenorge.github.io/helm-charts/ | helsenorge-common | ~0.0.1 |
 
 ## Values
 
@@ -26,10 +26,9 @@ Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge
 | clientId | string | `""` | ClientId for applikasjonen |
 | clientSecret | string | `""` | Tilhørende secret |
 | command | string | `nil` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
-| debug | object | `{"configShare":"/config-share/","debugConfigMap":"debug-environment","enabled":false}` | Debugmodus - begrenset til utviklings- og testmiljoer. |
+| debug | object | `{"configShare":"/config-share/","debugConfigMap":"debug-environment"}` | Debugmodus - Settings for debugmodus |
 | debug.configShare | string | `"/config-share/"` | Path til hvor debug-fil mountes i pod'en. |
 | debug.debugConfigMap | string | `"debug-environment"` | Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før. |
-| debug.enabled | bool | `false` | Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
 | dnsZone | string | `"aks-helsenorge.utvikling"` | Dns-sonen til miljøet. |
 | enableTokenValidation | bool | `true` | Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden. |
 | extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;" |
@@ -48,6 +47,7 @@ Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge
 | ingress | object | Se verdier under | Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret.  Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
 | ingress.create | bool | `true` | Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret. |
 | ingress.hostname | string | kalkuleres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
+| isDebugEnvironment | bool | `false` | Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
 | livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
 | logging | object | `{"areaOvveride":""}` | Logging |
 | nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
