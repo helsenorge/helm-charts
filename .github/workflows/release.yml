@@ -25,7 +25,11 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           version: v3.8.1
-
+      
+      - name: Add Repo Dependencies
+        run: | 
+          helm repo add helsenorge https://helsenorge.github.io/helm-charts
+        
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.0
         env:
