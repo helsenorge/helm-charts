@@ -128,6 +128,19 @@ entries:
     version: 0.0.12
   helsenorge-common:
   - apiVersion: v2
+    created: "2022-06-14T09:53:06.107838814Z"
+    description: A Helm chart for Kubernetes
+    digest: b4d9fe6b0fd8d9d7496d0e05dd31520894c2b65f464cc6e9e4606b8802bdfb5a
+    maintainers:
+    - email: utv-hn-plattform@norskhelsenett.slack.com
+      name: Team Plattform
+      url: https://www.nhn.no/
+    name: helsenorge-common
+    type: library
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-common-0.0.4/helsenorge-common-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
     created: "2022-06-14T08:18:20.650238279Z"
     description: A Helm chart for Kubernetes
     digest: a45d433133166ca67bd5616d23be6766e72a0b85ae00ec04c666c5441aed2180
@@ -256,4 +269,4 @@ entries:
     urls:
     - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.2/helsenorge-job-0.0.2.tgz
     version: 0.0.2
-generated: "2022-06-14T08:18:20.784025434Z"
+generated: "2022-06-14T09:53:06.107871914Z"
