@@ -77,7 +77,7 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.debug.enabled }}
+          {{- if .Values.isDebugEnvironment }}
           - name: debug-environment
             mountPath: {{ .Values.debug.configShare }}
             readOnly: true
@@ -105,7 +105,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-      {{- if .Values.debug.enabled }}
+      {{- if .Values.isDebugEnvironment }}
       - name: debug-environment
         configMap: 
           name: {{ .Values.debug.debugConfigMap }}
