@@ -89,6 +89,14 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+
+{{/*
+Is environment in debug-mode - checks if ovverided globally
+*/}}
+{{- define "common.isDebugEnvironment" -}}
+{{- .Values.isDebugEnvironment | default .Values.global.isDebugEnvironment }}
+{{- end }}
+
 {{/*
 https://github.com/bitnami/charts/blob/master/bitnami/common/templates/_tplvalues.tpl
 
