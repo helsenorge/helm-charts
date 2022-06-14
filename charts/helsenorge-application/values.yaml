@@ -129,10 +129,10 @@ extraVolumes:
 # -- Definisjon på extra volume mount som skal mountes til podden
 extraVolumeMounts: 
 
-# -- Debugmodus - begrenset til utviklings- og testmiljoer.
+# -- Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
+isDebugEnvironment: false
+# -- Debugmodus - Settings for debugmodus
 debug:  
-  # -- Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
-  enabled: false
   # -- Path til hvor debug-fil mountes i pod'en.
   configShare: /config-share/
   # -- Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før.
