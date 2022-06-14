@@ -1,1 +1,12 @@
-
+Completed installation of {{ include "common.fullname" . }}:{{ .Values.image.tag }} into {{ .Release.Namespace }}.
+{{ if .Values.ingress.create }}
+{{ printf "%s://%s" "http" (include "helsenorge-application.hostname" .) }}
+{{ end }}
+Logs:
+    Containers:
+        $ kubectl logs -f deployment/{{ include "common.fullname" . }}
+    {{- if .Values.enableTokenValidation }}
+    Tokenvalidation init-container:
+        $ kubectl logs -f deployment/{{ include "common.fullname" . }} -c {{ include "common.fullname" . }}-tokenvalidation
+{{- end }}
+---

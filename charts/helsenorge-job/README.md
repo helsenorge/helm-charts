@@ -1,8 +1,14 @@
 # helsenorge-job
 
-![Version: 0.0.6](https://img.shields.io/badge/Version-0.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.8](https://img.shields.io/badge/Version-0.0.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-Helm chart for å kjøre en helsenorge job
+Helm chart for installere en helsenorge-job på kuberntes. En job beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for kjøring databasemigreringer eller console applikasjoner.
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Team Plattform | utv-hn-plattform@norskhelsenett.slack.com | https://www.nhn.no/ |
 
 ## Requirements
 

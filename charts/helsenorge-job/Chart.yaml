@@ -1,9 +1,14 @@
 apiVersion: v2
 name: helsenorge-job
-description: Helm chart for å kjøre en helsenorge job
+description: Helm chart for installere en helsenorge-job på kuberntes. En job beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for kjøring databasemigreringer eller console applikasjoner.
 
 type: application
-version: 0.0.7
+maintainers: 
+  - name: Team Plattform
+    email: "utv-hn-plattform@norskhelsenett.slack.com"
+    url: "https://www.nhn.no/"
+
+version: 0.0.8
 
 dependencies:
 - name: helsenorge-common
