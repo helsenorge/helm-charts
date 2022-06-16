@@ -25,11 +25,7 @@ spec:
         args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
         {{- end }}  
         env:
-          {{- range $key, $val := .Values.extraEnvVars }}
-          - name: {{ $key }}
-            value: {{ $val | quote }}
-          {{- end }}
-          {{- range $key, $val := .Values.global.extraEnvVars }}
+          {{- range $key, $val := merge (default dict .Values.extraEnvVars) (default dict .Values.global.extraEnvVars)  }}
           - name: {{ $key }}
             value: {{ $val | quote }}
           {{- end }}

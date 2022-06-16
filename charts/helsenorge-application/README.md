@@ -1,6 +1,6 @@
 # helsenorge-applikasjon
 
-![Version: 0.0.25](https://img.shields.io/badge/Version-0.0.25-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.26](https://img.shields.io/badge/Version-0.0.26-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
@@ -31,7 +31,7 @@ Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge
 | debug.debugConfigMap | string | `"debug-environment"` | Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før. |
 | dnsZone | string | `"aks-helsenorge.utvikling"` | Dns-sonen til miljøet. |
 | enableTokenValidation | bool | `true` | Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden. |
-| extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;" |
+| extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;" Kan også overstyres globalt: global:   extraEnvVars:     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;" |
 | extraEnvVarsCM[0].configMapRef.name | string | `"felles-config"` |  |
 | extraEnvVarsSecret | list | `[{"secretRef":{"name":"felles-config"}}]` | Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før. Hvis du legger til flere, husk å bevare eventuelle defaults ved å ekplisitt definere i tillegg i din values-fil. - secretRef:    name: mysecret |
 | extraVolumeMounts | string | `nil` | Definisjon på extra volume mount som skal mountes til podden |
@@ -71,7 +71,7 @@ Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge
 | serviceAccount.create | bool | `true` | Spesifiserer om en service-konto skal opprettes. |
 | splunk | object | `{"sourceType":"kube:Helsenorge"}` | Splunk |
 | splunk.sourceType | string | `"kube:Helsenorge"` | Setter SourceType på loggene i splunk |
-| team | string | `""` | Ansvarlig team for losningsomraade - eks "Plattform".  |
+| team | string | `""` | Ansvarlig team for losningsomraade - eks "Plattform". - Kan overstyres globalt global:   team: "" |
 | tokenValidation | object | `{"filename":"helsenorge_sikkerhet_public.pem","secretName":"certificate.helsenorge-sikkerhet.public","volumeMount":"/tokevalidation-cert"}` | Informasjon om tokenvalideringssertifikatet i miljoet. |
 | tokenValidation.filename | string | `"helsenorge_sikkerhet_public.pem"` | Navn på filen som inneholder sertifikatet |
 | tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |
