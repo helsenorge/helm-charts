@@ -12,7 +12,7 @@ clientId: ""
 clientSecret: ""
 
 # -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
-aspnetCoreEnvironment: "k8s"
+aspnetCoreEnvironment: "st"
 
 # -- Messagings settings - Blir tilgjengeliggjort som environment-variabler i pod
 rabbitmq:

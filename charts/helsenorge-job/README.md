@@ -1,6 +1,6 @@
 # helsenorge-job
 
-![Version: 0.0.8](https://img.shields.io/badge/Version-0.0.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.10](https://img.shields.io/badge/Version-0.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for installere en helsenorge-job på kuberntes. En job beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for kjøring databasemigreringer eller console applikasjoner.
 
@@ -14,7 +14,7 @@ Helm chart for installere en helsenorge-job på kuberntes. En job beskriver en e
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../helsenorge-common | helsenorge-common | ~0.0.1 |
+| https://helsenorge.github.io/helm-charts/ | helsenorge-common | ~0.0.1 |
 
 ## Values
 

@@ -1,6 +1,6 @@
 # helsenorge-applikasjon
 
-![Version: 0.0.24](https://img.shields.io/badge/Version-0.0.24-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.25](https://img.shields.io/badge/Version-0.0.25-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
@@ -21,7 +21,7 @@ Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
-| aspnetCoreEnvironment | string | `"k8s"` | setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod |
+| aspnetCoreEnvironment | string | `"st"` | setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod |
 | certificateStore | string | `"root/.dotnet/corefx/cryptography/x509stores/my"` | Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux.  |
 | clientId | string | `""` | ClientId for applikasjonen |
 | clientSecret | string | `""` | Tilhørende secret |
