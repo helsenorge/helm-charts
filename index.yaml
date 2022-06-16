@@ -2,6 +2,25 @@ apiVersion: v1
 entries:
   helsenorge-applikasjon:
   - apiVersion: v2
+    created: "2022-06-16T07:05:02.688193176Z"
+    dependencies:
+    - name: helsenorge-common
+      repository: https://helsenorge.github.io/helm-charts/
+      version: ~0.0.1
+    description: Helm chart for installere en helsenorge-applikasjon på kuberntes.
+      En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner
+      som utfører arbeid kontinuerlig.
+    digest: 8b8c5f3c73ddde6c4fd3393b0643ca4a49fbe72c7d8728e57dee89cd5c6ea4ca
+    maintainers:
+    - email: utv-hn-plattform@norskhelsenett.slack.com
+      name: Team Plattform
+      url: https://www.nhn.no/
+    name: helsenorge-applikasjon
+    type: application
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-applikasjon-0.0.25/helsenorge-applikasjon-0.0.25.tgz
+    version: 0.0.25
+  - apiVersion: v2
     created: "2022-06-14T09:57:15.294680242Z"
     dependencies:
     - name: helsenorge-common
@@ -229,6 +248,25 @@ entries:
     version: 0.0.1
   helsenorge-job:
   - apiVersion: v2
+    created: "2022-06-16T07:05:02.85903806Z"
+    dependencies:
+    - name: helsenorge-common
+      repository: https://helsenorge.github.io/helm-charts/
+      version: ~0.0.1
+    description: Helm chart for installere en helsenorge-job på kuberntes. En job
+      beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for
+      kjøring databasemigreringer eller console applikasjoner.
+    digest: 833939bbe48f2e3ee57585e96aab91a929d0e89aeacbca4ad56453acacb2a8c6
+    maintainers:
+    - email: utv-hn-plattform@norskhelsenett.slack.com
+      name: Team Plattform
+      url: https://www.nhn.no/
+    name: helsenorge-job
+    type: application
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.10/helsenorge-job-0.0.10.tgz
+    version: 0.0.10
+  - apiVersion: v2
     created: "2022-06-14T08:18:20.78396263Z"
     dependencies:
     - name: helsenorge-common
@@ -288,4 +326,4 @@ entries:
     urls:
     - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.2/helsenorge-job-0.0.2.tgz
     version: 0.0.2
-generated: "2022-06-14T09:57:15.294724841Z"
+generated: "2022-06-16T07:05:02.859332772Z"
