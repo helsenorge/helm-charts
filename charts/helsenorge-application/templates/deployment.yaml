@@ -47,8 +47,6 @@ spec:
           {{- end }}  
           envFrom:
           env:
-          - name: ASPNETCORE_ENVIRONMENT
-            value: {{ .Values.aspnetCoreEnvironment | quote }}
           - name: HN_InternalMessagingSettings__Credentials__Username
             value: {{ .Values.rabbitmq.user | quote }}
           - name: HN_InternalMessagingSettings__Credentials__Password
@@ -59,11 +57,7 @@ spec:
             value: {{ .Values.clientSecret | quote }}
           - name: HN_LoggingConfiguration__Area
             value: {{ include "logging.area" . | quote }}
-          {{- range $key, $val := .Values.extraEnvVars }}
-          - name: {{ $key }}
-            value: {{ $val | quote }}
-          {{- end }}
-          {{- range $key, $val := .Values.global.extraEnvVars }}
+          {{- range $key, $val := merge (default dict .Values.extraEnvVars) (default dict .Values.global.extraEnvVars)  }}
           - name: {{ $key }}
             value: {{ $val | quote }}
           {{- end }}

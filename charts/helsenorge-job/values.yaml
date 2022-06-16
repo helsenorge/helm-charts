@@ -1,5 +1,12 @@
 
-
+# -- Overrider navn på chart. Beholder release-navnet
+nameOverride: ""
+# -- Overrider navn på chart. 
+fullnameOverride: ""
+# -- Ansvarlig team for losningsomraade - eks "Plattform". - Kan overstyres globalt
+# global:
+#   team: ""
+team: ""
 # -- Beskriver imaget til applikasjonen
 # @default -- Se verdier under
 image:
@@ -30,8 +37,11 @@ backoffLimit: 1
 # -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
 # Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
-# Eks: 
-# HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databaename;User Id=user;Password=password;"
+# HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
+# Kan også overstyres globalt:
+# global:
+#   extraEnvVars:
+#     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
 extraEnvVars:
 # Navn på eksisterende config-map som inneholder extra env-vars - må skrives på formen for en gyldig configMapRef og config-map må eksistere fra før
 extraEnvVarsCM: 
