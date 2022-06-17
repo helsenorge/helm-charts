@@ -8,7 +8,7 @@ maintainers:
     email: "utv-hn-plattform@norskhelsenett.slack.com"
     url: "https://www.nhn.no/"
 
-version: 0.0.28
+version: 0.0.29
 
 dependencies:
 - name: helsenorge-common
