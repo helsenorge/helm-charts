@@ -45,12 +45,28 @@ spec:
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}  
-          envFrom:
           env:
+          {{- if .Values.rabbitmq.createUser }}
+          - name: HN_InternalMessagingSettings__Credentials__Username
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helsenorge-application.rabbitmqUserSecret" . }}
+                key: username
+          - name: HN_InternalMessagingSettings__Credentials__Password
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helsenorge-application.rabbitmqUserSecret" . }}
+                key: password
+          {{- else }}
           - name: HN_InternalMessagingSettings__Credentials__Username
             value: {{ .Values.rabbitmq.user | quote }}
           - name: HN_InternalMessagingSettings__Credentials__Password
             value: {{ .Values.rabbitmq.password | quote }}
+          {{- end }}
+          - name: HN_InternalMessagingSettings__RootAddress
+            value: {{ printf "rabbitmq://%s:%s" .Values.rabbitmq.clusterName .Values.rabbitmq.port}}
+          - name: HN_InternalMessagingSettings__VirtualHost
+            value: {{ .Values.rabbitmq.virtualHost | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientId
             value: {{ .Values.clientId | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret

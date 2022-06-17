@@ -16,12 +16,22 @@ clientSecret: ""
 # -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
 aspnetCoreEnvironment: "st"
 
-# -- Messagings settings - Blir tilgjengeliggjort som environment-variabler i pod
+# -- Rabbitmq-settings
 rabbitmq:
-  # -- Bruker
+  # -- Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator). 
+  # Hvis satt til false så må 'user' og 'password' settes.
+  createUser: true
+  # -- Bruker - Settes default til det samme som applikasjonen, overstyr det navnet ved å angi en verdi.
+  # Eks: configuration-internalapi
   user: ""
-  # -- Passord
+  # -- Passord - Brukes kun hvis generate user er satt til 'false'
   password: ""
+  # -- Navn på virtual host
+  virtualHost: internal.messaging.helsenorge.no
+  # -- Navn på cluster, brukes til å sette opp adressen til rabbitmq, så må være det samme som hostnavnet
+  clusterName: rabbitmq
+  # -- Port til amqp-endepunktet til rabbitmq
+  port: 5671
 
 # -- Logging
 logging:
