@@ -1,6 +1,6 @@
 # helsenorge-applikasjon
 
-![Version: 0.0.29](https://img.shields.io/badge/Version-0.0.29-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.30](https://img.shields.io/badge/Version-0.0.30-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
@@ -51,11 +51,13 @@ Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge
 | livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
 | logging | object | `{"areaOvveride":""}` | Logging |
 | nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
-| rabbitmq | object | `{"clusterName":"rabbitmq","createUser":true,"password":"","port":5671,"user":"","virtualHost":"internal.messaging.helsenorge.no"}` | Rabbitmq-settings |
+| rabbitmq | object | `{"clusterName":"rabbitmq","createUser":true,"encryptMessages":true,"password":"","port":5671,"useSsl":true,"user":"","virtualHost":"internal.messaging.helsenorge.no"}` | Rabbitmq-settings |
 | rabbitmq.clusterName | string | `"rabbitmq"` | Navn på cluster, brukes til å sette opp adressen til rabbitmq, så må være det samme som hostnavnet |
 | rabbitmq.createUser | bool | `true` | Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator).  Hvis satt til false så må 'user' og 'password' settes. |
+| rabbitmq.encryptMessages | bool | `true` | Skal meldinger som går mellom client og rabbitmq krypteres |
 | rabbitmq.password | string | `""` | Passord - Brukes kun hvis generate user er satt til 'false' |
 | rabbitmq.port | int | `5671` | Port til amqp-endepunktet til rabbitmq |
+| rabbitmq.useSsl | bool | `true` | Kommunikasjon mellom client og rabbitmq går over ssl |
 | rabbitmq.user | string | `""` | Bruker - Settes default til det samme som applikasjonen, overstyr det navnet ved å angi en verdi. Eks: configuration-internalapi |
 | rabbitmq.virtualHost | string | `"internal.messaging.helsenorge.no"` | Navn på virtual host |
 | readinessProbe.path | string | `"/health"` | [Readiness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren er klar for å motta requests ved å gjøre et http kall mot gitt path |

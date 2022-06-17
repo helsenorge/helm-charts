@@ -32,7 +32,10 @@ rabbitmq:
   clusterName: rabbitmq
   # -- Port til amqp-endepunktet til rabbitmq
   port: 5671
-
+  # -- Kommunikasjon mellom client og rabbitmq går over ssl
+  useSsl: true
+  # -- Skal meldinger som går mellom client og rabbitmq krypteres
+  encryptMessages: true
 # -- Logging
 logging:
   # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.

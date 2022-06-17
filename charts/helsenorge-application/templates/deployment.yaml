@@ -67,6 +67,10 @@ spec:
             value: {{ printf "rabbitmq://%s:%d" .Values.rabbitmq.clusterName (.Values.rabbitmq.port | int ) | quote }}
           - name: HN_InternalMessagingSettings__VirtualHost
             value: {{ .Values.rabbitmq.virtualHost | quote }}
+          - name: HN_InternalMessagingSettings__UseSsl
+            value: {{ .Values.rabbitmq.useSsl | quote }}
+          - name: HN_InternalMessagingSettings__EncryptMessages
+            value: {{ .Values.rabbitmq.encryptMessages | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientId
             value: {{ .Values.clientId | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret
