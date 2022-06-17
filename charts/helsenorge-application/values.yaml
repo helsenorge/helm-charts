@@ -2,20 +2,26 @@
 nameOverride: ""
 # -- Overrider navn på chart. 
 fullnameOverride: ""
-
 # -- Ansvarlig team for losningsomraade - eks "Plattform". - Kan overstyres globalt
 # global:
 #   team: ""
 team: ""
-
 # -- ClientId for applikasjonen
 clientId: ""
 # -- Tilhørende secret
 clientSecret: ""
-
-# -- setter ASPNETCORE_ENVIRONMENT environment-variabelen i pod
-aspnetCoreEnvironment: "st"
-
+# -- Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden.
+enableTokenValidation: true
+# -- Informasjon om tokenvalideringssertifikatet i miljoet.
+tokenValidation:
+  # -- Navn på filen som inneholder sertifikatet
+  filename: helsenorge_sikkerhet_public.pem
+  # -- Path til hvor sertifikatet mountes i pod'en
+  volumeMount: /tokevalidation-cert
+  # -- Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før.
+  secretName: certificate.helsenorge-sikkerhet.public
+# -- Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux. 
+certificateStore: "root/.dotnet/corefx/cryptography/x509stores/my"  
 # -- Rabbitmq-settings
 rabbitmq:
   # -- Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator). 
@@ -40,12 +46,10 @@ rabbitmq:
 logging:
   # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.
   areaOvveride: ""
-
 # -- Splunk
 splunk:
   # -- Setter SourceType på loggene i splunk
   sourceType: kube:Helsenorge
-
 # -- Dns-sonen til miljøet.
 dnsZone: "aks-helsenorge.utvikling"
 # -- Beskriver imaget til applikasjonen
@@ -64,7 +68,6 @@ image:
 command: 
 # -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 args: 
-
 # -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
 imagePullSecrets: []
 # -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.
@@ -119,7 +122,6 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
-
 # -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
 # Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
@@ -133,21 +135,14 @@ extraEnvVars:
 # - configMapRef:
 #    name: myconfigmap
 extraEnvVarsCM: 
-  - configMapRef:
-      name: "felles-config"
 # -- Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før. Hvis du legger til flere, husk å bevare eventuelle defaults ved å ekplisitt definere i tillegg i din values-fil.
 # - secretRef:
 #    name: mysecret
 extraEnvVarsSecret: 
-  - secretRef:
-      name: "felles-config"
-
 # -- Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
 extraVolumes: 
-
 # -- Definisjon på extra volume mount som skal mountes til podden
 extraVolumeMounts: 
-
 # -- Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
 isDebugEnvironment: false
 # -- Debugmodus - Settings for debugmodus
@@ -156,20 +151,11 @@ debug:
   configShare: /config-share/
   # -- Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før.
   debugConfigMap: debug-environment
-
+# -- Gir pod'en tilgang til felles-config allerede definert i namespacet. Dette er typisk config som kreves av felles-pakkene.
+useSharedConfig: true
 # -- Image som inneholder diverse utils. Benyttes for installasjon av sertifikater.
 helsenorgeUtilImage: helsenorge.azurecr.io/utils/certificate-tool:0.1
-# -- Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden.
-enableTokenValidation: true
-# -- Informasjon om tokenvalideringssertifikatet i miljoet.
-tokenValidation:
-  # -- Navn på filen som inneholder sertifikatet
-  filename: helsenorge_sikkerhet_public.pem
-  # -- Path til hvor sertifikatet mountes i pod'en
-  volumeMount: /tokevalidation-cert
-  # -- Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før.
-  secretName: certificate.helsenorge-sikkerhet.public
-# -- Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux. 
-certificateStore: "root/.dotnet/corefx/cryptography/x509stores/my"  
+
+
 
 
