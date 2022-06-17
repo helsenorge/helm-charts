@@ -64,7 +64,7 @@ spec:
             value: {{ .Values.rabbitmq.password | quote }}
           {{- end }}
           - name: HN_InternalMessagingSettings__RootAddress
-            value: {{ printf "rabbitmq://%s:%s" .Values.rabbitmq.clusterName .Values.rabbitmq.port}}
+            value: {{ printf "rabbitmq://%s:%d" .Values.rabbitmq.clusterName (.Values.rabbitmq.port | int ) | quote }}
           - name: HN_InternalMessagingSettings__VirtualHost
             value: {{ .Values.rabbitmq.virtualHost | quote }}
           - name: HN_EhelseSecurityTokenServiceSettings__ClientId
