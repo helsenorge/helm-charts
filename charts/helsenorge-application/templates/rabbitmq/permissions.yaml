@@ -1,0 +1,17 @@
+{{- if .Values.rabbitmq.createUser }}
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: {{ include "common.fullname" . }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+spec:
+  vhost: {{ .Values.rabbitmq.virtualHost}}
+  user: {{ include "helsenorge-application.rabbitmqUser" . }}
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: {{ .Values.rabbitmq.clusterName }}
+{{- end }}
