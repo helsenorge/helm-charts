@@ -13,6 +13,7 @@ clientSecret: ""
 # -- Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden.
 enableTokenValidation: true
 # -- Informasjon om tokenvalideringssertifikatet i miljoet.
+# @default -- {}
 tokenValidation:
   # -- Navn på filen som inneholder sertifikatet
   filename: helsenorge_sikkerhet_public.pem
@@ -23,11 +24,12 @@ tokenValidation:
 # -- Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux. 
 certificateStore: "root/.dotnet/corefx/cryptography/x509stores/my"  
 # -- Rabbitmq-settings
+# @default -- {...}
 rabbitmq:
   # -- Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator). 
   # Hvis satt til false så må 'user' og 'password' settes.
   createUser: true
-  # -- Bruker - Settes default til det samme som applikasjonen, overstyr det navnet ved å angi en verdi.
+  # -- Bruker - Kun angi hvis du ønsker å overskrive at brukernavn blir satt til det samme som applikasjonsnavnet
   # Eks: configuration-internalapi
   user: ""
   # -- Passord - Brukes kun hvis generate user er satt til 'false'
@@ -42,22 +44,20 @@ rabbitmq:
   useSsl: true
   # -- Skal meldinger som går mellom client og rabbitmq krypteres
   encryptMessages: true
-# -- Logging
 logging:
   # Area settes automatisk til samme som Release.Name. Denne verdien kan ovverides her.
+  # Release.Name skal alltid være det samme som navnet på løsningsområde som deployes.
   areaOvveride: ""
-# -- Splunk
-splunk:
   # -- Setter SourceType på loggene i splunk
   sourceType: kube:Helsenorge
 # -- Dns-sonen til miljøet.
 dnsZone: "aks-helsenorge.utvikling"
 # -- Beskriver imaget til applikasjonen
-# @default -- Se verdier under
+# @default -- {}
 image:
   # -- Fra hvilket container registry skal imaget hentes. 
   registry: helsenorge.azurecr.io
-  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename+applikasjonsnavn, eg configuration-internalapi. TODO: gjøre det mulig å overstyre repository
+  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn, eg configuration-internalapi.
   repository: ""
   # -- Kubernetes image pull-policy.
   # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
@@ -65,9 +65,17 @@ image:
   # -- tag identifiserer versjonen på imaget som skal deployes 
   tag: ""
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
-command: 
-# -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
-args: 
+# Eks for å kjøre en dotnet applikasjon ```dotnet myassembly.dll``` bruk command:
+# ```
+# command: ["dotnet"]
+# ```
+# og args
+# ```
+# args: ["myassembly.dll"]
+# ```
+command: []
+# -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Les mer under ```command```.
+args: []
 # -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
 imagePullSecrets: []
 # -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.
@@ -106,7 +114,7 @@ ingress:
   className: "nginx"
 # -- Beskriver hvor mye ressurser en pod som kjører koden skal få tilgang til.
 # Les mer om konseptene [her](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits).
-# @default -- Se verdier under
+# @default -- {}
 resources:
   # -- Hvor mye ressurser er poden begrenset til.
   # @default -- Se verdier under
@@ -122,30 +130,29 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
-# -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
+# -- List av environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
 # Skrives på formen key: value
 # Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
-# HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
+# ```HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"```
 # Kan også overstyres globalt:
-# global:
+# ```global:
 #   extraEnvVars:
-#     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
-extraEnvVars:
-# Navn på eksisterende config-map som inneholder extra env-vars - må skrives på formen for en gyldig configMapRef og config-map må eksistere fra før. Hvis du legger til flere, husk å bevare eventuelle defaults ved å ekplisitt definere i tillegg i din values-fil.
+#     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"```
+extraEnvVars: []
+# Liste over eksisterende config-map som inneholder extra env-vars. Må skrives på yaml-formen for et gyldig envFrom config-map referanse. 
 # - configMapRef:
 #    name: myconfigmap
-extraEnvVarsCM: 
-# -- Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før. Hvis du legger til flere, husk å bevare eventuelle defaults ved å ekplisitt definere i tillegg i din values-fil.
-# - secretRef:
-#    name: mysecret
-extraEnvVarsSecret: 
-# -- Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
-extraVolumes: 
-# -- Definisjon på extra volume mount som skal mountes til podden
-extraVolumeMounts: 
+extraEnvVarsCM: []
+# -- Navn på eksisterende secret som inneholder extra env-vars. Må skrives på yaml-formen for et gyldig envFrom secret referanse. 
+extraEnvVarsSecret: []
+# -- Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Må skrives på yaml-formen for et gyldig volume.
+extraVolumes: []
+# -- Liste over extra volume mounts som skal mountes til podden. Må skrives på yaml-formen for et gyldig volume mount.
+extraVolumeMounts: []
 # -- Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
 isDebugEnvironment: false
 # -- Debugmodus - Settings for debugmodus
+# @default -- {}
 debug:  
   # -- Path til hvor debug-fil mountes i pod'en.
   configShare: /config-share/

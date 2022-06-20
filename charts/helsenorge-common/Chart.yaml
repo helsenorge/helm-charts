@@ -1,14 +1,11 @@
 apiVersion: v2
 name: helsenorge-common
-description: A Helm chart for Kubernetes
+description: Chart med felles helm-metoder for utvikling av helsenorge application-charts.
 
-# Library charts provide useful utilities or functions for the chart developer. They're included as
-# a dependency of application charts to inject those utilities and functions into the rendering
-# pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: library
 
 maintainers: 
   - name: Team Plattform
     email: "utv-hn-plattform@norskhelsenett.slack.com"
     url: "https://www.nhn.no/"
-version: 0.0.4
+version: 0.0.5

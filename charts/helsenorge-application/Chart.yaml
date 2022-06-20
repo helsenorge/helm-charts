@@ -1,14 +1,12 @@
 apiVersion: v2
 name: helsenorge-applikasjon
-description: Helm chart for installere en helsenorge-applikasjon på kuberntes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
+description: Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig. 
 
 type: application
 maintainers: 
-  - name: Team Plattform
-    email: "utv-hn-plattform@norskhelsenett.slack.com"
-    url: "https://www.nhn.no/"
+  - name: Plattform
 
-version: 0.0.31
+version: 0.0.32
 
 dependencies:
 - name: helsenorge-common
