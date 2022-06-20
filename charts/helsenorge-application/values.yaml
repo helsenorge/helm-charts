@@ -23,11 +23,12 @@ tokenValidation:
 # -- Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux. 
 certificateStore: "root/.dotnet/corefx/cryptography/x509stores/my"  
 # -- Rabbitmq-settings
+# @default -- {...}
 rabbitmq:
   # -- Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator). 
   # Hvis satt til false så må 'user' og 'password' settes.
   createUser: true
-  # -- Bruker - Settes default til det samme som applikasjonen, overstyr det navnet ved å angi en verdi.
+  # -- Bruker - Kun angi hvis du ønsker å overskrive at brukernavn blir satt til det samme som applikasjonsnavnet
   # Eks: configuration-internalapi
   user: ""
   # -- Passord - Brukes kun hvis generate user er satt til 'false'
@@ -65,8 +66,16 @@ image:
   # -- tag identifiserer versjonen på imaget som skal deployes 
   tag: ""
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
+# Eks for å kjøre en dotnet applikasjon bruk command:
+# ```
+# command: ["dotnet"]
+# ```
+# ```
+# args: ["myassbly.dll"]
+# ```
 command: 
 # -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
+
 args: 
 # -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
 imagePullSecrets: []
