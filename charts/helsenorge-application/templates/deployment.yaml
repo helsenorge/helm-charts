@@ -14,7 +14,7 @@ spec:
       labels:
         {{- include "common.labels.standard" . | nindent 8 }}
       annotations: 
-        splunk.com/sourcetype: {{ .Values.splunk.sourceType }}
+        splunk.com/sourcetype: {{ .Values.logging.sourceType }}
     spec:
       serviceAccountName: {{ include "common.serviceAccountName" . }}
       initContainers:

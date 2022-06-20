@@ -4,10 +4,8 @@ description: Helm chart for installere en helsenorge-job på kuberntes. En job b
 
 type: application
 maintainers: 
-  - name: Team Plattform
-    email: "utv-hn-plattform@norskhelsenett.slack.com"
-    url: "https://www.nhn.no/"
-
+  - name: Plattform
+  
 version: 0.0.11
 
 dependencies:
