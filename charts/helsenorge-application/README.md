@@ -1,9 +1,10 @@
 
+
 # helsenorge-applikasjon
 
 Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
-![Version: 0.0.32](https://img.shields.io/badge/Version-0.0.32-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.33](https://img.shields.io/badge/Version-0.0.33-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -30,7 +31,7 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | dnsZone | string | `"aks-helsenorge.utvikling"` | Dns-sonen til miljøet. |
 | enableTokenValidation | bool | `true` | Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden. |
 | extraEnvVars | list | `[]` | List av environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet ```HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"``` Kan også overstyres globalt: ```global:   extraEnvVars:     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"``` |
-| extraEnvVarsCM | list | `[]` |  |
+| extraEnvVarsCM | list | `[]` | Liste over eksisterende config-map som inneholder extra env-vars. Må skrives på yaml-formen. Se [eksempel](#env-from-example)  |
 | extraEnvVarsSecret | list | `[]` | Navn på eksisterende secret som inneholder extra env-vars. Må skrives på yaml-formen for et gyldig envFrom secret referanse.  |
 | extraVolumeMounts | list | `[]` | Liste over extra volume mounts som skal mountes til podden. Må skrives på yaml-formen for et gyldig volume mount. |
 | extraVolumes | list | `[]` | Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Må skrives på yaml-formen for et gyldig volume. |
@@ -39,12 +40,12 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | image | object | {} | Beskriver imaget til applikasjonen |
 | image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
-| image.repository | string | `""` | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn, eg configuration-internalapi. |
+| image.repository | string | Genereres av template. | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn. Hvis release = configuration og applikasjon = internalapi så blir repository = configuration-internalapi |
 | image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
 | imagePullSecrets | list | `[]` | Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk) |
 | ingress | object | Se verdier under | Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret.  Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
 | ingress.create | bool | `true` | Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret. |
-| ingress.hostname | string | kalkuleres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
+| ingress.hostname | string | genereres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
 | isDebugEnvironment | bool | `false` | Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
 | livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
 | logging.areaOvveride | string | `""` |  |
@@ -80,6 +81,20 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |
 | tokenValidation.volumeMount | string | `"/tokevalidation-cert"` | Path til hvor sertifikatet mountes i pod'en |
 | useSharedConfig | bool | `true` | Gir pod'en tilgang til felles-config allerede definert i namespacet. Dette er typisk config som kreves av felles-pakkene. |
+
+## <a name="Examples"></a>Examples
+
+### EnvFrom example
+ConfigMap:
+```yaml
+- configMapRef:
+   name: myconfigmap
+```
+Secret:
+```yaml
+- secretRef:
+    name: myconfigmap
+```
 
 ## Maintainers
 

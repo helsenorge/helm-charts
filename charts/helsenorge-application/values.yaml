@@ -57,7 +57,9 @@ dnsZone: "aks-helsenorge.utvikling"
 image:
   # -- Fra hvilket container registry skal imaget hentes. 
   registry: helsenorge.azurecr.io
-  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn, eg configuration-internalapi.
+  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn.
+  # Hvis release = configuration og applikasjon = internalapi så blir repository = configuration-internalapi
+  # @default -- Genereres av template.
   repository: ""
   # -- Kubernetes image pull-policy.
   # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
@@ -109,7 +111,7 @@ ingress:
   create: true
   # -- Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling.
   # Trenger ikke overstyres med mindre man skal teste noe spesielt
-  # @default -- kalkuleres basert på apinavn og miljo
+  # @default -- genereres basert på apinavn og miljo
   hostname: ""
   className: "nginx"
 # -- Beskriver hvor mye ressurser en pod som kjører koden skal få tilgang til.
@@ -139,9 +141,7 @@ resources:
 #   extraEnvVars:
 #     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"```
 extraEnvVars: []
-# Liste over eksisterende config-map som inneholder extra env-vars. Må skrives på yaml-formen for et gyldig envFrom config-map referanse. 
-# - configMapRef:
-#    name: myconfigmap
+# -- Liste over eksisterende config-map som inneholder extra env-vars. Må skrives på yaml-formen. Se [eksempel](#env-from-example) 
 extraEnvVarsCM: []
 # -- Navn på eksisterende secret som inneholder extra env-vars. Må skrives på yaml-formen for et gyldig envFrom secret referanse. 
 extraEnvVarsSecret: []

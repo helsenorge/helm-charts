@@ -10,3 +10,19 @@ $ helm repo add helsenorge http://helsenorge.github.io/helm-charts
 $ helm install my-release helsenorge/{{ template "chart.name" . }}
 ```
 {{- end }}
+
+{{ define "common.examples" -}}
+## <a name="Examples"></a>Examples
+
+### EnvFrom example
+ConfigMap:
+```yaml
+- configMapRef:
+   name: myconfigmap
+```
+Secret:
+```yaml
+- secretRef:
+    name: myconfigmap
+```
+{{- end }}
