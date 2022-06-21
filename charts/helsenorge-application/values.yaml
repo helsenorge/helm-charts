@@ -132,22 +132,15 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
-# -- List av environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
-# Skrives på formen key: value
-# Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
-# ```HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"```
-# Kan også overstyres globalt:
-# ```global:
-#   extraEnvVars:
-#     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"```
+# -- List av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler.
 extraEnvVars: []
-# -- Liste over eksisterende config-map som inneholder extra env-vars. Må skrives på yaml-formen. Se [eksempel](#env-from-example) 
+# -- Liste over eksisterende config-maps der innholdet lastes inn i podden som envVars. Se [her](#envfrom-configmap-eksempler) for eksempler. 
 extraEnvVarsCM: []
-# -- Navn på eksisterende secret som inneholder extra env-vars. Må skrives på yaml-formen for et gyldig envFrom secret referanse. 
+# -- Liste over eksisterende secrets der innholdet lastes inn i podden som envVars. Se [her](#envfrom-secret-eksempler) for eksempler.
 extraEnvVarsSecret: []
-# -- Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Må skrives på yaml-formen for et gyldig volume.
+# -- Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Se [her](#volume-og-volumemount-eksempler) for eksempler.
 extraVolumes: []
-# -- Liste over extra volume mounts som skal mountes til podden. Må skrives på yaml-formen for et gyldig volume mount.
+# -- Liste over extra volume mounts som skal mountes til podden. Se [her](#volume-og-volumemount-eksempler) for eksempler.
 extraVolumeMounts: []
 # -- Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet.
 isDebugEnvironment: false
@@ -158,7 +151,7 @@ debug:
   configShare: /config-share/
   # -- Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før.
   debugConfigMap: debug-environment
-# -- Gir pod'en tilgang til felles-config allerede definert i namespacet. Dette er typisk config som kreves av felles-pakkene.
+# -- Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene.
 useSharedConfig: true
 # -- Image som inneholder diverse utils. Benyttes for installasjon av sertifikater.
 helsenorgeUtilImage: helsenorge.azurecr.io/utils/certificate-tool:0.1
