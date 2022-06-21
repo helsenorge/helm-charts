@@ -1,9 +1,10 @@
 
+
 # helsenorge-applikasjon
 
 Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
-![Version: 0.0.32](https://img.shields.io/badge/Version-0.0.32-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.33](https://img.shields.io/badge/Version-0.0.33-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -29,22 +30,22 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | debug.debugConfigMap | string | `"debug-environment"` | Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før. |
 | dnsZone | string | `"aks-helsenorge.utvikling"` | Dns-sonen til miljøet. |
 | enableTokenValidation | bool | `true` | Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden. |
-| extraEnvVars | list | `[]` | List av environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet ```HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"``` Kan også overstyres globalt: ```global:   extraEnvVars:     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"``` |
-| extraEnvVarsCM | list | `[]` |  |
-| extraEnvVarsSecret | list | `[]` | Navn på eksisterende secret som inneholder extra env-vars. Må skrives på yaml-formen for et gyldig envFrom secret referanse.  |
-| extraVolumeMounts | list | `[]` | Liste over extra volume mounts som skal mountes til podden. Må skrives på yaml-formen for et gyldig volume mount. |
-| extraVolumes | list | `[]` | Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Må skrives på yaml-formen for et gyldig volume. |
+| extraEnvVars | list | `[]` | List av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler. |
+| extraEnvVarsCM | list | `[]` | Liste over eksisterende config-maps der innholdet lastes inn i podden som envVars. Se [her](#envfrom-configmap-eksempler) for eksempler.  |
+| extraEnvVarsSecret | list | `[]` | Liste over eksisterende secrets der innholdet lastes inn i podden som envVars. Se [her](#envfrom-secret-eksempler) for eksempler. |
+| extraVolumeMounts | list | `[]` | Liste over extra volume mounts som skal mountes til podden. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
+| extraVolumes | list | `[]` | Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
 | fullnameOverride | string | `""` | Overrider navn på chart.  |
 | helsenorgeUtilImage | string | `"helsenorge.azurecr.io/utils/certificate-tool:0.1"` | Image som inneholder diverse utils. Benyttes for installasjon av sertifikater. |
 | image | object | {} | Beskriver imaget til applikasjonen |
 | image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
-| image.repository | string | `""` | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn, eg configuration-internalapi. |
+| image.repository | string | Genereres av template. | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn. Hvis release = configuration og applikasjon = internalapi så blir repository = configuration-internalapi |
 | image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
 | imagePullSecrets | list | `[]` | Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk) |
 | ingress | object | Se verdier under | Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret.  Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
 | ingress.create | bool | `true` | Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret. |
-| ingress.hostname | string | kalkuleres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
+| ingress.hostname | string | genereres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
 | isDebugEnvironment | bool | `false` | Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
 | livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
 | logging.areaOvveride | string | `""` |  |
@@ -79,7 +80,80 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | tokenValidation.filename | string | `"helsenorge_sikkerhet_public.pem"` | Navn på filen som inneholder sertifikatet |
 | tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |
 | tokenValidation.volumeMount | string | `"/tokevalidation-cert"` | Path til hvor sertifikatet mountes i pod'en |
-| useSharedConfig | bool | `true` | Gir pod'en tilgang til felles-config allerede definert i namespacet. Dette er typisk config som kreves av felles-pakkene. |
+| useSharedConfig | bool | `true` | Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene. |
+
+## Eksempler
+### Env eksempler
+Alle environment-variabler defineres som et ```key: value``` par. Disse kan defineres per applikasjon eller globalt for alle applikasjoner som deployes av helm-chartet. Alle environment-variabler vil overstyre verdier satt i config-filer.
+
+Les mer detaljert rundt bruk av environment-variabler i kubernetes [her](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) og .Net [her](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#non-prefixed-environment-variables). Legg spesielt merke til seksjonen rundt [navngivning](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#naming-of-environment-variables) av variabler i .Net:
+```
+Environment variable names reflect the structure of an appsettings.json file. Each element in the hierarchy is separated by a double underscore (preferable) or a colon. When the element structure includes an array, the array index should be treated as an additional element name in this path. Consider the following appsettings.json file and its equivalent values represented as environment variables.
+```
+Hvis det er settings i helsenorge-config som skal overstyres så må variabel prefixes med ```HN_```, da det er slik helsenorge-koden plukker opp hvilke variabler som leses inn.
+
+```yaml
+extraEnvVars:
+    ASPNETCORE_ENVIRONMENT: Dev
+    # Overskriver aspnet-core loglevel
+    Logging__LogLevel__Default: Info
+    # overstyrer settingen ConfigurationSettings:Connectionstring
+    HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
+    # overstyrer rabbit-mq host
+    HN_InternalMessagingSettings_RootAddress: "rabbitmq://localhost:5671"
+```
+
+Globalt:
+```yaml
+global:
+  extraEnvVars:
+    HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
+```
+
+### EnvFrom configMap eksempler
+Som et altnerativ til å definere alle environment-variabler direkte, så kan du opprette ett eller flere config-maps som inneholder de environment-variablene du trenger.
+```yaml
+extraEnvVarsCM:
+  - configMapRef:
+    name: myconfigmap1
+  - configMapRef:
+    name: myconfigmap2
+```
+### EnvFrom secret eksempler
+Har du en eller flere environment-variabler som skal være hemmelige så kan disse opprettes i en secret og brukes av pod'en som environment-variabler.
+```yaml
+extraEnvVarsSecret:
+  - secretRef:
+    name: mysecret1
+  - secretRef:
+    name: mysecret2
+```
+### Volume og volumeMount eksempler
+Et Volume i kubernetes representerer en filkatalog som er tilgjengelig for alle containere i pod'en. Et volumeMount er mountingen av dette volumet inn i en spesifikk container i pod'en. Det er støtte for en stor mengde forskjellige volumes i kubernetes. Les mer om konseptet [her](https://kubernetes.io/docs/concepts/storage/volumes/).
+
+Eksemplet under vi tilgengeliggjøre 3 volumes av ulik type for podden, og disse vil deretter mountes inn containeren som kjøres i pod'en som filkatalog som igjen kan benyttes applikasjonen i containeren.
+
+```yaml
+extraVolumes:
+    # tilgjengeliggjøre et tomt volume
+  - name: tomt-volume
+    emptyDir: {}
+    # tilgjengeliggjøre en secret som et volume
+  - name: hemmelig-volum1
+    secret:
+      secretName: navn-paa-secret
+    # tilgjengeliggjøre et config-map som et volume
+  - name: volume-med-config-fil
+    configMap:
+      name: navn-paa-config-map
+extraVolumeMounts:
+    - name: tom-katalog
+    mountPath: /tomkatalog
+    - name: hemmelig-katalog
+    mountPath: /hemmelig
+    - name: config-katalog
+    mountPath: /config
+```
 
 ## Maintainers
 
