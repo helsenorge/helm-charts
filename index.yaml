@@ -2,6 +2,23 @@ apiVersion: v1
 entries:
   helsenorge-applikasjon:
   - apiVersion: v2
+    created: "2022-06-22T09:11:42.240473065Z"
+    dependencies:
+    - name: helsenorge-common
+      repository: https://helsenorge.github.io/helm-charts/
+      version: ~0.0.1
+    description: Helm chart for installere en helsenorge-applikasjon på kubernetes.
+      En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner
+      som utfører arbeid kontinuerlig.
+    digest: ce6e498ed50dc09c7399ad3108bf4a93c3ce89fc65217d2f6802aa5a6b1d91c8
+    maintainers:
+    - name: Plattform
+    name: helsenorge-applikasjon
+    type: application
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-applikasjon-0.0.36/helsenorge-applikasjon-0.0.36.tgz
+    version: 0.0.36
+  - apiVersion: v2
     created: "2022-06-21T08:14:33.640944396Z"
     dependencies:
     - name: helsenorge-common
@@ -388,6 +405,23 @@ entries:
     version: 0.0.1
   helsenorge-job:
   - apiVersion: v2
+    created: "2022-06-22T09:11:42.503962081Z"
+    dependencies:
+    - name: helsenorge-common
+      repository: https://helsenorge.github.io/helm-charts/
+      version: ~0.0.1
+    description: Helm chart for installere en helsenorge-job på kuberntes. En job
+      beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for
+      kjøring databasemigreringer eller console applikasjoner.
+    digest: 99435efdb60741fc9a9bb990f4316e56d516c85c07ed5afac96cf6b060c2b6db
+    maintainers:
+    - name: Plattform
+    name: helsenorge-job
+    type: application
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.14/helsenorge-job-0.0.14.tgz
+    version: 0.0.14
+  - apiVersion: v2
     created: "2022-06-21T08:14:33.786799957Z"
     dependencies:
     - name: helsenorge-common
@@ -519,4 +553,4 @@ entries:
     urls:
     - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.2/helsenorge-job-0.0.2.tgz
     version: 0.0.2
-generated: "2022-06-22T08:58:14.065530348Z"
+generated: "2022-06-22T09:11:42.504162391Z"
