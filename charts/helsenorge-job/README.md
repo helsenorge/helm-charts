@@ -4,7 +4,7 @@
 
 Helm chart for installere en helsenorge-job på kuberntes. En job beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for kjøring databasemigreringer eller console applikasjoner.
 
-![Version: 0.0.14](https://img.shields.io/badge/Version-0.0.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.15](https://img.shields.io/badge/Version-0.0.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -20,25 +20,25 @@ $ helm install my-release helsenorge/helsenorge-job
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
-| backoffLimit | int | `1` | Antall forsøk jobben får før den markeres som feilet |
+| nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
+| fullnameOverride | string | `""` | Overrider navn på chart.  |
+| teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
+| image | object | Se verdier under | Beskriver imaget til applikasjonen |
+| image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
+| image.repository | string | `""` | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository |
+| image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
+| image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
 | command | string | `nil` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
-| commonAnnotations | string | `nil` | Annoteringer som legges på alle objeckter som deployes  |
+| args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | commonLabels | string | `nil` | Labels som legges på alle objeckter som deployes |
+| commonAnnotations | string | `nil` | Annoteringer som legges på alle objeckter som deployes  |
+| restartPolicy | string | `"Never"` | Restart policien til en pod. Defaulter til Never for en engangsjobb. Mulige verdier er Always, OnFailure, and Never. Les mer [her](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy). |
+| backoffLimit | int | `1` | Antall forsøk jobben får før den markeres som feilet |
 | extraEnvVars | string | `nil` | Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings Skrives på formen key: value Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;" Kan også overstyres globalt: global:   extraEnvVars:     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;" |
 | extraEnvVarsCM[0].configMapRef.name | string | `"felles-config"` |  |
 | extraEnvVarsSecret[0].secretRef.name | string | `"felles-config"` |  |
-| extraVolumeMounts | string | `nil` |  |
 | extraVolumes | string | `nil` |  |
-| fullnameOverride | string | `""` | Overrider navn på chart.  |
-| image | object | Se verdier under | Beskriver imaget til applikasjonen |
-| image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
-| image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
-| image.repository | string | `""` | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository |
-| image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
-| nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
-| restartPolicy | string | `"Never"` | Restart policien til en pod. Defaulter til Never for en engangsjobb. Mulige verdier er Always, OnFailure, and Never. Les mer [her](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy). |
-| teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
+| extraVolumeMounts | string | `nil` |  |
 
 ## Maintainers
 
@@ -53,4 +53,4 @@ $ helm install my-release helsenorge/helsenorge-job
 | https://helsenorge.github.io/helm-charts/ | helsenorge-common | ~0.0.1 |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.6.0](https://github.com/norwoodj/helm-docs/releases/v1.6.0)
+Autogenerated from chart metadata using [helm-docs v1.10.0](https://github.com/norwoodj/helm-docs/releases/v1.10.0)

@@ -83,5 +83,5 @@ Benytter oss av [helm-docs](https://github.com/norwoodj/helm-docs) for å auto-g
 3. Kjør i terminal:
 
 ```console
-docker run --rm --volume "$(pwd):/src"  jnorwood/helm-docs:latest --chart-search-root=/src/. --template-files=/src/charts/_templates.gotmpl --template-files=README.md.gotmpl
+docker run --rm --volume "$(pwd):/src"  jnorwood/helm-docs:latest --chart-search-root=/src/. --template-files=/src/charts/_templates.gotmpl --template-files=README.md.gotmpl --sort-values-order file
 ``` 
