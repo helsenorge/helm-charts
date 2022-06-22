@@ -4,7 +4,7 @@
 
 Helm chart for installere en helsenorge-job på kuberntes. En job beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for kjøring databasemigreringer eller console applikasjoner.
 
-![Version: 0.0.12](https://img.shields.io/badge/Version-0.0.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.14](https://img.shields.io/badge/Version-0.0.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -38,7 +38,7 @@ $ helm install my-release helsenorge/helsenorge-job
 | image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
 | nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
 | restartPolicy | string | `"Never"` | Restart policien til en pod. Defaulter til Never for en engangsjobb. Mulige verdier er Always, OnFailure, and Never. Les mer [her](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy). |
-| team | string | `""` | Ansvarlig team for losningsomraade - eks "Plattform". - Kan overstyres globalt global:   team: "" |
+| teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
 
 ## Maintainers
 
