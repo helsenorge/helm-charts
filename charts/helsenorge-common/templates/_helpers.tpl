@@ -1,8 +1,14 @@
 {{/*
-Navn på ansvarlig team
+Navn på ansvarlig team. Henter fra Chart.Maintainers. Kan overstyres globalt eller per chart.
 */}}
 {{- define "common.team" -}}
-{{- .Values.team | default .Values.global.team | lower | trunc 63 | }}
+{{- if or .Values.teamOverride .Values.global.teamOverride }} 
+{{- .Values.teamOverride | default .Values.global.teamOverride | lower | trunc 63 }}
+{{- else }}
+{{- with index .Chart.Maintainers 0 }}
+{{- .Name | lower | trunc 63 }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{/*
