@@ -4,7 +4,7 @@
 
 Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
-![Version: 0.0.33](https://img.shields.io/badge/Version-0.0.33-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.36](https://img.shields.io/badge/Version-0.0.36-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -75,7 +75,7 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | serviceAccount | object | `{"annotations":{},"create":true}` | Kubernetes service-konto for losningsomraade. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/). Navn settes til det samme som applikasjon. |
 | serviceAccount.annotations | object | `{}` | Spesifikke annoteringer som skal legges til servicekontoen (todo). |
 | serviceAccount.create | bool | `true` | Spesifiserer om en service-konto skal opprettes. |
-| team | string | `""` | Ansvarlig team for losningsomraade - eks "Plattform". - Kan overstyres globalt global:   team: "" |
+| teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
 | tokenValidation | object | {} | Informasjon om tokenvalideringssertifikatet i miljoet. |
 | tokenValidation.filename | string | `"helsenorge_sikkerhet_public.pem"` | Navn på filen som inneholder sertifikatet |
 | tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |

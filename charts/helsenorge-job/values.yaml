@@ -3,10 +3,8 @@
 nameOverride: ""
 # -- Overrider navn på chart. 
 fullnameOverride: ""
-# -- Ansvarlig team for losningsomraade - eks "Plattform". - Kan overstyres globalt
-# global:
-#   team: ""
-team: ""
+# -- Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt.
+teamOvveride: ""
 # -- Beskriver imaget til applikasjonen
 # @default -- Se verdier under
 image:
