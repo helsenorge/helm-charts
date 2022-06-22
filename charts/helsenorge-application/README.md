@@ -4,7 +4,7 @@
 
 Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
-![Version: 0.0.36](https://img.shields.io/badge/Version-0.0.36-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.37](https://img.shields.io/badge/Version-0.0.37-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -20,48 +20,50 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| args | list | `[]` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Les mer under ```command```. |
-| certificateStore | string | `"root/.dotnet/corefx/cryptography/x509stores/my"` | Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux.  |
+| nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
+| fullnameOverride | string | `""` | Overrider navn på chart.  |
+| teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
 | clientId | string | `""` | ClientId for applikasjonen |
 | clientSecret | string | `""` | Tilhørende secret |
-| command | list | `[]` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Eks for å kjøre en dotnet applikasjon ```dotnet myassembly.dll``` bruk command: ``` command: ["dotnet"] ``` og args ``` args: ["myassembly.dll"] ``` |
-| debug | object | {} | Debugmodus - Settings for debugmodus |
-| debug.configShare | string | `"/config-share/"` | Path til hvor debug-fil mountes i pod'en. |
-| debug.debugConfigMap | string | `"debug-environment"` | Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før. |
-| dnsZone | string | `"aks-helsenorge.utvikling"` | Dns-sonen til miljøet. |
 | enableTokenValidation | bool | `true` | Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden. |
-| extraEnvVars | list | `[]` | List av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler. |
-| extraEnvVarsCM | list | `[]` | Liste over eksisterende config-maps der innholdet lastes inn i podden som envVars. Se [her](#envfrom-configmap-eksempler) for eksempler.  |
-| extraEnvVarsSecret | list | `[]` | Liste over eksisterende secrets der innholdet lastes inn i podden som envVars. Se [her](#envfrom-secret-eksempler) for eksempler. |
-| extraVolumeMounts | list | `[]` | Liste over extra volume mounts som skal mountes til podden. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
-| extraVolumes | list | `[]` | Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
-| fullnameOverride | string | `""` | Overrider navn på chart.  |
-| helsenorgeUtilImage | string | `"helsenorge.azurecr.io/utils/certificate-tool:0.1"` | Image som inneholder diverse utils. Benyttes for installasjon av sertifikater. |
+| tokenValidation | object | {} | Informasjon om tokenvalideringssertifikatet i miljoet. |
+| tokenValidation.filename | string | `"helsenorge_sikkerhet_public.pem"` | Navn på filen som inneholder sertifikatet |
+| tokenValidation.volumeMount | string | `"/tokevalidation-cert"` | Path til hvor sertifikatet mountes i pod'en |
+| tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |
+| tokenValidation.image | string | `"helsenorge.azurecr.io/utils/certificate-tool:2.0.7"` | Image som brukes som init-container for installasjon av sertifikat |
+| certificateStore | string | `"root/.dotnet/corefx/cryptography/x509stores/my"` | Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux.  |
+| rabbitmq | object | {...} | Rabbitmq-settings |
+| rabbitmq.createUser | bool | `true` | Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator).  Hvis satt til false så må 'user' og 'password' settes. |
+| rabbitmq.user | string | `""` | Bruker - Kun angi hvis du ønsker å overskrive at brukernavn blir satt til det samme som applikasjonsnavnet Eks: configuration-internalapi |
+| rabbitmq.password | string | `""` | Passord - Brukes kun hvis generate user er satt til 'false' |
+| rabbitmq.virtualHost | string | `"internal.messaging.helsenorge.no"` | Navn på virtual host |
+| rabbitmq.clusterName | string | `"rabbitmq"` | Navn på cluster, brukes til å sette opp adressen til rabbitmq, så må være det samme som hostnavnet |
+| rabbitmq.port | int | `5671` | Port til amqp-endepunktet til rabbitmq |
+| rabbitmq.useSsl | bool | `true` | Kommunikasjon mellom client og rabbitmq går over ssl |
+| rabbitmq.encryptMessages | bool | `true` | Skal meldinger som går mellom client og rabbitmq krypteres |
+| logging.areaOvveride | string | `""` |  |
+| logging.sourceType | string | `"kube:Helsenorge"` | Setter SourceType på loggene i splunk |
+| dnsZone | string | `"aks-helsenorge.utvikling"` | Dns-sonen til miljøet. |
 | image | object | {} | Beskriver imaget til applikasjonen |
-| image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.registry | string | `"helsenorge.azurecr.io"` | Fra hvilket container registry skal imaget hentes.  |
 | image.repository | string | Genereres av template. | Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn. Hvis release = configuration og applikasjon = internalapi så blir repository = configuration-internalapi |
+| image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy). |
 | image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
+| command | list | `[]` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Eks for å kjøre en dotnet applikasjon ```dotnet myassembly.dll``` bruk command: ``` command: ["dotnet"] ``` og args ``` args: ["myassembly.dll"] ``` |
+| args | list | `[]` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Les mer under ```command```. |
 | imagePullSecrets | list | `[]` | Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk) |
+| replicaCount | int | `1` | Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer. |
+| livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
+| readinessProbe.path | string | `"/health"` | [Readiness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren er klar for å motta requests ved å gjøre et http kall mot gitt path |
+| serviceAccount | object | `{"annotations":{},"create":true}` | Kubernetes service-konto for losningsomraade. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/). Navn settes til det samme som applikasjon. |
+| serviceAccount.create | bool | `true` | Spesifiserer om en service-konto skal opprettes. |
+| serviceAccount.annotations | object | `{}` | Spesifikke annoteringer som skal legges til servicekontoen (todo). |
+| service | object | Se verdier under | Servicen som eksponerer apiet ut i klusteret. |
+| service.type | string | `"ClusterIP"` | Type service. Les mer [her](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). |
+| service.port | int | `80` | Port servicen eksponerer apiet på ut i clusteret. |
 | ingress | object | Se verdier under | Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret.  Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
 | ingress.create | bool | `true` | Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret. |
 | ingress.hostname | string | genereres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
-| isDebugEnvironment | bool | `false` | Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
-| livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
-| logging.areaOvveride | string | `""` |  |
-| logging.sourceType | string | `"kube:Helsenorge"` | Setter SourceType på loggene i splunk |
-| nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
-| rabbitmq | object | {...} | Rabbitmq-settings |
-| rabbitmq.clusterName | string | `"rabbitmq"` | Navn på cluster, brukes til å sette opp adressen til rabbitmq, så må være det samme som hostnavnet |
-| rabbitmq.createUser | bool | `true` | Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator).  Hvis satt til false så må 'user' og 'password' settes. |
-| rabbitmq.encryptMessages | bool | `true` | Skal meldinger som går mellom client og rabbitmq krypteres |
-| rabbitmq.password | string | `""` | Passord - Brukes kun hvis generate user er satt til 'false' |
-| rabbitmq.port | int | `5671` | Port til amqp-endepunktet til rabbitmq |
-| rabbitmq.useSsl | bool | `true` | Kommunikasjon mellom client og rabbitmq går over ssl |
-| rabbitmq.user | string | `""` | Bruker - Kun angi hvis du ønsker å overskrive at brukernavn blir satt til det samme som applikasjonsnavnet Eks: configuration-internalapi |
-| rabbitmq.virtualHost | string | `"internal.messaging.helsenorge.no"` | Navn på virtual host |
-| readinessProbe.path | string | `"/health"` | [Readiness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren er klar for å motta requests ved å gjøre et http kall mot gitt path |
-| replicaCount | int | `1` | Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer. |
 | resources | object | {} | Beskriver hvor mye ressurser en pod som kjører koden skal få tilgang til. Les mer om konseptene [her](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits). |
 | resources.limits | object | Se verdier under | Hvor mye ressurser er poden begrenset til. |
 | resources.limits.cpu | string | `"200m"` | [Limits and requests for CPU resources are measured in cpu units. One cpu, in Kubernetes, is equivalent to 1 vCPU/Core for cloud providers and 1 hyperthread on bare-metal Intel processors](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu). |
@@ -69,17 +71,15 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | resources.requests | object | Se verdier under | Hvor mye ressurser poden minimum trenger. |
 | resources.requests.cpu | string | `"100m"` | Samme som under resources.limits. |
 | resources.requests.memory | string | `"128Mi"` | Samme som under resources.limits. |
-| service | object | Se verdier under | Servicen som eksponerer apiet ut i klusteret. |
-| service.port | int | `80` | Port servicen eksponerer apiet på ut i clusteret. |
-| service.type | string | `"ClusterIP"` | Type service. Les mer [her](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). |
-| serviceAccount | object | `{"annotations":{},"create":true}` | Kubernetes service-konto for losningsomraade. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/). Navn settes til det samme som applikasjon. |
-| serviceAccount.annotations | object | `{}` | Spesifikke annoteringer som skal legges til servicekontoen (todo). |
-| serviceAccount.create | bool | `true` | Spesifiserer om en service-konto skal opprettes. |
-| teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
-| tokenValidation | object | {} | Informasjon om tokenvalideringssertifikatet i miljoet. |
-| tokenValidation.filename | string | `"helsenorge_sikkerhet_public.pem"` | Navn på filen som inneholder sertifikatet |
-| tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |
-| tokenValidation.volumeMount | string | `"/tokevalidation-cert"` | Path til hvor sertifikatet mountes i pod'en |
+| extraEnvVars | list | `[]` | List av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler. |
+| extraEnvVarsCM | list | `[]` | Liste over eksisterende config-maps der innholdet lastes inn i podden som envVars. Se [her](#envfrom-configmap-eksempler) for eksempler.  |
+| extraEnvVarsSecret | list | `[]` | Liste over eksisterende secrets der innholdet lastes inn i podden som envVars. Se [her](#envfrom-secret-eksempler) for eksempler. |
+| extraVolumes | list | `[]` | Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
+| extraVolumeMounts | list | `[]` | Liste over extra volume mounts som skal mountes til podden. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
+| isDebugEnvironment | bool | `false` | Debugmodus - Skrur på debug-modus i miljøet. Krever at debug.dll config-map er tilgjengelig i miljøet. |
+| debug | object | {} | Debugmodus - Settings for debugmodus |
+| debug.configShare | string | `"/config-share/"` | Path til hvor debug-fil mountes i pod'en. |
+| debug.debugConfigMap | string | `"debug-environment"` | Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før. |
 | useSharedConfig | bool | `true` | Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene. |
 
 ## Eksempler
@@ -168,4 +168,4 @@ extraVolumeMounts:
 | https://helsenorge.github.io/helm-charts/ | helsenorge-common | ~0.0.1 |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.6.0](https://github.com/norwoodj/helm-docs/releases/v1.6.0)
+Autogenerated from chart metadata using [helm-docs v1.10.0](https://github.com/norwoodj/helm-docs/releases/v1.10.0)

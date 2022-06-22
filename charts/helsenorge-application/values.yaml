@@ -19,8 +19,10 @@ tokenValidation:
   volumeMount: /tokevalidation-cert
   # -- Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før.
   secretName: certificate.helsenorge-sikkerhet.public
+  # -- Image som brukes som init-container for installasjon av sertifikat
+  image: helsenorge.azurecr.io/utils/certificate-tool:2.0.7
 # -- Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux. 
-certificateStore: "root/.dotnet/corefx/cryptography/x509stores/my"  
+certificateStore: root/.dotnet/corefx/cryptography/x509stores/my  
 # -- Rabbitmq-settings
 # @default -- {...}
 rabbitmq:
@@ -151,8 +153,6 @@ debug:
   debugConfigMap: debug-environment
 # -- Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene.
 useSharedConfig: true
-# -- Image som inneholder diverse utils. Benyttes for installasjon av sertifikater.
-helsenorgeUtilImage: helsenorge.azurecr.io/utils/certificate-tool:0.1
 
 
 

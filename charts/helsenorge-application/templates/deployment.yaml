@@ -20,7 +20,7 @@ spec:
       initContainers:
       {{- if .Values.enableTokenValidation }}
       - name: {{ include "common.fullname" . }}-tokenvalidation
-        image: {{ .Values.helsenorgeUtilImage }}  
+        image: {{ .Values.tokenValidation.image}}
         workingDir: {{ .Values.tokenValidation.volumeMount }}
         command: ["certificate-tool"]
         args: ["add", "--file", {{ .Values.tokenValidation.filename }} ]
