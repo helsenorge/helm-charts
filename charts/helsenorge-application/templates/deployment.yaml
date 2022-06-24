@@ -23,6 +23,7 @@ spec:
         image: {{ .Values.tokenValidation.image}}
         workingDir: {{ .Values.tokenValidation.volumeMount }}
         command: ["certificate-tool"]
+        imagePullPolicy: {{ .Values.tokenValidation.imagePullPolicy }}
         args: ["add", "--file", {{ .Values.tokenValidation.filename }} ]
         volumeMounts:
         - name: certificate-store

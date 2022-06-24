@@ -21,6 +21,8 @@ tokenValidation:
   secretName: certificate.helsenorge-sikkerhet.public
   # -- Image som brukes som init-container for installasjon av sertifikat
   image: helsenorge.azurecr.io/utils/certificate-tool:2.0.7
+  # -- Image pull policy for init-container
+  imagePullPolicy: IfNotPresent
 # -- Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux. 
 certificateStore: root/.dotnet/corefx/cryptography/x509stores/my  
 # -- Rabbitmq-settings
@@ -132,8 +134,8 @@ resources:
     cpu: 100m
     # -- Samme som under resources.limits.
     memory: 128Mi
-# -- List av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler.
-extraEnvVars: []
+# -- Map av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler.
+extraEnvVars: {}
 # -- Liste over eksisterende config-maps der innholdet lastes inn i podden som envVars. Se [her](#envfrom-configmap-eksempler) for eksempler. 
 extraEnvVarsCM: []
 # -- Liste over eksisterende secrets der innholdet lastes inn i podden som envVars. Se [her](#envfrom-secret-eksempler) for eksempler.

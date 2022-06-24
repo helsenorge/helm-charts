@@ -4,7 +4,7 @@
 
 Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
-![Version: 0.0.37](https://img.shields.io/badge/Version-0.0.37-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.38](https://img.shields.io/badge/Version-0.0.38-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -31,6 +31,7 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | tokenValidation.volumeMount | string | `"/tokevalidation-cert"` | Path til hvor sertifikatet mountes i pod'en |
 | tokenValidation.secretName | string | `"certificate.helsenorge-sikkerhet.public"` | Navn på secret som inneholder sertifikatet.  Denne må eksistere i namespace fra før. |
 | tokenValidation.image | string | `"helsenorge.azurecr.io/utils/certificate-tool:2.0.7"` | Image som brukes som init-container for installasjon av sertifikat |
+| tokenValidation.imagePullPolicy | string | `"IfNotPresent"` | Image pull policy for init-container |
 | certificateStore | string | `"root/.dotnet/corefx/cryptography/x509stores/my"` | Path til certificate-store som sertifikater installeres til ved bruk av [certificate tool](https://github.com/gsoft-inc/dotnet-certificate-tool). Fallback plassering for [CurrentUser\My](https://docs.microsoft.com/nb-no/dotnet/standard/security/cross-platform-cryptography#the-my-store) på linux.  |
 | rabbitmq | object | {...} | Rabbitmq-settings |
 | rabbitmq.createUser | bool | `true` | Hvis 'true' så opprettes det en rabbitmq-bruker for applikasjonene. Fungerer kun i miljøer der rabbitmq styres av [rabbitmq-topology-operator](https://www.rabbitmq.com/kubernetes/operator/using-topology-operator.html#non-operator).  Hvis satt til false så må 'user' og 'password' settes. |
@@ -71,7 +72,7 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | resources.requests | object | Se verdier under | Hvor mye ressurser poden minimum trenger. |
 | resources.requests.cpu | string | `"100m"` | Samme som under resources.limits. |
 | resources.requests.memory | string | `"128Mi"` | Samme som under resources.limits. |
-| extraEnvVars | list | `[]` | List av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler. |
+| extraEnvVars | object | `{}` | Map av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler. |
 | extraEnvVarsCM | list | `[]` | Liste over eksisterende config-maps der innholdet lastes inn i podden som envVars. Se [her](#envfrom-configmap-eksempler) for eksempler.  |
 | extraEnvVarsSecret | list | `[]` | Liste over eksisterende secrets der innholdet lastes inn i podden som envVars. Se [her](#envfrom-secret-eksempler) for eksempler. |
 | extraVolumes | list | `[]` | Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
