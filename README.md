@@ -21,6 +21,7 @@ Stå i helsenorge-repoet du ønsker å deploye til kubernetes. Hvis losningsomr�
 Opprett nytt helm-chart under folder ```/charts```
 ```console 
 mkdir charts
+cd charts
 helm create okonomi
 ```
 Vi skal bare lage et umbrella chart der vi inkluderer allerede eksisterende helm-charts, så du trenger ikke den templatingen ```helm create``` gir by default.

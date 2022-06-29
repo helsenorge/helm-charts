@@ -115,6 +115,11 @@ ingress:
   # Trenger ikke overstyres med mindre man skal teste noe spesielt
   # @default -- genereres basert på apinavn og miljo
   hostname: ""
+  # -- Spesifiserer navn på secret som inneholder tls-sertifikatet som skal benyttes på endepunktet. 
+  # Vil være nødvendig å angi hvis tjenesten skal eksponeres på et annet domene enn standard og eksponeres på port 443, typisk hvis hostname er angitt.
+  # @default -- Hvis ikke angitt så brukes default
+  tlsSecret: ""
+  # -- Spesifiserer hvilken nginx-controller som er i bruk
   className: "nginx"
 # -- Beskriver hvor mye ressurser en pod som kjører koden skal få tilgang til.
 # Les mer om konseptene [her](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits).
