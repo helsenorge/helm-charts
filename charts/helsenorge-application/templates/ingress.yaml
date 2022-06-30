@@ -7,6 +7,9 @@ metadata:
     {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingress.className }}
+  {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
 spec:
   tls:
   {{- if .Values.ingress.tlsSecret }}
