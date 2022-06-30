@@ -105,6 +105,8 @@ service:
     type: "ClusterIP" 
     # -- Port servicen eksponerer apiet på ut i clusteret.
     port: 80 
+    # -- Ingress annoteringer, skrives som key-value par. 
+    annotations: {}
 # -- Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret. 
 # Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/).
 # @default -- Se verdier under
@@ -120,6 +122,11 @@ ingress:
   # @default -- Hvis ikke angitt så brukes default
   tlsSecret: ""
   # -- Spesifiserer hvilken nginx-controller som er i bruk
+  # -- Ingress annoteringer, skrives som key-value par. 
+  # For en full liste av mulige ingress annoteringer, les [her](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md)
+  annotations: {}
+  # dns.alpha.kubernetes.io/hostname: test.test.no
+  # -- Navnet på implementasjonen av ingress-controlleren som skal benyttes.
   className: "nginx"
 # -- Beskriver hvor mye ressurser en pod som kjører koden skal få tilgang til.
 # Les mer om konseptene [her](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits).

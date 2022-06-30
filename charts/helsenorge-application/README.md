@@ -62,6 +62,7 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | service | object | Se verdier under | Servicen som eksponerer apiet ut i klusteret. |
 | service.type | string | `"ClusterIP"` | Type service. Les mer [her](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). |
 | service.port | int | `80` | Port servicen eksponerer apiet på ut i clusteret. |
+| service.annotations | object | `{}` | Ingress annoteringer, skrives som key-value par.  |
 | ingress | object | Se verdier under | Beskriver hvordan komponenten skal eksponeres ut av clustert, slik at komponenten kan konsumeres av ressurser utenfor clusteret.  Les mer [her](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
 | ingress.create | bool | `true` | Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret. |
 | ingress.hostname | string | genereres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
