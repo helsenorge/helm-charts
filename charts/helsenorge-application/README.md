@@ -67,7 +67,8 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | ingress.create | bool | `true` | Bestemmer om en ingress skal opprettes eller ikke, false betyr at ingen ingress opprettes og komponenten kan ikke nås utenfra clusteret. |
 | ingress.hostname | string | genereres basert på apinavn og miljo | Bestemmer hvilket hostname ingress skal lytte på. Eks configuration-internalapi-mas01.helsenorge.utvikling. Trenger ikke overstyres med mindre man skal teste noe spesielt |
 | ingress.tlsSecret | string | Hvis ikke angitt så brukes default | Spesifiserer navn på secret som inneholder tls-sertifikatet som skal benyttes på endepunktet.  Vil være nødvendig å angi hvis tjenesten skal eksponeres på et annet domene enn standard og eksponeres på port 443, typisk hvis hostname er angitt. |
-| ingress.className | string | `"nginx"` | Spesifiserer hvilken nginx-controller som er i bruk |
+| ingress.annotations | object | `{}` | Ingress annoteringer, skrives som key-value par.  For en full liste av mulige ingress annoteringer, les [her](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) |
+| ingress.className | string | `"nginx"` | Navnet på implementasjonen av ingress-controlleren som skal benyttes. |
 | resources | object | {} | Beskriver hvor mye ressurser en pod som kjører koden skal få tilgang til. Les mer om konseptene [her](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits). |
 | resources.limits | object | Se verdier under | Hvor mye ressurser er poden begrenset til. |
 | resources.limits.cpu | string | `"200m"` | [Limits and requests for CPU resources are measured in cpu units. One cpu, in Kubernetes, is equivalent to 1 vCPU/Core for cloud providers and 1 hyperthread on bare-metal Intel processors](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu). |
