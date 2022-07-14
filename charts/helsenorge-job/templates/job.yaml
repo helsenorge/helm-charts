@@ -12,6 +12,7 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: {{ include "common.serviceAccountName" . }}
       containers:
       - name: {{ include "common.fullname" .  }} 
         image:  {{ include "common.image" . }}

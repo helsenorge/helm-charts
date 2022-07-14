@@ -49,11 +49,18 @@ extraEnvVarsCM:
 extraEnvVarsSecret: 
   - secretRef:
       name: "felles-config"
-
 # Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
 extraVolumes:
-
 # Definisjon på extra volume mount som skal mountes til podden
 extraVolumeMounts:
+# -- Kubernetes service-konto. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/).
+# Navn settes til det samme som applikasjon.
+serviceAccount:
+  # -- Spesifiserer om en service-konto skal opprettes.
+  create: true
+  # -- Legger på egne image pull secrets på service accounten
+  imagePullSecrets: 
+    - helsenorge-pull-secret
+
 
 
