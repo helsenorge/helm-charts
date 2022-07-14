@@ -31,29 +31,26 @@ commonAnnotations:
 restartPolicy: Never
 # -- Antall forsøk jobben får før den markeres som feilet
 backoffLimit: 1
+# -- Map av environment variabler som tilgjengeliggjøres for podden. Se [her](env-eksempler) for eksempler.
+extraEnvVars: {}
+# -- Liste over eksisterende config-maps der innholdet lastes inn i podden som envVars. Se [her](#envfrom-configmap-eksempler) for eksempler. 
+extraEnvVarsCM: []
+# -- Liste over eksisterende secrets der innholdet lastes inn i podden som envVars. Se [her](#envfrom-secret-eksempler) for eksempler.
+extraEnvVarsSecret: []
+# -- Liste over extra volumes som skal tilgjengeliggjøres til deploymenten. Se [her](#volume-og-volumemount-eksempler) for eksempler.
+extraVolumes: []
+# -- Liste over extra volume mounts som skal mountes til podden. Se [her](#volume-og-volumemount-eksempler) for eksempler.
+extraVolumeMounts: []
+# -- Kubernetes service-konto. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/).
+# Navn settes til det samme som applikasjon.
+serviceAccount:
+  # -- Spesifiserer om en service-konto skal opprettes.
+  create: true
+  # -- Legger på egne image pull secrets på service accounten
+  imagePullSecrets: 
+    - helsenorge-pull-secret
+# -- Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene.
+useSharedConfig: true
 
-# -- Environment variabler som tilgjengeliggjøres podden - Brukes for å overstyre config-settings
-# Skrives på formen key: value
-# Husk å bruke prefix HN_ for at environment-variabelen skal leses inn av config-systemet
-# HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
-# Kan også overstyres globalt:
-# global:
-#   extraEnvVars:
-#     HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
-extraEnvVars:
-# Navn på eksisterende config-map som inneholder extra env-vars - må skrives på formen for en gyldig configMapRef og config-map må eksistere fra før
-extraEnvVarsCM: 
-  - configMapRef:
-      name: "felles-config"
-# Navn på eksisterende secret som inneholder extra env-vars - må skrives på formen for en gyldig secretRef og secret må eksistere fra før
-extraEnvVarsSecret: 
-  - secretRef:
-      name: "felles-config"
-
-# Definisjon på extra volume som skal tilgjengeliggjøres til deploymenten
-extraVolumes:
-
-# Definisjon på extra volume mount som skal mountes til podden
-extraVolumeMounts:
 
 

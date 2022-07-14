@@ -53,7 +53,9 @@ logging:
   # -- Setter SourceType på loggene i splunk
   sourceType: kube:Helsenorge
 # -- Dns-sonen til miljøet.
-dnsZone: "aks-helsenorge.utvikling"
+# Dev: "helsenorge.utvikling"
+# INT: "aks-helsenorge.utvikling"
+dnsZone: "helsenorge.utvikling"
 # -- Beskriver imaget til applikasjonen
 # @default -- {}
 image:
@@ -90,13 +92,16 @@ livenessProbe:
 readinessProbe:
    # -- [Readiness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren er klar for å motta requests ved å gjøre et http kall mot gitt path
   path: "/health"
-# -- Kubernetes service-konto for losningsomraade. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/).
+# -- Kubernetes service-konto. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/).
 # Navn settes til det samme som applikasjon.
 serviceAccount:
   # -- Spesifiserer om en service-konto skal opprettes.
   create: true
   # -- Spesifikke annoteringer som skal legges til servicekontoen (todo).
   annotations: {}
+  # -- Legger på egne image pull secrets på service accounten
+  imagePullSecrets: 
+    - helsenorge-pull-secret
 # -- Servicen som eksponerer apiet ut i klusteret.
 # @default -- Se verdier under
 service:  
