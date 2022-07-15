@@ -16,6 +16,9 @@ spec:
       annotations: 
         splunk.com/sourcetype: {{ .Values.logging.sourceType }}
     spec:
+      {{- if or .Values.hostAliases .Values.global.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" (default .Values.global.hostAliases .Values.hostAliases) "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "common.serviceAccountName" . }}
       initContainers:
       {{- if .Values.enableTokenValidation }}

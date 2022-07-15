@@ -51,6 +51,9 @@ serviceAccount:
     - helsenorge-pull-secret
 # -- Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene.
 useSharedConfig: true
+# -- Legger inn hostfil innslag i pod'ens /etc/host. Se [her](#hostalias-eksempler) for eksempler.
+hostAliases: []
+
 
 
 

@@ -4,7 +4,7 @@
 
 Helm chart for installere en helsenorge-job på kuberntes. En job beskriver en engangskjøring av en eller flere pod'er ved deploy. Passer for kjøring databasemigreringer eller console applikasjoner.
 
-![Version: 0.0.17](https://img.shields.io/badge/Version-0.0.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.18](https://img.shields.io/badge/Version-0.0.18-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -43,6 +43,102 @@ $ helm install my-release helsenorge/helsenorge-job
 | serviceAccount.create | bool | `true` | Spesifiserer om en service-konto skal opprettes. |
 | serviceAccount.imagePullSecrets | list | `["helsenorge-pull-secret"]` | Legger på egne image pull secrets på service accounten |
 | useSharedConfig | bool | `true` | Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene. |
+| hostAliases | list | `[]` | Legger inn hostfil innslag i pod'ens /etc/host. Se [her](#hostalias-eksempler) for eksempler. |
+
+## Eksempler
+### Env eksempler
+Alle environment-variabler defineres som et ```key: value``` par. Disse kan defineres per applikasjon eller globalt for alle applikasjoner som deployes av helm-chartet. Alle environment-variabler vil overstyre verdier satt i config-filer.
+
+Les mer detaljert rundt bruk av environment-variabler i kubernetes [her](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) og .Net [her](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#non-prefixed-environment-variables). Legg spesielt merke til seksjonen rundt [navngivning](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#naming-of-environment-variables) av variabler i .Net:
+```
+Environment variable names reflect the structure of an appsettings.json file. Each element in the hierarchy is separated by a double underscore (preferable) or a colon. When the element structure includes an array, the array index should be treated as an additional element name in this path. Consider the following appsettings.json file and its equivalent values represented as environment variables.
+```
+Hvis det er settings i helsenorge-config som skal overstyres så må variabel prefixes med ```HN_```, da det er slik helsenorge-koden plukker opp hvilke variabler som leses inn.
+
+```yaml
+extraEnvVars:
+    ASPNETCORE_ENVIRONMENT: Dev
+    # Overskriver aspnet-core loglevel
+    Logging__LogLevel__Default: Info
+    # overstyrer settingen ConfigurationSettings:Connectionstring
+    HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
+    # overstyrer rabbit-mq host
+    HN_InternalMessagingSettings_RootAddress: "rabbitmq://localhost:5671"
+```
+
+Globalt:
+```yaml
+global:
+  extraEnvVars:
+    HN_ConfigurationSettings_Connectionstring: "Server=sql;Database=databasename;User Id=user;Password=password;"
+```
+
+### EnvFrom configMap eksempler
+Som et altnerativ til å definere alle environment-variabler direkte, så kan du opprette ett eller flere config-maps som inneholder de environment-variablene du trenger.
+```yaml
+extraEnvVarsCM:
+  - configMapRef:
+    name: myconfigmap1
+  - configMapRef:
+    name: myconfigmap2
+```
+### EnvFrom secret eksempler
+Har du en eller flere environment-variabler som skal være hemmelige så kan disse opprettes i en secret og brukes av pod'en som environment-variabler.
+```yaml
+extraEnvVarsSecret:
+  - secretRef:
+    name: mysecret1
+  - secretRef:
+    name: mysecret2
+```
+### Volume og volumeMount eksempler
+Et Volume i kubernetes representerer en filkatalog som er tilgjengelig for alle containere i pod'en. Et volumeMount er mountingen av dette volumet inn i en spesifikk container i pod'en. Det er støtte for en stor mengde forskjellige volumes i kubernetes. Les mer om konseptet [her](https://kubernetes.io/docs/concepts/storage/volumes/).
+
+Eksemplet under vi tilgengeliggjøre 3 volumes av ulik type for podden, og disse vil deretter mountes inn containeren som kjøres i pod'en som filkatalog som igjen kan benyttes applikasjonen i containeren.
+
+```yaml
+extraVolumes:
+    # tilgjengeliggjøre et tomt volume
+  - name: tomt-volume
+    emptyDir: {}
+    # tilgjengeliggjøre en secret som et volume
+  - name: hemmelig-volum1
+    secret:
+      secretName: navn-paa-secret
+    # tilgjengeliggjøre et config-map som et volume
+  - name: volume-med-config-fil
+    configMap:
+      name: navn-paa-config-map
+extraVolumeMounts:
+    - name: tom-katalog
+    mountPath: /tomkatalog
+    - name: hemmelig-katalog
+    mountPath: /hemmelig
+    - name: config-katalog
+    mountPath: /config
+```
+### HostAlias eksempler
+Et hostalias overrider resolving av hostname internt i pod'en. Dette fungerer på samme måte som i en hostfil på windows. Kan være nyttig å bruke i utvikling for å peke mot riktig sql-server. Les mer om hostalias i kubernetes [her](https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/)
+
+Eksempelet under peker hostnavnene"sql-mh" og "sql-sec" til ip: "1.2.3.4".
+```yaml
+hostAliases:
+  - ip: 1.2.3.4
+  hostnames:
+  - sql-mh
+  - sql-sec
+```
+
+Kan også defineres globalt så det gjelder for alle charts i umbrella chartet:
+```yaml
+global:
+  hostAliases:
+  - ip: 1.2.3.4
+    hostnames:
+    - "sql-mh"
+```
+
+Den globale verdien kan igjen overstyres per chart.
 
 ## Maintainers
 
