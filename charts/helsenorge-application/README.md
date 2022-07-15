@@ -87,6 +87,7 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | debug.configShare | string | `"/config-share/"` | Path til hvor debug-fil mountes i pod'en. |
 | debug.debugConfigMap | string | `"debug-environment"` | Navn på config-map som inneholder debug-dll. Denne må eksistere i namespace fra før. |
 | useSharedConfig | bool | `true` | Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene. |
+| hostAliases | list | `[]` | Legger inn hostfil innslag i pod'ens /etc/host. Se [her](#hostalias-eksempler) for eksempler. |
 
 ## Eksempler
 ### Env eksempler
@@ -160,6 +161,28 @@ extraVolumeMounts:
     - name: config-katalog
     mountPath: /config
 ```
+### HostAlias eksempler
+Et hostalias overrider resolving av hostname internt i pod'en. Dette fungerer på samme måte som i en hostfil på windows. Kan være nyttig å bruke i utvikling for å peke mot riktig sql-server. Les mer om hostalias i kubernetes [her](https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/)
+
+Eksempelet under peker hostnavnene"sql-mh" og "sql-sec" til ip: "1.2.3.4".
+```yaml
+hostAliases:
+  - ip: 1.2.3.4
+  hostnames:
+  - sql-mh
+  - sql-sec
+```
+
+Kan også defineres globalt så det gjelder for alle charts i umbrella chartet:
+```yaml
+global:
+  hostAliases:
+  - ip: 1.2.3.4
+    hostnames:
+    - "sql-mh"
+```
+
+Den globale verdien kan igjen overstyres per chart.
 
 ## Maintainers
 
