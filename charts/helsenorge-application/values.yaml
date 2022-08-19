@@ -4,10 +4,6 @@ nameOverride: ""
 fullnameOverride: ""
 # -- Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt.
 teamOvveride: ""
-# -- ClientId for applikasjonen
-clientId: ""
-# -- Tilhørende secret
-clientSecret: ""
 # -- Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden.
 enableTokenValidation: true
 # -- Informasjon om tokenvalideringssertifikatet i miljoet.

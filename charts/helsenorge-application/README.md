@@ -4,7 +4,7 @@
 
 Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorge-applikasjon dekker typene API, WebApp, Service, Batch. Dvs, applikasjoner som utfører arbeid kontinuerlig.
 
-![Version: 0.0.42](https://img.shields.io/badge/Version-0.0.42-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.0.43](https://img.shields.io/badge/Version-0.0.43-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installasjon
 
@@ -23,8 +23,6 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
 | fullnameOverride | string | `""` | Overrider navn på chart.  |
 | teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
-| clientId | string | `""` | ClientId for applikasjonen |
-| clientSecret | string | `""` | Tilhørende secret |
 | enableTokenValidation | bool | `true` | Muligjor tokenvalidering i applikasjonen ved å tilgjengeliggjøre sertifikatet i podden. |
 | tokenValidation | object | {} | Informasjon om tokenvalideringssertifikatet i miljoet. |
 | tokenValidation.filename | string | `"helsenorge_sikkerhet_public.pem"` | Navn på filen som inneholder sertifikatet |
