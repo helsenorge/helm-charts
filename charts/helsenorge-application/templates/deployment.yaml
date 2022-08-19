@@ -75,10 +75,6 @@ spec:
             value: {{ .Values.rabbitmq.useSsl | quote }}
           - name: HN_InternalMessagingSettings__EncryptMessages
             value: {{ .Values.rabbitmq.encryptMessages | quote }}
-          - name: HN_EhelseSecurityTokenServiceSettings__ClientId
-            value: {{ .Values.clientId | quote }}
-          - name: HN_EhelseSecurityTokenServiceSettings__ClientSecret
-            value: {{ .Values.clientSecret | quote }}
           - name: HN_LoggingConfiguration__Area
             value: {{ include "logging.area" . | quote }}
           {{- range $key, $val := merge (default dict .Values.extraEnvVars) (default dict .Values.global.extraEnvVars)  }}
