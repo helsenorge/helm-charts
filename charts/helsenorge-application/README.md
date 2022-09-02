@@ -8,7 +8,7 @@ Helm chart for installere en helsenorge-applikasjon på kubernetes. En helsenorg
 
 ## Installasjon
 
-Dette chartet er ment for å inkluderes i et [umbrella chart](https://helm.sh/docs/howto/charts_tips_and_tricks/#complex-charts-with-many-dependencies) for å deploye et helsenorge-løsningsområde, men kan også installeres enkeltvis. Les mer om dette her.
+Dette chartet er ment for å inkluderes i et [umbrella chart](https://helm.sh/docs/howto/charts_tips_and_tricks/#complex-charts-with-many-dependencies) for å deploye et helsenorge-løsningsområde, men kan også installeres enkeltvis. Les mer om dette [her](http://www.missing.no).
 
 For å installere chartet med navnet "my-release"
 ```console
