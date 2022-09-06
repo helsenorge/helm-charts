@@ -18,7 +18,7 @@ spec:
       serviceAccountName: {{ include "common.serviceAccountName" . }}
       containers:
       - name: {{ include "common.fullname" .  }} 
-        image:  {{ include "common.image" . }}
+        image: {{ printf "%s:%s" .Values.image.repository ( .Values.image.tag | default "latest" ) }}
         command:
         {{- if .Values.command }}
         {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}

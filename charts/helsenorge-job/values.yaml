@@ -6,27 +6,22 @@ fullnameOverride: ""
 # -- Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt.
 teamOvveride: ""
 # -- Beskriver imaget til applikasjonen
-# @default -- Se verdier under
-image:
-  # -- Fra hvilket container registry skal imaget hentes. 
-  registry: helsenorge.azurecr.io
-  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository
+# @default -- {}
+image: 
+  # -- Image repository
   repository: ""
-  # -- Kubernetes image pull-policy.
-  # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
-  pullPolicy: IfNotPresent
   # -- tag identifiserer versjonen på imaget som skal deployes 
   tag: ""
+  # -- Kubernetes image pull-policy.
+  pullPolicy: IfNotPresent
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 command: 
 # -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 args: 
-
 # -- Labels som legges på alle objeckter som deployes
 commonLabels:
 # -- Annoteringer som legges på alle objeckter som deployes 
 commonAnnotations:
-
 # -- Restart policien til en pod. Defaulter til Never for en engangsjobb. Mulige verdier er Always, OnFailure, and Never. Les mer [her](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy).
 restartPolicy: Never
 # -- Antall forsøk jobben får før den markeres som feilet

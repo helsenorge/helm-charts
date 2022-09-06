@@ -54,18 +54,13 @@ logging:
 dnsZone: "helsenorge.utvikling"
 # -- Beskriver imaget til applikasjonen
 # @default -- {}
-image:
-  # -- Fra hvilket container registry skal imaget hentes. 
-  registry: helsenorge.azurecr.io
-  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen basert på releaename-applikasjonsnavn.
-  # Hvis release = configuration og applikasjon = internalapi så blir repository = configuration-internalapi
-  # @default -- Genereres av template.
+image: 
+  # -- Image repository
   repository: ""
-  # -- Kubernetes image pull-policy.
-  # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
-  pullPolicy: IfNotPresent
   # -- tag identifiserer versjonen på imaget som skal deployes 
   tag: ""
+  # -- Kubernetes image pull-policy.
+  pullPolicy: IfNotPresent
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 # Eks for å kjøre en dotnet applikasjon ```dotnet myassembly.dll``` bruk command:
 # ```
