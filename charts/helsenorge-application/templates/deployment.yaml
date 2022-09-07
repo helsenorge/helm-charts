@@ -38,8 +38,8 @@ spec:
         - name: {{ include "common.fullname" . }} 
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ include "common.image" . }} 
-          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           command:
           {{- if .Values.command }}
           {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}

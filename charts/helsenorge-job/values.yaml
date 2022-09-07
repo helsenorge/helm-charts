@@ -5,28 +5,18 @@ nameOverride: ""
 fullnameOverride: ""
 # -- Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt.
 teamOvveride: ""
-# -- Beskriver imaget til applikasjonen
-# @default -- Se verdier under
-image:
-  # -- Fra hvilket container registry skal imaget hentes. 
-  registry: helsenorge.azurecr.io
-  # -- Navn på imaget som skal deployes. Hvis ikke definert, settes til det samme som navnet på applikasjonen. TODO: gjøre det mulig å overstyre repository
-  repository: ""
-  # -- Kubernetes image pull-policy.
-  # Les mer om image pull policy [her](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).
-  pullPolicy: IfNotPresent
-  # -- tag identifiserer versjonen på imaget som skal deployes 
-  tag: ""
+# -- Image referanse: registry/repository:tag
+image: 
+# -- Pull-policy satt på imaget
+imagePullPolicy: Always
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 command: 
 # -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 args: 
-
 # -- Labels som legges på alle objeckter som deployes
 commonLabels:
 # -- Annoteringer som legges på alle objeckter som deployes 
 commonAnnotations:
-
 # -- Restart policien til en pod. Defaulter til Never for en engangsjobb. Mulige verdier er Always, OnFailure, and Never. Les mer [her](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy).
 restartPolicy: Never
 # -- Antall forsøk jobben får før den markeres som feilet
@@ -46,7 +36,7 @@ extraVolumeMounts: []
 serviceAccount:
   # -- Spesifiserer om en service-konto skal opprettes.
   create: true
-  # -- Legger på egne image pull secrets på service accounten
+  # -- Legger på egne image pull secrets på service accounten. Gjør det mulig for pods som kjører under denne service-accounten å få tilgang til private registry
   imagePullSecrets: 
     - helsenorge-pull-secret
 # -- Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene.

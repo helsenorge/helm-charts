@@ -1,4 +1,4 @@
-Completed installation of {{ include "common.fullname" . }}:{{ .Values.image.tag }} into {{ .Release.Namespace }}.
+Completed installation of {{ .Values.image }} into {{ .Release.Namespace }}.
 {{ if .Values.ingress.create }}
 {{ printf "%s://%s" "http" (include "helsenorge-application.hostname" .) }}
 {{ end }}

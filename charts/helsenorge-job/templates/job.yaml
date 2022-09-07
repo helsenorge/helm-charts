@@ -18,7 +18,8 @@ spec:
       serviceAccountName: {{ include "common.serviceAccountName" . }}
       containers:
       - name: {{ include "common.fullname" .  }} 
-        image:  {{ include "common.image" . }}
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
         command:
         {{- if .Values.command }}
         {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
