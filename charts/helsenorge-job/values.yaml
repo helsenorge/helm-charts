@@ -8,7 +8,7 @@ teamOvveride: ""
 # -- Image referanse: registry/repository:tag
 image: 
 # -- Pull-policy satt på imaget
-imagePullPolicy: Always
+imagePullPolicy: IfNotPresent
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 command: 
 # -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).

@@ -39,7 +39,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ .Values.image }}
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.imagePullPolicy | default "IfNotPresent" }}
           command:
           {{- if .Values.command }}
           {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}

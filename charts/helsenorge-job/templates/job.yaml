@@ -19,7 +19,7 @@ spec:
       containers:
       - name: {{ include "common.fullname" .  }} 
         image: {{ .Values.image }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.imagePullPolicy | default "IfNotPresent" }}
         command:
         {{- if .Values.command }}
         {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
