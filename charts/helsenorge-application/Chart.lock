@@ -1,6 +1,6 @@
 dependencies:
 - name: helsenorge-common
   repository: https://helsenorge.github.io/helm-charts/
-  version: 0.0.7
-digest: sha256:e72cf8078ae5a5ebf40ccd5d25687ceb69a70ee963ed0518d895c0c053bfdd33
-generated: "2022-09-07T11:15:53.548153+02:00"
+  version: 0.0.8
+digest: sha256:f69508e904a6bc8252dcd49efd6d516d9be08198e221f2dc807e52fd0427e5e4
+generated: "2022-09-07T11:58:28.1770336+02:00"
