@@ -6,7 +6,7 @@ type: application
 maintainers: 
   - name: Plattform
 
-version: 0.0.44
+version: 0.0.45
 
 dependencies:
 - name: helsenorge-common
