@@ -465,6 +465,17 @@ entries:
     version: 0.0.12
   helsenorge-common:
   - apiVersion: v2
+    created: "2022-09-07T09:56:38.707531157Z"
+    description: Chart med felles helm-metoder for utvikling av helsenorge application-charts.
+    digest: dff41c655cd71b69b434f75da75619ea46a66ec0c2508849fcab2375c0542d53
+    maintainers:
+    - name: Plattform
+    name: helsenorge-common
+    type: library
+    urls:
+    - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-common-0.0.8/helsenorge-common-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v2
     created: "2022-09-07T09:08:20.091266264Z"
     description: Chart med felles helm-metoder for utvikling av helsenorge application-charts.
     digest: a2b90de8f719f2dc95ab5db2c72de78343cea96a3f11ae64ddb9aa04f2fb44e9
@@ -802,4 +813,4 @@ entries:
     urls:
     - https://github.com/helsenorge/helm-charts/releases/download/helsenorge-job-0.0.2/helsenorge-job-0.0.2.tgz
     version: 0.0.2
-generated: "2022-09-07T09:23:40.436037146Z"
+generated: "2022-09-07T09:56:38.707853559Z"
