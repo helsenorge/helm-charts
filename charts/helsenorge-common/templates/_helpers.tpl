@@ -15,14 +15,7 @@ Navn på ansvarlig team. Henter fra Chart.Maintainers. Kan overstyres globalt el
 Versjon av applikasjon
 */}}
 {{- define "common.version" -}}
-{{- .Values.image.tag | default "latest" }}
-{{- end }}
-
-{{/*
-Applikasjons image
-*/}}
-{{- define "common.image" -}}
-{{ printf "%s/%s:%s" .Values.image.registry (include "common.fullname" .) (include "common.version" .) }} 
+{{- .Values.image }}
 {{- end }}
 
 {{/*
@@ -69,10 +62,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service | lower }}
 app.kubernetes.io/part-of: {{ .Release.Name | lower }}
 app.kubernetes.io/created-by: {{ include "common.team" . }}
 app.kubernetes.io/version: {{ include "common.version" . | quote }}
-name: {{ include "common.fullname" . }}
-area: {{ .Release.Name | lower }}
-team: {{ include "common.team" . }}
-version: {{ include "common.version" . | quote }}
 {{ include "common.selectorLabels.standard" . }}
 {{- end }}
 
