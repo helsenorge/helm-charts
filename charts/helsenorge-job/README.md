@@ -25,10 +25,8 @@ $ helm install my-release helsenorge/helsenorge-job
 | nameOverride | string | `""` | Overrider navn på chart. Beholder release-navnet |
 | fullnameOverride | string | `""` | Overrider navn på chart.  |
 | teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
-| image | object | {} | Beskriver imaget til applikasjonen |
-| image.repository | string | `""` | Image repository |
-| image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
-| image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. |
+| image | string | `nil` | Image referanse: registry/repository:tag |
+| imagePullPolicy | string | `"Always"` | Pull-policy satt på imaget |
 | command | string | `nil` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | commonLabels | string | `nil` | Labels som legges på alle objeckter som deployes |
@@ -42,7 +40,7 @@ $ helm install my-release helsenorge/helsenorge-job
 | extraVolumeMounts | list | `[]` | Liste over extra volume mounts som skal mountes til podden. Se [her](#volume-og-volumemount-eksempler) for eksempler. |
 | serviceAccount | object | `{"create":true,"imagePullSecrets":["helsenorge-pull-secret"]}` | Kubernetes service-konto. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/). Navn settes til det samme som applikasjon. |
 | serviceAccount.create | bool | `true` | Spesifiserer om en service-konto skal opprettes. |
-| serviceAccount.imagePullSecrets | list | `["helsenorge-pull-secret"]` | Legger på egne image pull secrets på service accounten |
+| serviceAccount.imagePullSecrets | list | `["helsenorge-pull-secret"]` | Legger på egne image pull secrets på service accounten. Gjør det mulig for pods som kjører under denne service-accounten å få tilgang til private registry |
 | useSharedConfig | bool | `true` | Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene. |
 | hostAliases | list | `[]` | Legger inn hostfil innslag i pod'ens /etc/host. Se [her](#hostalias-eksempler) for eksempler. |
 

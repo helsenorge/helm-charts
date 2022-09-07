@@ -44,21 +44,18 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | rabbitmq.encryptMessages | bool | `true` | Skal meldinger som går mellom client og rabbitmq krypteres |
 | logging.areaOvveride | string | `""` |  |
 | logging.sourceType | string | `"kube:Helsenorge"` | Setter SourceType på loggene i splunk |
-| dnsZone | string | `"helsenorge.utvikling"` | Dns-sonen til miljøet. Dev: "helsenorge.utvikling" INT: "aks-helsenorge.utvikling" |
-| image | object | {} | Beskriver imaget til applikasjonen |
-| image.repository | string | `""` | Image repository |
-| image.tag | string | `""` | tag identifiserer versjonen på imaget som skal deployes  |
-| image.pullPolicy | string | `"IfNotPresent"` | Kubernetes image pull-policy. |
+| dnsZone | string | `"helsenorge.utvikling"` | Dns-sonen til miljøet. |
+| image | string | `nil` | Image referanse: registry/repository:tag |
+| imagePullPolicy | string | `"Always"` | Pull-policy satt på imaget |
 | command | list | `[]` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Eks for å kjøre en dotnet applikasjon ```dotnet myassembly.dll``` bruk command: ``` command: ["dotnet"] ``` og args ``` args: ["myassembly.dll"] ``` |
 | args | list | `[]` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Les mer under ```command```. |
-| imagePullSecrets | list | `[]` | Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk) |
 | replicaCount | int | `1` | Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer. |
 | livenessProbe.path | string | `"/api/ping"` | [Liveness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren kjører ved å gjøre et http kall mot gitt path. |
 | readinessProbe.path | string | `"/health"` | [Readiness probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#types-of-probe) indikerer om containeren er klar for å motta requests ved å gjøre et http kall mot gitt path |
 | serviceAccount | object | `{"annotations":{},"create":true,"imagePullSecrets":["helsenorge-pull-secret"]}` | Kubernetes service-konto. Les mer [her](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/). Navn settes til det samme som applikasjon. |
 | serviceAccount.create | bool | `true` | Spesifiserer om en service-konto skal opprettes. |
 | serviceAccount.annotations | object | `{}` | Spesifikke annoteringer som skal legges til servicekontoen (todo). |
-| serviceAccount.imagePullSecrets | list | `["helsenorge-pull-secret"]` | Legger på egne image pull secrets på service accounten |
+| serviceAccount.imagePullSecrets | list | `["helsenorge-pull-secret"]` | Legger på egne image pull secrets på service accounten. Gjør det mulig for pods som kjører under denne service-accounten å få tilgang til private registry |
 | service | object | Se verdier under | Servicen som eksponerer apiet ut i klusteret. |
 | service.type | string | `"ClusterIP"` | Type service. Les mer [her](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). |
 | service.port | int | `80` | Port servicen eksponerer apiet på ut i clusteret. |

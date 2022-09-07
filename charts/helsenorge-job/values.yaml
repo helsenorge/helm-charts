@@ -5,15 +5,10 @@ nameOverride: ""
 fullnameOverride: ""
 # -- Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt.
 teamOvveride: ""
-# -- Beskriver imaget til applikasjonen
-# @default -- {}
+# -- Image referanse: registry/repository:tag
 image: 
-  # -- Image repository
-  repository: ""
-  # -- tag identifiserer versjonen på imaget som skal deployes 
-  tag: ""
-  # -- Kubernetes image pull-policy.
-  pullPolicy: IfNotPresent
+# -- Pull-policy satt på imaget
+imagePullPolicy: Always
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 command: 
 # -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
@@ -41,7 +36,7 @@ extraVolumeMounts: []
 serviceAccount:
   # -- Spesifiserer om en service-konto skal opprettes.
   create: true
-  # -- Legger på egne image pull secrets på service accounten
+  # -- Legger på egne image pull secrets på service accounten. Gjør det mulig for pods som kjører under denne service-accounten å få tilgang til private registry
   imagePullSecrets: 
     - helsenorge-pull-secret
 # -- Gir pod'en tilgang til felles-config allerede tilgjengeligjort i miljoet. Dette er typisk config som kreves av felles-pakkene.

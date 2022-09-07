@@ -49,18 +49,11 @@ logging:
   # -- Setter SourceType på loggene i splunk
   sourceType: kube:Helsenorge
 # -- Dns-sonen til miljøet.
-# Dev: "helsenorge.utvikling"
-# INT: "aks-helsenorge.utvikling"
 dnsZone: "helsenorge.utvikling"
-# -- Beskriver imaget til applikasjonen
-# @default -- {}
+# -- Image referanse: registry/repository:tag
 image: 
-  # -- Image repository
-  repository: ""
-  # -- tag identifiserer versjonen på imaget som skal deployes 
-  tag: ""
-  # -- Kubernetes image pull-policy.
-  pullPolicy: IfNotPresent
+# -- Pull-policy satt på imaget
+imagePullPolicy: Always
 # -- Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 # Eks for å kjøre en dotnet applikasjon ```dotnet myassembly.dll``` bruk command:
 # ```
@@ -73,8 +66,6 @@ image:
 command: []
 # -- Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Les mer under ```command```.
 args: []
-# -- Referanse til secret som inneholder nøkler for å få kontakt med private container registry (hvis dette er i bruk)
-imagePullSecrets: []
 # -- Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer.
 replicaCount: 1
 livenessProbe:
@@ -90,7 +81,7 @@ serviceAccount:
   create: true
   # -- Spesifikke annoteringer som skal legges til servicekontoen (todo).
   annotations: {}
-  # -- Legger på egne image pull secrets på service accounten
+  # -- Legger på egne image pull secrets på service accounten. Gjør det mulig for pods som kjører under denne service-accounten å få tilgang til private registry
   imagePullSecrets: 
     - helsenorge-pull-secret
 # -- Servicen som eksponerer apiet ut i klusteret.

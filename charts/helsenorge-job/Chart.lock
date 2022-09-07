@@ -3,4 +3,4 @@ dependencies:
   repository: https://helsenorge.github.io/helm-charts/
   version: 0.0.6
 digest: sha256:f9f05a128cf61374e4e61f5cb0d73d30e7d88a63ff99f74b8d024cb7afdbf16e
-generated: "2022-06-22T11:08:17.5606367+02:00"
+generated: "2022-09-07T09:54:58.2482973+02:00"

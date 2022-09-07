@@ -1,4 +1,4 @@
-Completed installation of {{ include "common.fullname" . }}:{{ .Values.image.tag }} into {{ .Release.Namespace }} 
+Completed installation of {{ .Values.image }} into {{ .Release.Namespace }} 
 
 Ran command {{ include "common.tplvalues.render" (dict "value" .Values.command "context" $) }} with args: {{ include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
 
