@@ -12,10 +12,10 @@ Navn på ansvarlig team. Henter fra Chart.Maintainers. Kan overstyres globalt el
 {{- end }}
 
 {{/*
-Versjon av applikasjon
+Versjon av applikasjon - henter ut tag fra image-string
 */}}
 {{- define "common.version" -}}
-{{- .Values.image }}
+{{- regexFind "[^:]+$" .Values.image }} 
 {{- end }}
 
 {{/*
@@ -61,7 +61,7 @@ helm.sh/chart: {{ include "common.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service | lower }}
 app.kubernetes.io/part-of: {{ .Release.Name | lower }}
 app.kubernetes.io/created-by: {{ include "common.team" . }}
-app.kubernetes.io/version: {{ include "common.version" . | quote }}
+app.kubernetes.io/version: {{ include "common.version" . }}
 {{ include "common.selectorLabels.standard" . }}
 {{- end }}
 
