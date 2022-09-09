@@ -25,7 +25,7 @@ $ helm install my-release helsenorge/helsenorge-job
 | fullnameOverride | string | `""` | Overrider navn på chart.  |
 | teamOvveride | string | `""` | Hentes fra Chart.Maintainers[0].name (Chart.yaml) - Kan ovverides ved behov, også globalt. |
 | image | string | `nil` | Image referanse: registry/repository:tag |
-| imagePullPolicy | string | `"IfNotPresent"` | Pull-policy satt på imaget |
+| imagePullPolicy | string | `nil` | Pull-policy satt på imaget |
 | command | string | `nil` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | args | string | `nil` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). |
 | commonLabels | string | `nil` | Labels som legges på alle objeckter som deployes |

@@ -45,7 +45,7 @@ $ helm install my-release helsenorge/helsenorge-applikasjon
 | logging.sourceType | string | `"kube:Helsenorge"` | Setter SourceType på loggene i splunk |
 | dnsZone | string | `"helsenorge.utvikling"` | Dns-sonen til miljøet. |
 | image | string | `nil` | Image referanse: registry/repository:tag |
-| imagePullPolicy | string | `"IfNotPresent"` | Pull-policy satt på imaget |
+| imagePullPolicy | string | `nil` | Pull-policy satt på imaget |
 | command | list | `[]` | Ovveride default container command - defaulter til "dotnet" - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Eks for å kjøre en dotnet applikasjon ```dotnet myassembly.dll``` bruk command: ``` command: ["dotnet"] ``` og args ``` args: ["myassembly.dll"] ``` |
 | args | list | `[]` | Ovveride default container args - Les mer om Command and Arguments for kontainere [her](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/). Les mer under ```command```. |
 | replicaCount | int | `1` | Antall containere som kjører apiet. Disse lastbalanseres automatisk, men flere containere krever mer ressurser av clusteret. Bør overstyrers i høyere miljøer. |
